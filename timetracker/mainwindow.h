@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "dataprovider.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -17,5 +18,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+    DataProvider _provider;
 };
 #endif // MAINWINDOW_H
