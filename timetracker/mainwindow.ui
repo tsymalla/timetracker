@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>696</height>
+    <height>734</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -172,15 +172,18 @@
            <item row="6" column="1">
             <widget class="QTextEdit" name="txtContent"/>
            </item>
-           <item row="7" column="1">
+           <item row="8" column="1">
             <widget class="QPushButton" name="pushButton">
              <property name="text">
               <string>Save</string>
              </property>
             </widget>
            </item>
-           <item row="8" column="1">
+           <item row="9" column="1">
             <widget class="QPushButton" name="pushButton_2">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>Delete</string>
              </property>
@@ -197,6 +200,13 @@
             <widget class="QDateEdit" name="dtUntil">
              <property name="calendarPopup">
               <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="1">
+            <widget class="QPushButton" name="btnNew">
+             <property name="text">
+              <string>New entry</string>
              </property>
             </widget>
            </item>

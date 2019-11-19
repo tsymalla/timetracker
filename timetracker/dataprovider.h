@@ -3,6 +3,7 @@
 
 #include "database.h"
 #include <QDateTime>
+#include <QMap>
 
 struct Project
 {
@@ -13,7 +14,7 @@ struct Project
 struct Task
 {
     int id;
-    Project* project;
+    int projectId;
     QString name;
 };
 
@@ -31,7 +32,7 @@ class DataProvider final
 private:
     Database _db;
     QVector<Project> _projects;
-    QVector<Task> _tasks;
+    QMap<int, QVector<Task>> _tasks;
     QVector<Entry> _entries;
 public:
     DataProvider();
@@ -46,7 +47,7 @@ public:
     Task addTask(const Project& project, const QString& taskName);
     Task updateTask(const Task& task, const Project& projectId, const QString& taskName);
     bool deleteTask(const Task& task);
-    QVector<Task>& getAllTasks(const Project& project) const;
+    QVector<Task>& getAllTasksByProject(const int projectId);
 
     Entry addEntry(const QDateTime& from, const QDateTime& until, const Task& task, const QString& text);
     Entry updateEntry(const Entry& entry, const QDateTime& from, const QDateTime& until, const Task& task, const QString& text);

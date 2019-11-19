@@ -41,9 +41,14 @@ void Database::_init()
 
 void Database::_refreshStorage()
 {
-    executeQuery("CREATE TABLE PROJECT (id INTEGER PRIMARY KEY, name TEXT)");
-    executeQuery("CREATE TABLE TASK (id INTEGER PRIMARY KEY, PROJECT_ID INTEGER, name TEXT, FOREIGN KEY (PROJECT_ID) REFERENCES PROJECT(ID))");
-    executeQuery("INSERT INTO PROJECT(name) VALUES('test')");
+    executeQuery("CREATE TABLE PROJECT (ID INTEGER PRIMARY KEY, NAME TEXT)");
+    executeQuery("CREATE TABLE TASK (ID INTEGER PRIMARY KEY, PROJECT_ID INTEGER, NAME TEXT, FOREIGN KEY (PROJECT_ID) REFERENCES PROJECT(ID))");
+    executeQuery("CREATE TABLE ENTRY (ID INTEGER PRIMARY KEY, TASK_ID INTEGER, CONTENT TEXT, FROM DATETIME, UNTIL DATETIME, FOREIGN KEY (TASK_ID) REFERENCES TASK(ID))");
+    executeQuery("INSERT INTO PROJECT(NAME) VALUES('test')");
+    executeQuery("INSERT INTO PROJECT(NAME) VALUES('test2')");
+    executeQuery("INSERT INTO TASK(PROJECT_ID, NAME) VALUES(1, 'testaufgabe')");
+    executeQuery("INSERT INTO TASK(PROJECT_ID, NAME) VALUES(1, 'testaufgabe 2')");
+    executeQuery("INSERT INTO TASK(PROJECT_ID, NAME) VALUES(2, 'testaufgabe 3')");
 }
 
 QSqlQuery Database::executeQuery(const QString &sql, const QVariantList &bindArgs) const

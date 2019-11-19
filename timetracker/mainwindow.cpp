@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
     const auto& p = _provider.getAllProjects();
     for (const auto& project: p)
     {
-        ui->cboProject->addItem(project.name, project.id);
+        ui->cboProject->addItem(project.name, QVariant(project.id));
     }
 
     const auto currentDate = QDate::currentDate();
@@ -36,3 +36,15 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+
+void MainWindow::on_cboProject_currentIndexChanged(const QString &arg1)
+{
+    Q_UNUSED(arg1)
+    ui->cboTask->clear();
+
+    const auto& t = _provider.getAllTasksByProject(ui->cboProject->itemData(ui->cboProject->currentIndex()).toInt());
+    for (const auto& task: t)
+    {
+        ui->cboTask->addItem(task.name, task.id);
+    }
+}
