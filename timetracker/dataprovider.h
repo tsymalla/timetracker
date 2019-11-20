@@ -63,6 +63,12 @@ private:
     {
         _db._genericInsert<T>(_entityMapping[T::TYPE()], args);
     }
+
+    /*template<typename T>
+    void _update(const QVariantList& args)
+    {
+        _db.genericUpdate<T>(_entityMapping[T::TYPE()], args);
+    }*/
 public:
     DataProvider();
 
