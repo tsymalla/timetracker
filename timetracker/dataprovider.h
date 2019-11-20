@@ -15,6 +15,15 @@ struct Project
     static const QString TYPE() {
         return "PROJECT";
     }
+
+    static Project fromResult(const QSqlQuery& result)
+    {
+        return Project
+        {
+            result.value(0).toInt(),
+            result.value(1).toString()
+        };
+    }
 };
 
 struct Task
@@ -26,18 +35,40 @@ struct Task
     static const QString TYPE() {
         return "TASK";
     }
+
+    static Task fromResult(const QSqlQuery& result)
+    {
+        return Task
+        {
+            result.value(0).toInt(),
+            result.value(1).toInt(),
+            result.value(2).toString()
+        };
+    }
 };
 
 struct Entry
 {
     ENTITY_ID_TYPE id;
     ENTITY_ID_TYPE taskId;
+    QString entryContent;
     QDateTime from;
     QDateTime until;
-    QString text;
 
     static const QString TYPE() {
         return "ENTRY";
+    }
+
+    static Entry fromResult(const QSqlQuery& result)
+    {
+        return Entry
+        {
+            result.value(0).toInt(),
+            result.value(1).toInt(),
+            result.value(2).toString(),
+            QDateTime::fromTime_t(static_cast<unsigned int>(result.value(3).toInt())),
+            QDateTime::fromTime_t(static_cast<unsigned int>(result.value(4).toInt())),
+        };
     }
 };
 
@@ -80,14 +111,14 @@ public:
     QVector<Project>& getAllProjects();
 
     void addTask(const Project& project, const QString& taskName);
-    void updateTask(const Task& task, const Project& projectId, const QString& taskName);
+    void updateTask(const Task& task, const Project& project, const QString& taskName);
     bool deleteTask(const Task& task);
     QVector<Task>& getAllTasksByProject(const ENTITY_ID_TYPE projectId);
 
-    void addEntry(const QDateTime& from, const QDateTime& until, const Task& task, const QString& text);
-    void updateEntry(const Entry& entry, const QDateTime& from, const QDateTime& until, const Task& task, const QString& text);
+    void addEntry(const ENTITY_ID_TYPE taskId, const QString& entryContent, const QDateTime& from, const QDateTime& until);
+    void updateEntry(const Entry& entry, const QString& entryContent, const QDateTime& from, const QDateTime& until, const ENTITY_ID_TYPE taskId);
     bool deleteEntry(const Entry& entry);
-    QVector<Entry>& getAllEntries() const;
+    QVector<Entry>& getAllEntries();
 };
 
 #endif // DATAPROVIDER_H

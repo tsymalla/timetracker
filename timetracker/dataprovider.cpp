@@ -14,9 +14,9 @@ void DataProvider::_initMapping()
     registerEntityColumn<Task>("NAME");
 
     registerEntityColumn<Entry>("TASK_ID");
-    registerEntityColumn<Entry>("FROM");
-    registerEntityColumn<Entry>("UNTIL");
-    registerEntityColumn<Entry>("TEXT");
+    registerEntityColumn<Entry>("ENTRY_CONTENT");
+    registerEntityColumn<Entry>("TS_FROM");
+    registerEntityColumn<Entry>("TS_UNTIL");
 }
 
 bool DataProvider::isInitialized() const
@@ -41,8 +41,7 @@ QVector<Project> &DataProvider::getAllProjects()
     auto result = _db._genericSelectAll<Project>();
     while (result.next())
     {
-        Project p{result.value(0).toInt(), result.value(1).toString()};
-        _projects.push_back(std::move(p));
+        _projects.push_back(Project::fromResult(result));
     }
 
     return _projects;
@@ -53,11 +52,6 @@ bool DataProvider::deleteTask(const Task &task)
     return _db._genericDelete<Task>(task.id);
 }
 
-bool DataProvider::deleteEntry(const Entry &entry)
-{
-    return _db._genericDelete<Entry>(entry.id);
-}
-
 QVector<Task> &DataProvider::getAllTasksByProject(const int projectId)
 {
     _tasks[projectId].clear();
@@ -65,9 +59,34 @@ QVector<Task> &DataProvider::getAllTasksByProject(const int projectId)
     auto result = _db._genericSelect<Task>({ "PROJECT_ID" }, { projectId });
     while (result.next())
     {
-        Task t{result.value(0).toInt(), result.value(1).toInt(), result.value(2).toString()};
-        _tasks[projectId].push_back(std::move(t));
+        _tasks[projectId].push_back(Task::fromResult(result));
     }
 
     return _tasks[projectId];
+}
+
+void DataProvider::addEntry(const ENTITY_ID_TYPE taskId, const QString &text, const QDateTime &from, const QDateTime &until)
+{
+    const auto fromTs = static_cast<int>(from.currentDateTimeUtc().toTime_t());
+    const auto untilTs = static_cast<int>(until.currentDateTimeUtc().toTime_t());
+    QVariantList args = { taskId, text, fromTs, untilTs };
+    _insert<Entry>(args);
+}
+
+bool DataProvider::deleteEntry(const Entry &entry)
+{
+    return _db._genericDelete<Entry>(entry.id);
+}
+
+QVector<Entry> &DataProvider::getAllEntries()
+{
+    _entries.clear();
+
+    auto result = _db._genericSelectAll<Entry>();
+    while (result.next())
+    {
+        _entries.push_back(Entry::fromResult(result));
+    }
+
+    return _entries;
 }

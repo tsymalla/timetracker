@@ -21,14 +21,11 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     const auto currentDate = QDate::currentDate();
-    const auto currentTime = QDateTime::currentDateTime().time();
-
-    ui->dtFrom->setDate(currentDate);
-    ui->dtUntil->setDate(currentDate);
-    ui->tmFrom->setTime(currentTime);
-    ui->tmUntil->setTime(currentTime);
     ui->dtFilterStart->setDate(currentDate);
     ui->dtFilterEnd->setDate(currentDate);
+
+    on_btnNew_clicked();
+    _refreshEntries();
 }
 
 MainWindow::~MainWindow()
@@ -46,5 +43,39 @@ void MainWindow::on_cboProject_currentIndexChanged(const QString &arg1)
     for (const auto& task: t)
     {
         ui->cboTask->addItem(task.name, task.id);
+    }
+}
+
+void MainWindow::on_btnNew_clicked()
+{
+    _isNewEntry = true;
+    const auto currentDateTime = QDateTime::currentDateTime();
+
+    ui->dtFrom->setDateTime(currentDateTime);
+    ui->dtUntil->setDateTime(currentDateTime);
+    ui->txtContent->clear();
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    _provider.addEntry(ui->cboTask->itemData(ui->cboTask->currentIndex()).toInt(), ui->txtContent->toPlainText(), ui->dtFrom->dateTime(), ui->dtUntil->dateTime());
+    on_btnNew_clicked();
+    _refreshEntries();
+}
+
+void MainWindow::_refreshEntries()
+{
+    const auto& entries = _provider.getAllEntries();
+
+    ui->tblCurrentData->clear();
+    ui->tblCurrentData->setRowCount(entries.count());
+    ui->tblCurrentData->setHorizontalHeaderLabels(QStringList() << "Task" << "From" << "Until" << "Text");
+    for (int i = 0; i < entries.count(); ++i)
+    {
+        const auto& entry = entries[i];
+        ui->tblCurrentData->setItem(i, 0, new QTableWidgetItem(entry.taskId));
+        ui->tblCurrentData->setItem(i, 1, new QTableWidgetItem(entry.from.toString(Qt::DateFormat::LocalDate)));
+        ui->tblCurrentData->setItem(i, 2, new QTableWidgetItem(entry.until.toString(Qt::DateFormat::LocalDate)));
+        ui->tblCurrentData->setItem(i, 3, new QTableWidgetItem(entry.entryContent));
     }
 }

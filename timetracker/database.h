@@ -54,7 +54,7 @@ private:
         QString sql = "INSERT INTO " + entity + " (" + columns.join(',') + ") VALUES (";
         for (int i = 0; i < args.size(); ++i)
         {
-            sql += ":" + QString::number(i);
+            sql += ":" + QString::number(i + 1);
             if (i < args.size() - 1)
             {
                 sql += ",";

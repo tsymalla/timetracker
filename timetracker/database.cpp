@@ -43,7 +43,7 @@ void Database::_refreshStorage()
 {
     executeQuery("CREATE TABLE PROJECT (ID INTEGER PRIMARY KEY, NAME TEXT)");
     executeQuery("CREATE TABLE TASK (ID INTEGER PRIMARY KEY, PROJECT_ID INTEGER, NAME TEXT, FOREIGN KEY (PROJECT_ID) REFERENCES PROJECT(ID))");
-    executeQuery("CREATE TABLE ENTRY (ID INTEGER PRIMARY KEY, TASK_ID INTEGER, CONTENT TEXT, FROM DATETIME, UNTIL DATETIME, FOREIGN KEY (TASK_ID) REFERENCES TASK(ID))");
+    executeQuery("CREATE TABLE ENTRY (ID INTEGER PRIMARY KEY, TASK_ID INTEGER, ENTRY_CONTENT TEXT, TS_FROM INTEGER, TS_UNTIL INTEGER, FOREIGN KEY (TASK_ID) REFERENCES TASK(ID))");
     executeQuery("INSERT INTO PROJECT(NAME) VALUES('test')");
     executeQuery("INSERT INTO PROJECT(NAME) VALUES('test2')");
     executeQuery("INSERT INTO TASK(PROJECT_ID, NAME) VALUES(1, 'testaufgabe')");
@@ -56,14 +56,18 @@ QSqlQuery Database::executeQuery(const QString &sql, const QVariantList &bindArg
     QSqlQuery query;
     query.prepare(sql);
 
-    assert(query.boundValues().size() == bindArgs.size());
-
     for (int i = 0; i < bindArgs.size(); ++i)
     {
         query.bindValue(i, bindArgs[i]);
     }
 
     query.exec();
+
+    if (query.lastError().type() != QSqlError::NoError)
+    {
+        qWarning() << query.lastError().text();
+        qWarning() << query.executedQuery();
+    }
 
     return query;
 }
