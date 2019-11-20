@@ -23,5 +23,6 @@ private:
     Ui::MainWindow *ui;
 
     DataProvider _provider;
+    bool _isEntryNew = true;
 };
 #endif // MAINWINDOW_H

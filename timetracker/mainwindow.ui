@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>734</height>
+    <height>769</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -214,6 +214,11 @@
          </widget>
         </item>
        </layout>
+      </widget>
+      <widget class="QWidget" name="tabProjectTasks">
+       <attribute name="title">
+        <string>Projects and tasks</string>
+       </attribute>
       </widget>
       <widget class="QWidget" name="tabReport">
        <attribute name="title">
