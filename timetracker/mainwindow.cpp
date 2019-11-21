@@ -14,6 +14,9 @@ MainWindow::MainWindow(QWidget *parent)
         QApplication::exit();
     }
 
+    _entryModel = new EntryModel(this, _provider);
+    ui->tblCurrentData->setModel(_entryModel);
+
     const auto& p = _provider.getAllProjects();
     for (const auto& project: p)
     {
@@ -25,14 +28,12 @@ MainWindow::MainWindow(QWidget *parent)
     ui->dtFilterEnd->setDate(currentDate);
 
     on_btnNew_clicked();
-    _refreshEntries();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
-
 
 void MainWindow::on_cboProject_currentIndexChanged(const QString &arg1)
 {
@@ -46,6 +47,17 @@ void MainWindow::on_cboProject_currentIndexChanged(const QString &arg1)
     }
 }
 
+void MainWindow::on_tblCurrentData_clicked(const QModelIndex &index)
+{
+    _selectedEntry = _entryModel->getRow(index);
+    ui->dtFrom->setDateTime(_selectedEntry.from);
+    ui->dtUntil->setDateTime(_selectedEntry.until);
+    ui->txtContent->setText(_selectedEntry.entryContent);
+    _selectedRowIndex = index;
+
+    ui->btnDelete->setEnabled(true);
+}
+
 void MainWindow::on_btnNew_clicked()
 {
     _isNewEntry = true;
@@ -54,28 +66,24 @@ void MainWindow::on_btnNew_clicked()
     ui->dtFrom->setDateTime(currentDateTime);
     ui->dtUntil->setDateTime(currentDateTime);
     ui->txtContent->clear();
+
+    ui->btnDelete->setEnabled(false);
 }
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_btnDelete_clicked()
 {
-    _provider.addEntry(ui->cboTask->itemData(ui->cboTask->currentIndex()).toInt(), ui->txtContent->toPlainText(), ui->dtFrom->dateTime(), ui->dtUntil->dateTime());
+    _entryModel->removeRow(_selectedRowIndex, std::move(_selectedEntry));
     on_btnNew_clicked();
-    _refreshEntries();
 }
 
-void MainWindow::_refreshEntries()
+void MainWindow::on_btnSave_clicked()
 {
-    const auto& entries = _provider.getAllEntries();
+    Entry e;
+    e.taskId =          ui->cboTask->itemData(ui->cboTask->currentIndex()).toInt();
+    e.entryContent =    ui->txtContent->toPlainText();
+    e.from =            ui->dtFrom->dateTime();
+    e.until =           ui->dtUntil->dateTime();
 
-    ui->tblCurrentData->clear();
-    ui->tblCurrentData->setRowCount(entries.count());
-    ui->tblCurrentData->setHorizontalHeaderLabels(QStringList() << "Task" << "From" << "Until" << "Text");
-    for (int i = 0; i < entries.count(); ++i)
-    {
-        const auto& entry = entries[i];
-        ui->tblCurrentData->setItem(i, 0, new QTableWidgetItem(entry.taskId));
-        ui->tblCurrentData->setItem(i, 1, new QTableWidgetItem(entry.from.toString(Qt::DateFormat::LocalDate)));
-        ui->tblCurrentData->setItem(i, 2, new QTableWidgetItem(entry.until.toString(Qt::DateFormat::LocalDate)));
-        ui->tblCurrentData->setItem(i, 3, new QTableWidgetItem(entry.entryContent));
-    }
+    _entryModel->addRow(std::move(e));
+    on_btnNew_clicked();
 }

@@ -96,7 +96,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QTabWidget" name="tabReport">
+     <widget class="QTabWidget" name="tabMain">
       <property name="currentIndex">
        <number>0</number>
       </property>
@@ -106,27 +106,13 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QTableWidget" name="tblCurrentData">
-          <column>
-           <property name="text">
-            <string>Task</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>From</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Until</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Text</string>
-           </property>
-          </column>
+         <widget class="QTableView" name="tblCurrentData">
+          <property name="selectionMode">
+           <enum>QAbstractItemView::SingleSelection</enum>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
          </widget>
         </item>
         <item>
@@ -194,14 +180,14 @@
             </widget>
            </item>
            <item row="6" column="1">
-            <widget class="QPushButton" name="pushButton">
+            <widget class="QPushButton" name="btnSave">
              <property name="text">
               <string>Save</string>
              </property>
             </widget>
            </item>
            <item row="7" column="1">
-            <widget class="QPushButton" name="pushButton_2">
+            <widget class="QPushButton" name="btnDelete">
              <property name="enabled">
               <bool>false</bool>
              </property>

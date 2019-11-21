@@ -78,15 +78,15 @@ bool DataProvider::deleteEntry(const Entry &entry)
     return _db._genericDelete<Entry>(entry.id);
 }
 
-QVector<Entry> &DataProvider::getAllEntries()
+QVector<Entry> DataProvider::getAllEntries() const
 {
-    _entries.clear();
+    QVector<Entry> entries;
 
     auto result = _db._genericSelectAll<Entry>();
     while (result.next())
     {
-        _entries.push_back(Entry::fromResult(result));
+        entries.push_back(Entry::fromResult(result));
     }
 
-    return _entries;
+    return entries;
 }

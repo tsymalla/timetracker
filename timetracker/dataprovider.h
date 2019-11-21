@@ -85,7 +85,6 @@ private:
     QMap<QString, QStringList> _entityMapping;
     QVector<Project> _projects;
     QMap<int, QVector<Task>> _tasks;
-    QVector<Entry> _entries;
 
     void _initMapping();
 
@@ -118,7 +117,7 @@ public:
     void addEntry(const ENTITY_ID_TYPE taskId, const QString& entryContent, const QDateTime& from, const QDateTime& until);
     void updateEntry(const Entry& entry, const QString& entryContent, const QDateTime& from, const QDateTime& until, const ENTITY_ID_TYPE taskId);
     bool deleteEntry(const Entry& entry);
-    QVector<Entry>& getAllEntries();
+    QVector<Entry> getAllEntries() const;
 };
 
 #endif // DATAPROVIDER_H

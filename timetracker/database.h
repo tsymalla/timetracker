@@ -20,7 +20,7 @@ private:
     const QString DATABASE_NAME = "data.db";
 
     template<typename T>
-    QSqlQuery _genericSelect(const QStringList& filter, const QVariantList& args)
+    QSqlQuery _genericSelect(const QStringList& filter, const QVariantList& args) const
     {
         QString sql = "SELECT * FROM " + T::TYPE();
 
@@ -42,7 +42,7 @@ private:
     }
 
     template<typename T>
-    QSqlQuery _genericSelectAll()
+    QSqlQuery _genericSelectAll() const
     {
         return _genericSelect<T>({}, {});
     }
