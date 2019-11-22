@@ -7,6 +7,7 @@
 #include <QVector>
 
 using ENTITY_ID_TYPE = int;
+const auto DATE_TIME_FORMAT = QString("yyyy-MM-dd hh:mm:ss");
 
 struct Project
 {
@@ -73,8 +74,8 @@ struct Entry
             result.value(3).toString(),
             result.value(4).toString(),
             result.value(5).toString(),
-            QDateTime::fromTime_t(static_cast<unsigned int>(result.value(6).toInt())),
-            QDateTime::fromTime_t(static_cast<unsigned int>(result.value(7).toInt())),
+            QDateTime::fromString(result.value(6).toString(), DATE_TIME_FORMAT),
+            QDateTime::fromString(result.value(7).toString(), DATE_TIME_FORMAT),
         };
     }
 };
