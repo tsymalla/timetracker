@@ -108,3 +108,14 @@ void MainWindow::on_btnCreateProject_clicked()
 
     _projectModel->addRow(std::move(p));
 }
+
+void MainWindow::on_lstProjects_clicked(const QModelIndex &index)
+{
+    _selectedProject = _projectModel->getRow(index.row());
+    ui->btnDeleteProject->setEnabled(true);
+}
+
+void MainWindow::on_btnDeleteProject_clicked()
+{
+    //_projectModel->removeRow()
+}

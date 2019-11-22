@@ -5,6 +5,7 @@
 #include <QMainWindow>
 #include "dataprovider.h"
 #include "projectmodel.h"
+#include "taskmodel.h"
 #include "entrymodel.h"
 
 QT_BEGIN_NAMESPACE
@@ -32,12 +33,18 @@ private slots:
 
     void on_btnCreateProject_clicked();
 
+    void on_lstProjects_clicked(const QModelIndex &index);
+
+    void on_btnDeleteProject_clicked();
+
 private:
     Ui::MainWindow      *ui;
 
     DataProvider        _provider;
-    EntryModel*         _entryModel;
     ProjectModel*       _projectModel;
+    TaskModel*          _taskModel;
+    EntryModel*         _entryModel;
+    Project             _selectedProject;
     Entry               _selectedEntry;
     QModelIndex         _selectedRowIndex;
     bool                _isNewEntry = true;

@@ -226,6 +226,9 @@
             </item>
             <item>
              <widget class="QPushButton" name="btnUpdateProject">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="text">
                <string>Update project</string>
               </property>
@@ -233,6 +236,9 @@
             </item>
             <item>
              <widget class="QPushButton" name="btnDeleteProject">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="text">
                <string>Delete project</string>
               </property>
@@ -260,6 +266,9 @@
               </item>
               <item>
                <widget class="QPushButton" name="btnUpdateTask">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
                 <property name="text">
                  <string>Update Task</string>
                 </property>
@@ -267,6 +276,9 @@
               </item>
               <item>
                <widget class="QPushButton" name="btnDeleteTask">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
                 <property name="text">
                  <string>Delete task</string>
                 </property>
