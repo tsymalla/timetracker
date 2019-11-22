@@ -20,13 +20,15 @@ SOURCES += \
     dataprovider.cpp \
     entrymodel.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    projectmodel.cpp
 
 HEADERS += \
     database.h \
     dataprovider.h \
     entrymodel.h \
-    mainwindow.h
+    mainwindow.h \
+    projectmodel.h
 
 FORMS += \
     mainwindow.ui

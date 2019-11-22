@@ -4,6 +4,7 @@
 #include <QComboBox>
 #include <QMainWindow>
 #include "dataprovider.h"
+#include "projectmodel.h"
 #include "entrymodel.h"
 
 QT_BEGIN_NAMESPACE
@@ -29,11 +30,14 @@ private slots:
 
     void on_btnSave_clicked();
 
+    void on_btnCreateProject_clicked();
+
 private:
     Ui::MainWindow      *ui;
 
     DataProvider        _provider;
     EntryModel*         _entryModel;
+    ProjectModel*       _projectModel;
     Entry               _selectedEntry;
     QModelIndex         _selectedRowIndex;
     bool                _isNewEntry = true;

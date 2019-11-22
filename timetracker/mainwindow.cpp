@@ -17,11 +17,9 @@ MainWindow::MainWindow(QWidget *parent)
     _entryModel = new EntryModel(this, _provider);
     ui->tblCurrentData->setModel(_entryModel);
 
-    const auto& p = _provider.getAllProjects();
-    for (const auto& project: p)
-    {
-        ui->cboProject->addItem(project.name, QVariant(project.id));
-    }
+    _projectModel = new ProjectModel(this, _provider);
+    ui->lstProjects->setModel(_projectModel);
+    ui->cboProject->setModel(_projectModel);
 
     const auto currentDate = QDate::currentDate();
     ui->dtFilterStart->setDate(currentDate);
@@ -39,8 +37,9 @@ void MainWindow::on_cboProject_currentIndexChanged(const QString &arg1)
 {
     Q_UNUSED(arg1)
     ui->cboTask->clear();
-
-    const auto& t = _provider.getAllTasksByProject(ui->cboProject->itemData(ui->cboProject->currentIndex()).toInt());
+    auto projectIndex = ui->cboProject->currentIndex();
+    const auto& project = _projectModel->getRow(projectIndex);
+    const auto& t = _provider.getAllTasksByProject(project.id);
     for (const auto& task: t)
     {
         ui->cboTask->addItem(task.name, task.id);
@@ -99,4 +98,13 @@ void MainWindow::_setComboItem(QComboBox *item, int value)
     {
         item->setCurrentIndex(index);
     }
+}
+
+void MainWindow::on_btnCreateProject_clicked()
+{
+    QString projectName = QInputDialog::getText(this, tr("New project name"), tr("Enter the new project name."));
+    Project p;
+    p.name = projectName;
+
+    _projectModel->addRow(std::move(p));
 }
