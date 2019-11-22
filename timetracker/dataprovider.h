@@ -59,6 +59,7 @@ struct Entry
     QString entryContent;
     QDateTime from;
     QDateTime until;
+    QDateTime duration;
 
     static const QString TYPE() {
         return "ENTRY";
@@ -66,7 +67,7 @@ struct Entry
 
     static Entry fromResult(const QSqlQuery& result)
     {
-        return Entry
+        Entry e =
         {
             result.value(0).toInt(),
             result.value(1).toInt(),
@@ -77,6 +78,11 @@ struct Entry
             QDateTime::fromString(result.value(6).toString(), DATE_TIME_FORMAT),
             QDateTime::fromString(result.value(7).toString(), DATE_TIME_FORMAT),
         };
+
+        const auto duration = QDateTime::fromSecsSinceEpoch(e.until.toSecsSinceEpoch() - e.from.toSecsSinceEpoch());
+        e.duration = duration;
+
+        return e;
     }
 };
 

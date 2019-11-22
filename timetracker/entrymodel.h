@@ -10,9 +10,12 @@
 class EntryModel : public QAbstractTableModel
 {
 private:
+    constexpr static int COL_COUNT = 6;
+
     DataProvider& _provider;
     QVector<Entry> _entries;
     void _internalUpdate();
+    const QString _getDurationString(const QDateTime& dt) const;
 public:
     EntryModel(QObject* parent, DataProvider& provider);
     int rowCount(const QModelIndex &parent) const override;
