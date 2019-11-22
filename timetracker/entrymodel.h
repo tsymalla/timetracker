@@ -5,6 +5,7 @@
 
 #include <QAbstractTableModel>
 #include <QObject>
+#include <QVector>
 
 class EntryModel : public QAbstractTableModel
 {

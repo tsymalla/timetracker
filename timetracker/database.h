@@ -6,6 +6,7 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QVariant>
+#include <assert.h>
 
 using ENTITY_ID_TYPE = int;
 

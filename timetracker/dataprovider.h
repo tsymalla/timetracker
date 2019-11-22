@@ -4,6 +4,7 @@
 #include "database.h"
 #include <QDateTime>
 #include <QMap>
+#include <QVector>
 
 using ENTITY_ID_TYPE = int;
 
