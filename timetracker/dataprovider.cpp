@@ -82,7 +82,14 @@ QVector<Entry> DataProvider::getAllEntries() const
 {
     QVector<Entry> entries;
 
-    auto result = _db._genericSelectAll<Entry>();
+    auto result = _db.executeQuery("SELECT e.ID,"
+                                   "p.ID,"
+                                   "t.ID,"
+                                   "p.NAME,"
+                                   "t.NAME,"
+                                   "e.ENTRY_CONTENT,"
+                                   "e.TS_FROM,"
+                                   "e.TS_UNTIL FROM ENTRY e INNER JOIN TASK t ON e.TASK_ID = t.ID INNER JOIN PROJECT p ON t.PROJECT_ID = p.ID");
     while (result.next())
     {
         entries.push_back(Entry::fromResult(result));

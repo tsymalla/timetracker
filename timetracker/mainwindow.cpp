@@ -52,6 +52,8 @@ void MainWindow::on_tblCurrentData_clicked(const QModelIndex &index)
     _selectedEntry = _entryModel->getRow(index);
     ui->dtFrom->setDateTime(_selectedEntry.from);
     ui->dtUntil->setDateTime(_selectedEntry.until);
+    _setComboItem(ui->cboProject, _selectedEntry.projectId);
+    _setComboItem(ui->cboTask, _selectedEntry.taskId);
     ui->txtContent->setText(_selectedEntry.entryContent);
     _selectedRowIndex = index;
 
@@ -68,6 +70,8 @@ void MainWindow::on_btnNew_clicked()
     ui->txtContent->clear();
 
     ui->btnDelete->setEnabled(false);
+    ui->tblCurrentData->clearSelection();
+    ui->tblCurrentData->resizeRowsToContents();
 }
 
 void MainWindow::on_btnDelete_clicked()
@@ -86,4 +90,13 @@ void MainWindow::on_btnSave_clicked()
 
     _entryModel->addRow(std::move(e));
     on_btnNew_clicked();
+}
+
+void MainWindow::_setComboItem(QComboBox *item, int value)
+{
+    auto index = item->findData(value);
+    if (index != -1)
+    {
+        item->setCurrentIndex(index);
+    }
 }

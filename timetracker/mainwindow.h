@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QComboBox>
 #include <QMainWindow>
 #include "dataprovider.h"
 #include "entrymodel.h"
@@ -36,5 +37,7 @@ private:
     Entry               _selectedEntry;
     QModelIndex         _selectedRowIndex;
     bool                _isNewEntry = true;
+
+    void                _setComboItem(QComboBox* item, int value);
 };
 #endif // MAINWINDOW_H

@@ -51,7 +51,10 @@ struct Task
 struct Entry
 {
     ENTITY_ID_TYPE id;
+    ENTITY_ID_TYPE projectId;
     ENTITY_ID_TYPE taskId;
+    QString projectName;
+    QString taskName;
     QString entryContent;
     QDateTime from;
     QDateTime until;
@@ -66,9 +69,12 @@ struct Entry
         {
             result.value(0).toInt(),
             result.value(1).toInt(),
-            result.value(2).toString(),
-            QDateTime::fromTime_t(static_cast<unsigned int>(result.value(3).toInt())),
-            QDateTime::fromTime_t(static_cast<unsigned int>(result.value(4).toInt())),
+            result.value(2).toInt(),
+            result.value(3).toString(),
+            result.value(4).toString(),
+            result.value(5).toString(),
+            QDateTime::fromTime_t(static_cast<unsigned int>(result.value(6).toInt())),
+            QDateTime::fromTime_t(static_cast<unsigned int>(result.value(7).toInt())),
         };
     }
 };

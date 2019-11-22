@@ -19,7 +19,7 @@ int EntryModel::rowCount(const QModelIndex &parent) const
 int EntryModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
-    return 4;
+    return 5;
 }
 
 QVariant EntryModel::data(const QModelIndex &index, int role) const
@@ -34,12 +34,14 @@ QVariant EntryModel::data(const QModelIndex &index, int role) const
     switch (index.column())
     {
     case 0:
-        return entry.taskId;
+        return entry.projectName;
     case 1:
-        return entry.from;
+        return entry.taskName;
     case 2:
-        return entry.until;
+        return entry.from;
     case 3:
+        return entry.until;
+    case 4:
         return entry.entryContent;
     }
 
@@ -53,12 +55,14 @@ QVariant EntryModel::headerData(int section, Qt::Orientation orientation, int ro
         switch (section)
         {
         case 0:
-            return QString("Task");
+            return QString("Project");
         case 1:
-            return QString("From");
+            return QString("Task");
         case 2:
-            return QString("Until");
+            return QString("From");
         case 3:
+            return QString("Until");
+        case 4:
             return QString("Text");
         }
     }
