@@ -8,21 +8,19 @@ void EntryModel::_internalUpdate()
 const QString EntryModel::_getDurationString(const QDateTime &dt) const
 {
     QStringList result;
-#define APPEND_VALUE(value, description) if (value != 0) result << QString::number(value) + " " + description;
+#define APPEND_VALUE(value, description) if (value != 0) result << QString::number(value) + " " + description + (value > 1 ? "s" : "");
 
-    const auto& date = dt.date();
-    const auto days = date.day();
-    const auto months = date.month();
-    const auto years = date.year();
-    const auto& time = dt.time();
-    const auto hours = time.hour();
-    const auto minutes = time.minute();
+    const qint64 DAY = 86400;
+    const auto secs = dt.toSecsSinceEpoch();
+    auto days = secs / DAY;
+    auto t = QTime(0, 0).addSecs(secs  % DAY);
 
-    APPEND_VALUE(days,      "day(s)")
-    APPEND_VALUE(months,    "month(s)")
-    APPEND_VALUE(years,     "year(s)")
-    APPEND_VALUE(hours,     "hour(s)")
-    APPEND_VALUE(minutes,   "minute(s)")
+    const auto hours = t.hour();
+    const auto minutes = t.minute();
+
+    APPEND_VALUE(days,      "day")
+    APPEND_VALUE(hours,     "hour")
+    APPEND_VALUE(minutes,   "minute")
 
     return result.join(", ");
 }
