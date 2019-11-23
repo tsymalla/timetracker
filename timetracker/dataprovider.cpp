@@ -31,6 +31,11 @@ void DataProvider::addProject(const QString &projectName)
     _insert<Project>(args);
 }
 
+void DataProvider::updateProject(const Project &project, const QString &projectName)
+{
+
+}
+
 bool DataProvider::deleteProject(const Project &project)
 {
     return _db->_genericDelete<Project>(project.id);
@@ -54,12 +59,17 @@ void DataProvider::addTask(const Task& task)
     _insert<Task>(args);
 }
 
+void DataProvider::updateTask(const Task &task, const QString &taskName)
+{
+
+}
+
 bool DataProvider::deleteTask(const Task &task)
 {
     return _db->_genericDelete<Task>(task.id);
 }
 
-QVector<Task> &DataProvider::getAllTasksByProject(const int projectId)
+QVector<Task> &DataProvider::getAllTasksByProject(const ENTITY_ID_TYPE projectId)
 {
     _tasks[projectId].clear();
 
@@ -78,6 +88,11 @@ void DataProvider::addEntry(const ENTITY_ID_TYPE taskId, const QString &text, co
     const auto untilFormat = until.toString(DATE_TIME_FORMAT);
     QVariantList args = { taskId, text, fromFormat, untilFormat };
     _insert<Entry>(args);
+}
+
+void DataProvider::updateEntry(const Entry &entry, const QString &entryContent, const QDateTime &from, const QDateTime &until, const ENTITY_ID_TYPE taskId)
+{
+
 }
 
 bool DataProvider::deleteEntry(const Entry &entry)
