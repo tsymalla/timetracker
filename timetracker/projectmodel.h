@@ -9,12 +9,12 @@
 class ProjectModel : public QAbstractListModel
 {
 private:
-    DataProvider& _provider;
+    DataProvider* _provider;
     QVector<Project> _projects;
 
     void _internalUpdate();
 public:
-    ProjectModel(QObject* parent, DataProvider& provider);
+    ProjectModel(QObject* parent, DataProvider* provider);
 
     int rowCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;

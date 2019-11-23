@@ -10,8 +10,9 @@
 
 using ENTITY_ID_TYPE = int;
 
-class Database final
+class Database final: public QObject
 {
+Q_OBJECT
     friend class DataProvider;
 private:
     void _init();
@@ -78,7 +79,7 @@ private:
     }
 
 public:
-    Database();
+    Database(QObject *parent);
     Database(const Database&) = delete;
     Database& operator=(const Database&) = delete;
     Database(Database&&) = delete;

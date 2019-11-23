@@ -2,7 +2,7 @@
 
 void EntryModel::_internalUpdate()
 {
-    _entries = _provider.getAllEntries();
+    _entries = _provider->getAllEntries();
 }
 
 const QString EntryModel::_getDurationString(const QDateTime &dt) const
@@ -22,10 +22,15 @@ const QString EntryModel::_getDurationString(const QDateTime &dt) const
     APPEND_VALUE(hours,     "hour")
     APPEND_VALUE(minutes,   "minute")
 
+    if (result.empty())
+    {
+        result << "0 minutes";
+    }
+
     return result.join(", ");
 }
 
-EntryModel::EntryModel(QObject *parent, DataProvider &provider): QAbstractTableModel(parent), _provider(provider)
+EntryModel::EntryModel(QObject *parent, DataProvider *provider): QAbstractTableModel(parent), _provider(provider)
 {
     _internalUpdate();
 }
@@ -104,7 +109,7 @@ void EntryModel::addRow(const Entry &entry)
     const auto row = _entries.count();
 
     beginInsertRows(QModelIndex(), row, row);
-    _provider.addEntry(entry.taskId, entry.entryContent, entry.from, entry.until);
+    _provider->addEntry(entry.taskId, entry.entryContent, entry.from, entry.until);
     endInsertRows();
 
     _internalUpdate();
@@ -118,7 +123,7 @@ void EntryModel::updateRow(const Entry &entry)
 void EntryModel::removeRow(const QModelIndex &index, const Entry &entry)
 {
     beginRemoveRows(QModelIndex(), index.row(), index.row());
-    _provider.deleteEntry(entry);
+    _provider->deleteEntry(entry);
     endRemoveRows();
 
     _internalUpdate();

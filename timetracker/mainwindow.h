@@ -37,10 +37,12 @@ private slots:
 
     void on_btnDeleteProject_clicked();
 
+    void on_btnCreateTask_clicked();
+
 private:
     Ui::MainWindow      *ui;
 
-    DataProvider        _provider;
+    DataProvider*       _provider;
     ProjectModel*       _projectModel;
     TaskModel*          _taskModel;
     EntryModel*         _entryModel;

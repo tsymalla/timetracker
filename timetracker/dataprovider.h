@@ -86,8 +86,9 @@ struct Entry
     }
 };
 
-class DataProvider final
+class DataProvider final: public QObject
 {
+Q_OBJECT
 private:
     template<typename ENTITY, typename COLUMN>
     void registerEntityColumn(COLUMN column)
@@ -95,17 +96,17 @@ private:
         _entityMapping[ENTITY::TYPE()] << column;
     }
 
-    Database _db;
-    QMap<QString, QStringList> _entityMapping;
-    QVector<Project> _projects;
-    QMap<int, QVector<Task>> _tasks;
+    Database*                       _db;
+    QMap<QString, QStringList>      _entityMapping;
+    QVector<Project>                _projects;
+    QMap<int, QVector<Task>>        _tasks;
 
     void _initMapping();
 
     template<typename T>
     void _insert(const QVariantList& args)
     {
-        _db._genericInsert<T>(_entityMapping[T::TYPE()], args);
+        _db->_genericInsert<T>(_entityMapping[T::TYPE()], args);
     }
 
     /*template<typename T>
@@ -114,7 +115,7 @@ private:
         _db.genericUpdate<T>(_entityMapping[T::TYPE()], args);
     }*/
 public:
-    DataProvider();
+    DataProvider(QObject *parent);
 
     bool isInitialized() const;
 
@@ -123,8 +124,8 @@ public:
     bool deleteProject(const Project& project);
     QVector<Project>& getAllProjects();
 
-    void addTask(const Project& project, const QString& taskName);
-    void updateTask(const Task& task, const Project& project, const QString& taskName);
+    void addTask(const Task& task);
+    void updateTask(const Task& task, const QString& taskName);
     bool deleteTask(const Task& task);
     QVector<Task>& getAllTasksByProject(const ENTITY_ID_TYPE projectId);
 

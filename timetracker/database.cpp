@@ -77,7 +77,7 @@ QSqlQuery Database::executeQuery(const QString &sql) const
     return executeQuery(sql, {});
 }
 
-Database::Database(): _isInitialized(false)
+Database::Database(QObject *parent): QObject(parent), _isInitialized(false)
 {
     _init();
 }

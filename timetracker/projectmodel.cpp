@@ -2,10 +2,10 @@
 
 void ProjectModel::_internalUpdate()
 {
-    _projects = _provider.getAllProjects();
+    _projects = _provider->getAllProjects();
 }
 
-ProjectModel::ProjectModel(QObject *parent, DataProvider &provider): QAbstractListModel(parent), _provider(provider)
+ProjectModel::ProjectModel(QObject *parent, DataProvider *provider): QAbstractListModel(parent), _provider(provider)
 {
     _internalUpdate();
 }
@@ -37,7 +37,7 @@ void ProjectModel::addRow(const Project &project)
 {
     const auto rows = _projects.count();
     beginInsertRows(QModelIndex(), rows, rows);
-    _provider.addProject(project.name);
+    _provider->addProject(project.name);
     endInsertRows();
 
     _internalUpdate();
@@ -51,7 +51,7 @@ void ProjectModel::updateRow(const Project &project)
 void ProjectModel::removeRow(const QModelIndex &index, const Project &project)
 {
     beginRemoveRows(QModelIndex(), index.row(), index.row());
-    _provider.deleteProject(project);
+    _provider->deleteProject(project);
     endRemoveRows();
 
     _internalUpdate();
