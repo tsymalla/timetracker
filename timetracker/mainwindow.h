@@ -7,6 +7,7 @@
 #include "projectmodel.h"
 #include "taskmodel.h"
 #include "entrymodel.h"
+#include "projecttaskadmindialog.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -31,26 +32,22 @@ private slots:
 
     void on_btnSave_clicked();
 
-    void on_btnCreateProject_clicked();
+    void on_actionManage_projects_and_tasks_triggered();
 
-    void on_lstProjects_clicked(const QModelIndex &index);
+    void onProjectsChanged();
 
-    void on_btnDeleteProject_clicked();
-
-    void on_btnCreateTask_clicked();
+    void onTasksChanged(ENTITY_ID_TYPE projectId);
 
 private:
-    Ui::MainWindow      *ui;
+    Ui::MainWindow              *ui;
+    ProjectTaskAdminDialog      *_projectTaskAdminDialog;
 
-    DataProvider*       _provider;
-    ProjectModel*       _projectModel;
-    TaskModel*          _taskModel;
-    EntryModel*         _entryModel;
-    Project             _selectedProject;
-    Entry               _selectedEntry;
-    QModelIndex         _selectedRowIndex;
-    bool                _isNewEntry = true;
-
-    void                _setComboItem(QComboBox* item, int value);
+    DataProvider                *_provider;
+    ProjectModel                *_projectModel;
+    TaskModel                   *_taskModel;
+    EntryModel                  *_entryModel;
+    Entry                       _selectedEntry;
+    QModelIndex                 _selectedRowIndex;
+    bool                        _isNewEntry = true;
 };
 #endif // MAINWINDOW_H

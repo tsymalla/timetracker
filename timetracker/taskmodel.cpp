@@ -5,7 +5,7 @@ void TaskModel::_internalUpdate()
     assert(_projectId > 0);
     _tasks = _provider->getAllTasksByProject(_projectId);
 
-    emit dataChanged(index(0), index(_tasks.count() - 1));
+    emit dataChanged(index(0), index(_tasks.count()));
 }
 
 TaskModel::TaskModel(QObject *parent, DataProvider *provider): QAbstractListModel(parent), _provider(provider), _projectId(0)
@@ -28,7 +28,7 @@ int TaskModel::rowCount(const QModelIndex &parent) const
 
 QVariant TaskModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid() || role != Qt::DisplayRole)
+    if (!index.isValid() || role != Qt::DisplayRole || _tasks.empty())
     {
         return QVariant();
     }
@@ -41,6 +41,19 @@ QVariant TaskModel::data(const QModelIndex &index, int role) const
 Task &TaskModel::getRow(const int index)
 {
     return _tasks[index];
+}
+
+int TaskModel::getIndex(const ENTITY_ID_TYPE id) const
+{
+    for (auto i = 0; i < _tasks.count(); ++i)
+    {
+        if (_tasks[i].id == id)
+        {
+            return i;
+        }
+    }
+
+    return -1;
 }
 
 void TaskModel::addRow(const Task &task)
@@ -65,5 +78,10 @@ void TaskModel::removeRow(const QModelIndex &index, const Task &task)
     _provider->deleteTask(task);
     endRemoveRows();
 
+    _internalUpdate();
+}
+
+void TaskModel::refresh()
+{
     _internalUpdate();
 }

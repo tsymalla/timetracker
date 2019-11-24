@@ -23,9 +23,11 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
 
     Task& getRow(const int index);
+    int getIndex(const ENTITY_ID_TYPE id) const;
     void addRow(const Task& task);
     void updateRow(const Task& task);
     void removeRow(const QModelIndex &index, const Task& task);
+    void refresh();
 };
 
 #endif // TASKMODEL_H

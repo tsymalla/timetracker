@@ -20,9 +20,11 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
 
     Project& getRow(const int index);
+    int getIndex(const ENTITY_ID_TYPE id) const;
     void addRow(const Project& project);
     void updateRow(const Project& project);
     void removeRow(const QModelIndex &index, const Project& project);
+    void refresh();
 };
 
 #endif // PROJECTMODEL_H

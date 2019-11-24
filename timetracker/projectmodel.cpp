@@ -3,6 +3,8 @@
 void ProjectModel::_internalUpdate()
 {
     _projects = _provider->getAllProjects();
+
+    emit dataChanged(index(0), index(_projects.count()));
 }
 
 ProjectModel::ProjectModel(QObject *parent, DataProvider *provider): QAbstractListModel(parent), _provider(provider)
@@ -18,7 +20,7 @@ int ProjectModel::rowCount(const QModelIndex &parent) const
 
 QVariant ProjectModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid() || role != Qt::DisplayRole)
+    if (!index.isValid() || role != Qt::DisplayRole || _projects.empty())
     {
         return QVariant();
     }
@@ -32,6 +34,20 @@ Project &ProjectModel::getRow(const int index)
 {
     return _projects[index];
 }
+
+int ProjectModel::getIndex(const ENTITY_ID_TYPE id) const
+{
+    for (auto i = 0; i < _projects.count(); ++i)
+    {
+        if (_projects[i].id == id)
+        {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
 
 void ProjectModel::addRow(const Project &project)
 {
@@ -54,5 +70,10 @@ void ProjectModel::removeRow(const QModelIndex &index, const Project &project)
     _provider->deleteProject(project);
     endRemoveRows();
 
+    _internalUpdate();
+}
+
+void ProjectModel::refresh()
+{
     _internalUpdate();
 }

@@ -20,11 +20,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     _taskModel = new TaskModel(this, _provider);
     ui->cboTask->setModel(_taskModel);
-    ui->lstTasks->setModel(_taskModel);
 
-    _projectModel= new ProjectModel(this, _provider);
+    _projectTaskAdminDialog = new ProjectTaskAdminDialog(_provider, this);
+
+    _projectModel = new ProjectModel(this, _provider);
     ui->cboProject->setModel(_projectModel);
-    ui->lstProjects->setModel(_projectModel);
+
+    connect(_projectTaskAdminDialog, &ProjectTaskAdminDialog::projectsChanged, this, &MainWindow::onProjectsChanged);
+    connect(_projectTaskAdminDialog, &ProjectTaskAdminDialog::tasksChanged, this, &MainWindow::onTasksChanged);
 
     const auto currentDate = QDate::currentDate();
     ui->dtFilterStart->setDate(currentDate);
@@ -52,8 +55,13 @@ void MainWindow::on_tblCurrentData_clicked(const QModelIndex &index)
     _selectedEntry = _entryModel->getRow(index);
     ui->dtFrom->setDateTime(_selectedEntry.from);
     ui->dtUntil->setDateTime(_selectedEntry.until);
-    _setComboItem(ui->cboProject, _selectedEntry.projectId);
-    _setComboItem(ui->cboTask, _selectedEntry.taskId);
+
+    auto projectIndex = _projectModel->getIndex(_selectedEntry.projectId);
+    ui->cboProject->setCurrentIndex(projectIndex);
+
+    auto taskIndex = _taskModel->getIndex(_selectedEntry.taskId);
+    ui->cboTask->setCurrentIndex(taskIndex);
+
     ui->txtContent->setText(_selectedEntry.entryContent);
     _selectedRowIndex = index;
 
@@ -93,42 +101,21 @@ void MainWindow::on_btnSave_clicked()
     on_btnNew_clicked();
 }
 
-void MainWindow::_setComboItem(QComboBox *item, int value)
+void MainWindow::on_actionManage_projects_and_tasks_triggered()
 {
-    auto index = item->findData(value);
-    if (index != -1)
+    _projectTaskAdminDialog->show();
+}
+
+void MainWindow::onProjectsChanged()
+{
+    _projectModel->refresh();
+}
+
+void MainWindow::onTasksChanged(ENTITY_ID_TYPE projectId)
+{
+    if (projectId == _selectedEntry.projectId)
     {
-        item->setCurrentIndex(index);
+        _taskModel->refresh();
     }
-}
 
-void MainWindow::on_btnCreateProject_clicked()
-{
-    QString projectName = QInputDialog::getText(this, tr("New project name"), tr("Enter the new project name."));
-    Project p;
-    p.name = projectName;
-
-    _projectModel->addRow(std::move(p));
-}
-
-void MainWindow::on_lstProjects_clicked(const QModelIndex &index)
-{
-    _selectedProject = _projectModel->getRow(index.row());
-    ui->btnDeleteProject->setEnabled(true);
-    _taskModel->setProjectId(_selectedProject.id);
-}
-
-void MainWindow::on_btnDeleteProject_clicked()
-{
-    //_projectModel->removeRow()
-}
-
-void MainWindow::on_btnCreateTask_clicked()
-{
-    QString taskName = QInputDialog::getText(this, tr("New task name"), tr("Enter the new task name."));
-    Task t;
-    t.projectId = _selectedProject.id;
-    t.name = taskName;
-
-    _taskModel->addRow(std::move(t));
 }

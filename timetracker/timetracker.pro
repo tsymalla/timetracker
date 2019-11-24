@@ -22,6 +22,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     projectmodel.cpp \
+    projecttaskadmindialog.cpp \
     taskmodel.cpp
 
 HEADERS += \
@@ -30,10 +31,12 @@ HEADERS += \
     entrymodel.h \
     mainwindow.h \
     projectmodel.h \
+    projecttaskadmindialog.h \
     taskmodel.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    projecttaskadmindialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
