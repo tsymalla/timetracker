@@ -69,6 +69,24 @@ private:
     }
 
     template<typename T>
+    QSqlQuery _genericUpdate(const ENTITY_ID_TYPE id, const QStringList& columns, QVariantList& args)
+    {
+        const QString entity = T::TYPE();
+        QString sql = "UPDATE " + entity + " SET ";
+        QStringList updateClause;
+        for (int i = 0; i < args.size(); ++i)
+        {
+            updateClause << columns[i] + "=:" + QString::number(i + 1);
+        }
+
+        sql += updateClause.join(", ");
+        sql += " WHERE ID = :" + QString::number(args.size() + 1);
+
+        args << id;
+        return executeQuery(sql, args);
+    }
+
+    template<typename T>
     bool _genericDelete(const ENTITY_ID_TYPE id)
     {
         const QString sql = "DELETE FROM " + T::TYPE() + " WHERE ID = :1";

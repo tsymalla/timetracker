@@ -3,6 +3,8 @@
 void EntryModel::_internalUpdate()
 {
     _entries = _provider->getAllEntries();
+
+    emit dataChanged(index(0, 0), index(_entries.count(), COL_COUNT));
 }
 
 const QString EntryModel::_getDurationString(const QDateTime &dt) const
@@ -117,6 +119,7 @@ void EntryModel::addRow(const Entry &entry)
 
 void EntryModel::updateRow(const Entry &entry)
 {
+    _provider->updateEntry(entry);
     _internalUpdate();
 }
 
@@ -126,5 +129,10 @@ void EntryModel::removeRow(const QModelIndex &index, const Entry &entry)
     _provider->deleteEntry(entry);
     endRemoveRows();
 
+    _internalUpdate();
+}
+
+void EntryModel::refresh()
+{
     _internalUpdate();
 }

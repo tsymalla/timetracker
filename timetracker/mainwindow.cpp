@@ -65,8 +65,10 @@ void MainWindow::on_tblCurrentData_clicked(const QModelIndex &index)
 
     ui->txtContent->setText(_selectedEntry.entryContent);
     _selectedRowIndex = index;
+    _isNewEntry = false;
 
     ui->btnDelete->setEnabled(true);
+    _isNewEntry = false;
 }
 
 void MainWindow::on_btnNew_clicked()
@@ -91,15 +93,25 @@ void MainWindow::on_btnDelete_clicked()
 
 void MainWindow::on_btnSave_clicked()
 {
-    Entry e;
     Task t = _taskModel->getRow(ui->cboTask->currentIndex());
-    e.taskId =          t.id;
-    e.entryContent =    ui->txtContent->toPlainText();
-    e.from =            ui->dtFrom->dateTime();
-    e.until =           ui->dtUntil->dateTime();
 
-    _entryModel->addRow(std::move(e));
-    on_btnNew_clicked();
+    Entry e;
+    e.taskId            = t.id;
+    e.entryContent      = ui->txtContent->toPlainText();
+    e.from              = ui->dtFrom->dateTime();
+    e.until             = ui->dtUntil->dateTime();
+
+    if (_isNewEntry)
+    {
+        _entryModel->addRow(std::move(e));
+
+        on_btnNew_clicked();
+    }
+    else
+    {
+        e.id = _selectedEntry.id;
+        _entryModel->updateRow(std::move(e));
+    }
 }
 
 void MainWindow::on_actionManage_projects_and_tasks_triggered()
@@ -110,6 +122,7 @@ void MainWindow::on_actionManage_projects_and_tasks_triggered()
 void MainWindow::onProjectsChanged()
 {
     _projectModel->refresh();
+    _entryModel->refresh();
 }
 
 void MainWindow::onTasksChanged(ENTITY_ID_TYPE projectId)
@@ -117,6 +130,6 @@ void MainWindow::onTasksChanged(ENTITY_ID_TYPE projectId)
     if (projectId == _selectedEntry.projectId)
     {
         _taskModel->refresh();
+        _entryModel->refresh();
     }
-
 }

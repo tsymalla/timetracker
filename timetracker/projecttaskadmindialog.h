@@ -34,6 +34,10 @@ private slots:
 
     void on_lstTasks_clicked(const QModelIndex &index);
 
+    void on_btnUpdateProject_clicked();
+
+    void on_btnUpdateTask_clicked();
+
 private:
     Ui::ProjectTaskAdminDialog  *ui;
     DataProvider                *_provider;

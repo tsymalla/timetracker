@@ -31,9 +31,10 @@ void DataProvider::addProject(const QString &projectName)
     _insert<Project>(args);
 }
 
-void DataProvider::updateProject(const Project &project, const QString &projectName)
+void DataProvider::updateProject(const Project &project)
 {
-
+    QVariantList args = { project.name };
+    _update<Project>(project.id, args);
 }
 
 bool DataProvider::deleteProject(const Project &project)
@@ -59,9 +60,10 @@ void DataProvider::addTask(const Task& task)
     _insert<Task>(args);
 }
 
-void DataProvider::updateTask(const Task &task, const QString &taskName)
+void DataProvider::updateTask(const Task &task)
 {
-
+    QVariantList args = { task.projectId, task.name };
+    _update<Task>(task.id, args);
 }
 
 bool DataProvider::deleteTask(const Task &task)
@@ -90,9 +92,12 @@ void DataProvider::addEntry(const ENTITY_ID_TYPE taskId, const QString &text, co
     _insert<Entry>(args);
 }
 
-void DataProvider::updateEntry(const Entry &entry, const QString &entryContent, const QDateTime &from, const QDateTime &until, const ENTITY_ID_TYPE taskId)
+void DataProvider::updateEntry(const Entry &entry)
 {
-
+    const auto fromFormat = entry.from.toString(DATE_TIME_FORMAT);
+    const auto untilFormat = entry.until.toString(DATE_TIME_FORMAT);
+    QVariantList args = { entry.taskId, entry.entryContent, fromFormat, untilFormat };
+    _update<Entry>(entry.id, args);
 }
 
 bool DataProvider::deleteEntry(const Entry &entry)

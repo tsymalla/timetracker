@@ -27,6 +27,8 @@ public:
     void addRow(const Entry& entry);
     void updateRow(const Entry& entry);
     void removeRow(const QModelIndex &index, const Entry& entry);
+
+    void refresh();
 };
 
 #endif // ENTRYMODEL_H

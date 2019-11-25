@@ -109,28 +109,28 @@ private:
         _db->_genericInsert<T>(_entityMapping[T::TYPE()], args);
     }
 
-    /*template<typename T>
-    void _update(const QVariantList& args)
+    template<typename T>
+    void _update(const ENTITY_ID_TYPE id, QVariantList& args)
     {
-        _db.genericUpdate<T>(_entityMapping[T::TYPE()], args);
-    }*/
+        _db->_genericUpdate<T>(id, _entityMapping[T::TYPE()], args);
+    }
 public:
     DataProvider(QObject *parent);
 
     bool isInitialized() const;
 
     void addProject(const QString& projectName);
-    void updateProject(const Project& project, const QString& projectName);
+    void updateProject(const Project& project);
     bool deleteProject(const Project& project);
     QVector<Project>& getAllProjects();
 
     void addTask(const Task& task);
-    void updateTask(const Task& task, const QString& taskName);
+    void updateTask(const Task& task);
     bool deleteTask(const Task& task);
     QVector<Task>& getAllTasksByProject(const ENTITY_ID_TYPE projectId);
 
     void addEntry(const ENTITY_ID_TYPE taskId, const QString& entryContent, const QDateTime& from, const QDateTime& until);
-    void updateEntry(const Entry& entry, const QString& entryContent, const QDateTime& from, const QDateTime& until, const ENTITY_ID_TYPE taskId);
+    void updateEntry(const Entry& entry);
     bool deleteEntry(const Entry& entry);
     QVector<Entry> getAllEntries() const;
 };

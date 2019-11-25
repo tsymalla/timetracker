@@ -48,7 +48,6 @@ int ProjectModel::getIndex(const ENTITY_ID_TYPE id) const
     return -1;
 }
 
-
 void ProjectModel::addRow(const Project &project)
 {
     const auto rows = _projects.count();
@@ -61,6 +60,7 @@ void ProjectModel::addRow(const Project &project)
 
 void ProjectModel::updateRow(const Project &project)
 {
+    _provider->updateProject(project);
     _internalUpdate();
 }
 

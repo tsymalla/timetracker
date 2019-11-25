@@ -69,6 +69,7 @@ void TaskModel::addRow(const Task &task)
 
 void TaskModel::updateRow(const Task &task)
 {
+    _provider->updateTask(task);
     _internalUpdate();
 }
 
