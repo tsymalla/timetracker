@@ -45,6 +45,7 @@ void MainWindow::on_cboProject_currentIndexChanged(const QString &arg1)
 {
     Q_UNUSED(arg1)
     ui->cboTask->clear();
+    ui->cboTask->setCurrentIndex(-1);
     auto projectIndex = ui->cboProject->currentIndex();
     const auto& project = _projectModel->getRow(projectIndex);
     _taskModel->setProjectId(project.id);
