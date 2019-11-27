@@ -73,9 +73,9 @@ void TaskModel::updateRow(const Task &task)
     _internalUpdate();
 }
 
-void TaskModel::removeRow(const QModelIndex &index, const Task &task)
+void TaskModel::removeRow(const int index, const Task &task)
 {
-    beginRemoveRows(QModelIndex(), index.row(), index.row());
+    beginRemoveRows(QModelIndex(), index, index);
     _provider->deleteTask(task);
     endRemoveRows();
 

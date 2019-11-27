@@ -8,6 +8,7 @@
 #include "taskmodel.h"
 #include "entrymodel.h"
 #include "projecttaskadmindialog.h"
+#include "aboutdialog.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -38,9 +39,24 @@ private slots:
 
     void onTasksChanged(ENTITY_ID_TYPE projectId);
 
+    void on_actionAbout_triggered();
+
+    void on_actionCreate_new_database_file_triggered();
+
+    void on_actionExit_triggered();
+
+    void on_btnFilterDay_clicked();
+
+    void on_btnFilterWeek_clicked();
+
+    void on_btnFilterMonth_clicked();
+
+    void on_btnFilterYear_clicked();
+
 private:
     Ui::MainWindow              *ui;
     ProjectTaskAdminDialog      *_projectTaskAdminDialog;
+    AboutDialog                 *_aboutDialog;
 
     DataProvider                *_provider;
     ProjectModel                *_projectModel;
@@ -49,5 +65,8 @@ private:
     Entry                       _selectedEntry;
     QModelIndex                 _selectedRowIndex;
     bool                        _isNewEntry = true;
+
+    void                        _refreshData();
+    void                        _resetFilters(const int days);
 };
 #endif // MAINWINDOW_H

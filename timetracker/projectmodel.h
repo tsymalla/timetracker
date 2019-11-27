@@ -23,7 +23,7 @@ public:
     int getIndex(const ENTITY_ID_TYPE id) const;
     void addRow(const Project& project);
     void updateRow(const Project& project);
-    void removeRow(const QModelIndex &index, const Project& project);
+    void removeRow(const int index, const Project& project);
     void refresh();
 };
 

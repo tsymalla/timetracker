@@ -238,20 +238,46 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>26</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAdministration">
     <property name="title">
-     <string>Administration</string>
+     <string>Menu</string>
     </property>
+    <addaction name="actionCreate_new_database_file"/>
     <addaction name="actionManage_projects_and_tasks"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>?</string>
+    </property>
+    <addaction name="actionAbout"/>
    </widget>
    <addaction name="menuAdministration"/>
+   <addaction name="menu"/>
   </widget>
+  <widget class="QStatusBar" name="statusBar"/>
   <action name="actionManage_projects_and_tasks">
    <property name="text">
     <string>Manage projects and tasks</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
+  <action name="actionCreate_new_database_file">
+   <property name="text">
+    <string>Create new database file</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
    </property>
   </action>
  </widget>

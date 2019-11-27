@@ -64,9 +64,9 @@ void ProjectModel::updateRow(const Project &project)
     _internalUpdate();
 }
 
-void ProjectModel::removeRow(const QModelIndex &index, const Project &project)
+void ProjectModel::removeRow(const int index, const Project &project)
 {
-    beginRemoveRows(QModelIndex(), index.row(), index.row());
+    beginRemoveRows(QModelIndex(), index, index);
     _provider->deleteProject(project);
     endRemoveRows();
 

@@ -16,6 +16,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    aboutdialog.cpp \
     database.cpp \
     dataprovider.cpp \
     entrymodel.cpp \
@@ -26,6 +27,7 @@ SOURCES += \
     taskmodel.cpp
 
 HEADERS += \
+    aboutdialog.h \
     database.h \
     dataprovider.h \
     entrymodel.h \
@@ -35,6 +37,7 @@ HEADERS += \
     taskmodel.h
 
 FORMS += \
+    aboutdialog.ui \
     mainwindow.ui \
     projecttaskadmindialog.ui
 

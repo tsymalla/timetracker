@@ -38,6 +38,8 @@ private slots:
 
     void on_btnUpdateTask_clicked();
 
+    void on_btnDeleteTask_clicked();
+
 private:
     Ui::ProjectTaskAdminDialog  *ui;
     DataProvider                *_provider;

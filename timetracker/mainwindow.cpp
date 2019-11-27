@@ -15,20 +15,25 @@ MainWindow::MainWindow(QWidget *parent)
         QApplication::exit();
     }
 
+    // dialogs
+    _projectTaskAdminDialog = new ProjectTaskAdminDialog(_provider, this);
+    _aboutDialog = new AboutDialog(this);
+
+    // models and their connection
     _entryModel = new EntryModel(this, _provider);
     ui->tblCurrentData->setModel(_entryModel);
 
     _taskModel = new TaskModel(this, _provider);
     ui->cboTask->setModel(_taskModel);
 
-    _projectTaskAdminDialog = new ProjectTaskAdminDialog(_provider, this);
-
     _projectModel = new ProjectModel(this, _provider);
     ui->cboProject->setModel(_projectModel);
 
+    // receive events from admin dialog when the data has changed
     connect(_projectTaskAdminDialog, &ProjectTaskAdminDialog::projectsChanged, this, &MainWindow::onProjectsChanged);
     connect(_projectTaskAdminDialog, &ProjectTaskAdminDialog::tasksChanged, this, &MainWindow::onTasksChanged);
 
+    // set filter field values to default
     const auto currentDate = QDate::currentDate();
     ui->dtFilterStart->setDate(currentDate);
     ui->dtFilterEnd->setDate(currentDate);
@@ -88,6 +93,7 @@ void MainWindow::on_btnNew_clicked()
 void MainWindow::on_btnDelete_clicked()
 {
     _entryModel->removeRow(_selectedRowIndex, std::move(_selectedEntry));
+    statusBar()->showMessage(tr("Deleted entry."));
     on_btnNew_clicked();
 }
 
@@ -104,6 +110,7 @@ void MainWindow::on_btnSave_clicked()
     if (_isNewEntry)
     {
         _entryModel->addRow(std::move(e));
+        statusBar()->showMessage(tr("Created entry."));
 
         on_btnNew_clicked();
     }
@@ -111,6 +118,7 @@ void MainWindow::on_btnSave_clicked()
     {
         e.id = _selectedEntry.id;
         _entryModel->updateRow(std::move(e));
+        statusBar()->showMessage(tr("Updated entry."));
     }
 }
 
@@ -121,15 +129,69 @@ void MainWindow::on_actionManage_projects_and_tasks_triggered()
 
 void MainWindow::onProjectsChanged()
 {
-    _projectModel->refresh();
-    _entryModel->refresh();
+    _refreshData();
 }
 
 void MainWindow::onTasksChanged(ENTITY_ID_TYPE projectId)
 {
     if (projectId == _selectedEntry.projectId)
     {
-        _taskModel->refresh();
-        _entryModel->refresh();
+        _refreshData();
     }
+}
+
+void MainWindow::_refreshData()
+{
+    _projectModel->refresh();
+    _entryModel->refresh();
+
+    statusBar()->showMessage(tr("Projects and tasks refreshed."));
+}
+
+void MainWindow::_resetFilters(const int days)
+{
+    assert(days > -1);
+
+    const auto startDate      = QDate::currentDate();
+    const auto endDate        = startDate.addDays(days);
+
+    ui->dtFilterStart->setDate(startDate);
+    ui->dtFilterEnd->setDate(endDate);
+
+    _entryModel->refresh();
+    statusBar()->showMessage(tr("Filters refreshed."));
+}
+
+void MainWindow::on_actionCreate_new_database_file_triggered()
+{
+}
+
+void MainWindow::on_actionExit_triggered()
+{
+    QApplication::exit();
+}
+
+void MainWindow::on_actionAbout_triggered()
+{
+    _aboutDialog->show();
+}
+
+void MainWindow::on_btnFilterDay_clicked()
+{
+    _resetFilters(0);
+}
+
+void MainWindow::on_btnFilterWeek_clicked()
+{
+    _resetFilters(7);
+}
+
+void MainWindow::on_btnFilterMonth_clicked()
+{
+    _resetFilters(30);
+}
+
+void MainWindow::on_btnFilterYear_clicked()
+{
+    _resetFilters(365);
 }
