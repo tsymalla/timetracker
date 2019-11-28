@@ -1,10 +1,12 @@
 #include "entrymodel.h"
+#include <QDebug>
 
 void EntryModel::_internalUpdate()
 {
-    _entries = _provider->getAllEntries();
+    _entries = _provider->getEntriesByDateRange(_dateFilter.start, _dateFilter.end);
 
     emit dataChanged(index(0, 0), index(_entries.count(), COL_COUNT));
+    emit layoutChanged();
 }
 
 const QString EntryModel::_getDurationString(const QDateTime &dt) const
@@ -128,6 +130,14 @@ void EntryModel::removeRow(const QModelIndex &index, const Entry &entry)
     beginRemoveRows(QModelIndex(), index.row(), index.row());
     _provider->deleteEntry(entry);
     endRemoveRows();
+
+    _internalUpdate();
+}
+
+void EntryModel::setDateFilter(const QDate &start, const QDate &end)
+{
+    _dateFilter.start   = start;
+    _dateFilter.end     = end;
 
     _internalUpdate();
 }

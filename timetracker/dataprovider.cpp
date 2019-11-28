@@ -116,7 +116,32 @@ QVector<Entry> DataProvider::getAllEntries() const
                                    "t.NAME,"
                                    "e.ENTRY_CONTENT,"
                                    "e.TS_FROM,"
-                                   "e.TS_UNTIL FROM ENTRY e INNER JOIN TASK t ON e.TASK_ID = t.ID INNER JOIN PROJECT p ON t.PROJECT_ID = p.ID");
+                                   "e.TS_UNTIL FROM ENTRY e INNER JOIN TASK t ON e.TASK_ID = t.ID INNER JOIN PROJECT p ON t.PROJECT_ID = p.ID "
+                                   "ORDER BY e.ID DESC");
+    while (result.next())
+    {
+        entries.push_back(Entry::fromResult(result));
+    }
+
+    return entries;
+}
+
+QVector<Entry> DataProvider::getEntriesByDateRange(const QDate &start, const QDate &end) const
+{
+    QVector<Entry> entries;
+    const QVariantList args = { start.toString(DATE_FORMAT), QDateTime(end).addDays(1).addSecs(-1).toString(DATE_FORMAT) };
+
+    auto result = _db->executeQuery("SELECT e.ID,"
+                                    "p.ID,"
+                                    "t.ID,"
+                                    "p.NAME,"
+                                    "t.NAME,"
+                                    "e.ENTRY_CONTENT,"
+                                    "e.TS_FROM,"
+                                    "e.TS_UNTIL FROM ENTRY e INNER JOIN TASK t ON e.TASK_ID = t.ID INNER JOIN PROJECT p ON t.PROJECT_ID = p.ID "
+                                    "WHERE DATE(e.TS_FROM) >= DATE(:1) AND DATE(e.TS_UNTIL) <= DATE(:2) "
+                                    "ORDER BY e.ID DESC", args);
+
     while (result.next())
     {
         entries.push_back(Entry::fromResult(result));

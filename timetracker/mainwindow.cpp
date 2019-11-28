@@ -39,6 +39,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->dtFilterEnd->setDate(currentDate);
 
     on_btnNew_clicked();
+    on_btnFilterToday_clicked();
 }
 
 MainWindow::~MainWindow()
@@ -148,17 +149,12 @@ void MainWindow::_refreshData()
     statusBar()->showMessage(tr("Projects and tasks refreshed."));
 }
 
-void MainWindow::_resetFilters(const int days)
+void MainWindow::_resetFilters(const QDate& start, const QDate& end)
 {
-    assert(days > -1);
+    ui->dtFilterStart->setDate(start);
+    ui->dtFilterEnd->setDate(end);
 
-    const auto startDate      = QDate::currentDate();
-    const auto endDate        = startDate.addDays(days);
-
-    ui->dtFilterStart->setDate(startDate);
-    ui->dtFilterEnd->setDate(endDate);
-
-    _entryModel->refresh();
+    _entryModel->setDateFilter(start, end);
     statusBar()->showMessage(tr("Filters refreshed."));
 }
 
@@ -176,22 +172,80 @@ void MainWindow::on_actionAbout_triggered()
     _aboutDialog->show();
 }
 
-void MainWindow::on_btnFilterDay_clicked()
+void MainWindow::on_btnFilterYesterday_clicked()
 {
-    _resetFilters(0);
+    const auto yesterday = ui->dtFilterStart->date().addDays(-1);
+
+    _resetFilters(yesterday, yesterday);
+}
+
+void MainWindow::on_btnFilterToday_clicked()
+{
+    const auto today = QDate::currentDate();
+
+    _resetFilters(today, today);
+}
+
+void MainWindow::on_btnFilterTomorrow_clicked()
+{
+    const auto tomorrow = ui->dtFilterStart->date().addDays(1);
+
+    _resetFilters(tomorrow, tomorrow);
 }
 
 void MainWindow::on_btnFilterWeek_clicked()
 {
-    _resetFilters(7);
+    const auto today = QDate::currentDate();
+
+    // get first day of week
+    const auto dayOfWeek    = today.dayOfWeek();
+    const auto startOfWeek  = today.addDays(-dayOfWeek + 1);
+    const auto endOfWeek    = startOfWeek.addDays(6);
+
+    _resetFilters(startOfWeek, endOfWeek);
 }
 
 void MainWindow::on_btnFilterMonth_clicked()
 {
-    _resetFilters(30);
+    const auto today = QDate::currentDate();
+
+    // get first day of month
+    const auto monthNumber      = today.month();
+    const auto year             = today.year();
+    const auto startDateString  = QString::number(year) + "-" + QString::number(monthNumber) + "-01";
+    const auto startOfMonth     = QDate::fromString(startDateString, DATE_FORMAT);
+
+    const auto isYearOverlap    = (monthNumber + 1 > 12);
+    const auto nextMonth        = (isYearOverlap) ? 1 : (monthNumber + 1);
+    const auto nextYear         = (isYearOverlap) ? year + 1 : year;
+
+    const auto endDateString    = QString::number(nextYear) + "-" + QString::number(nextMonth) + "-01";
+    const auto endOfMonth       = QDate::fromString(endDateString, DATE_FORMAT).addDays(-1);
+
+    _resetFilters(startOfMonth, endOfMonth);
 }
 
 void MainWindow::on_btnFilterYear_clicked()
 {
-    _resetFilters(365);
+    const auto today = QDate::currentDate();
+
+    // get first day of month
+    const auto year             = today.year();
+    const auto startDateString  = QString::number(year) + "-01-01";
+    const auto startOfYear      = QDate::fromString(startDateString, DATE_FORMAT);
+
+    const auto endDateString    = QString::number(year + 1) + "-01-01";
+    const auto endOfYear        = QDate::fromString(endDateString, DATE_FORMAT).addDays(-1);
+
+    _resetFilters(startOfYear, endOfYear);
+}
+
+void MainWindow::on_dtFilterStart_userDateChanged(const QDate &date)
+{
+    _resetFilters(date, ui->dtFilterEnd->date());
+}
+
+void MainWindow::on_dtFilterEnd_userDateChanged(const QDate &date)
+{
+    _resetFilters(ui->dtFilterStart->date(), date);
 }

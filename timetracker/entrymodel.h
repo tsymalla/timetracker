@@ -9,11 +9,18 @@
 
 class EntryModel : public QAbstractTableModel
 {
+    struct DateFilter
+    {
+        QDate start;
+        QDate end;
+    };
+
 private:
     constexpr static int COL_COUNT = 6;
 
-    DataProvider* _provider;
-    QVector<Entry> _entries;
+    DataProvider*   _provider;
+    QVector<Entry>  _entries;
+    DateFilter      _dateFilter;
     void _internalUpdate();
     const QString _getDurationString(const QDateTime& dt) const;
 public:
@@ -27,6 +34,7 @@ public:
     void addRow(const Entry& entry);
     void updateRow(const Entry& entry);
     void removeRow(const QModelIndex &index, const Entry& entry);
+    void setDateFilter(const QDate& start, const QDate& end);
 
     void refresh();
 };

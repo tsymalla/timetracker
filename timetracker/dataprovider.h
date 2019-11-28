@@ -7,7 +7,8 @@
 #include <QVector>
 
 using ENTITY_ID_TYPE = int;
-const auto DATE_TIME_FORMAT = QString("yyyy-MM-dd hh:mm:ss");
+const auto DATE_FORMAT = QString("yyyy-MM-dd");
+const auto DATE_TIME_FORMAT = DATE_FORMAT + QString(" hh:mm:ss");
 
 struct Project
 {
@@ -133,6 +134,7 @@ public:
     void updateEntry(const Entry& entry);
     bool deleteEntry(const Entry& entry);
     QVector<Entry> getAllEntries() const;
+    QVector<Entry> getEntriesByDateRange(const QDate& start, const QDate& end) const;
 };
 
 #endif // DATAPROVIDER_H

@@ -45,13 +45,21 @@ private slots:
 
     void on_actionExit_triggered();
 
-    void on_btnFilterDay_clicked();
+    void on_btnFilterYesterday_clicked();
+
+    void on_btnFilterToday_clicked();
+
+    void on_btnFilterTomorrow_clicked();
 
     void on_btnFilterWeek_clicked();
 
     void on_btnFilterMonth_clicked();
 
     void on_btnFilterYear_clicked();
+
+    void on_dtFilterStart_userDateChanged(const QDate &date);
+
+    void on_dtFilterEnd_userDateChanged(const QDate &date);
 
 private:
     Ui::MainWindow              *ui;
@@ -67,6 +75,6 @@ private:
     bool                        _isNewEntry = true;
 
     void                        _refreshData();
-    void                        _resetFilters(const int days);
+    void                        _resetFilters(const QDate& start, const QDate& end);
 };
 #endif // MAINWINDOW_H
