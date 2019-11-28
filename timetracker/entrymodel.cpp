@@ -9,31 +9,6 @@ void EntryModel::_internalUpdate()
     emit layoutChanged();
 }
 
-const QString EntryModel::_getDurationString(const QDateTime &dt) const
-{
-    QStringList result;
-#define APPEND_VALUE(value, description) if (value != 0) result << QString::number(value) + " " + description + (value > 1 ? "s" : "");
-
-    const qint64 DAY = 86400;
-    const auto secs = dt.toSecsSinceEpoch();
-    auto days = secs / DAY;
-    auto t = QTime(0, 0).addSecs(secs  % DAY);
-
-    const auto hours = t.hour();
-    const auto minutes = t.minute();
-
-    APPEND_VALUE(days,      "day")
-    APPEND_VALUE(hours,     "hour")
-    APPEND_VALUE(minutes,   "minute")
-
-    if (result.empty())
-    {
-        result << "0 minutes";
-    }
-
-    return result.join(", ");
-}
-
 EntryModel::EntryModel(QObject *parent, DataProvider *provider): QAbstractTableModel(parent), _provider(provider)
 {
     _internalUpdate();
@@ -71,7 +46,7 @@ QVariant EntryModel::data(const QModelIndex &index, int role) const
     case 3:
         return entry.until;
     case 4:
-        return _getDurationString(entry.duration);
+        return getDurationString(entry.duration);
     case 5:
         return entry.entryContent;
     }
@@ -108,6 +83,11 @@ Entry &EntryModel::getRow(const QModelIndex &index)
     return _entries[index.row()];
 }
 
+QVector<Entry> &EntryModel::getRows()
+{
+    return _entries;
+}
+
 void EntryModel::addRow(const Entry &entry)
 {
     const auto row = _entries.count();
@@ -140,6 +120,32 @@ void EntryModel::setDateFilter(const QDate &start, const QDate &end)
     _dateFilter.end     = end;
 
     _internalUpdate();
+}
+
+const QString EntryModel::getDurationString(const QDateTime &dt)
+{
+    QStringList result;
+#define APPEND_VALUE(value, description) if (value != 0) result << QString::number(value) + " " + description + (value > 1 ? "s" : "");
+
+    const qint64 DAY = 86400;
+    const auto secs = dt.toSecsSinceEpoch();
+    auto days = secs / DAY;
+    auto t = QTime(0, 0).addSecs(secs  % DAY);
+
+    const auto hours = t.hour();
+    const auto minutes = t.minute();
+
+    APPEND_VALUE(days,      "day")
+    APPEND_VALUE(hours,     "hour")
+    APPEND_VALUE(minutes,   "minute")
+
+    if (result.empty())
+    {
+        result << "0 minutes";
+    }
+
+    return result.join(", ");
+#undef APPEND_VALUE
 }
 
 void EntryModel::refresh()

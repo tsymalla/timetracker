@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     aboutdialog.cpp \
+    chartdataprovider.cpp \
     database.cpp \
     dataprovider.cpp \
     entrymodel.cpp \
@@ -28,6 +29,7 @@ SOURCES += \
 
 HEADERS += \
     aboutdialog.h \
+    chartdataprovider.h \
     database.h \
     dataprovider.h \
     entrymodel.h \

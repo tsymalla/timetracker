@@ -33,10 +33,19 @@ MainWindow::MainWindow(QWidget *parent)
     connect(_projectTaskAdminDialog, &ProjectTaskAdminDialog::projectsChanged, this, &MainWindow::onProjectsChanged);
     connect(_projectTaskAdminDialog, &ProjectTaskAdminDialog::tasksChanged, this, &MainWindow::onTasksChanged);
 
-    // set filter field values to default
-    const auto currentDate = QDate::currentDate();
-    ui->dtFilterStart->setDate(currentDate);
-    ui->dtFilterEnd->setDate(currentDate);
+    // initialize chart
+    _chart = new QChart();
+    QFont chartFont;
+    chartFont.setPointSize(15);
+    chartFont.setBold(true);
+
+    _chart->setTitleFont(std::move(chartFont));
+    ui->chrtView->setChart(_chart);
+
+    _chartData = new QPieSeries();
+    _chart->addSeries(_chartData);
+
+    _chartDataProvider = new ChartDataProvider(this);
 
     on_btnNew_clicked();
     on_btnFilterToday_clicked();
@@ -96,6 +105,8 @@ void MainWindow::on_btnDelete_clicked()
     _entryModel->removeRow(_selectedRowIndex, std::move(_selectedEntry));
     statusBar()->showMessage(tr("Deleted entry."));
     on_btnNew_clicked();
+
+    _updateChart();
 }
 
 void MainWindow::on_btnSave_clicked()
@@ -121,6 +132,8 @@ void MainWindow::on_btnSave_clicked()
         _entryModel->updateRow(std::move(e));
         statusBar()->showMessage(tr("Updated entry."));
     }
+
+    _updateChart();
 }
 
 void MainWindow::on_actionManage_projects_and_tasks_triggered()
@@ -155,7 +168,40 @@ void MainWindow::_resetFilters(const QDate& start, const QDate& end)
     ui->dtFilterEnd->setDate(end);
 
     _entryModel->setDateFilter(start, end);
+    _updateChart();
+
     statusBar()->showMessage(tr("Filters refreshed."));
+}
+
+void MainWindow::_updateChart()
+{
+    _chartData->clear();
+    const auto& groupedData = _chartDataProvider->getGroupedData(_entryModel->getRows());
+    auto it = groupedData.constBegin();
+
+    while (it != groupedData.constEnd())
+    {
+        const auto& value = it.value();
+        auto slice = _chartData->append(it.key(), value.second);
+        slice->setLabelVisible(true);
+        slice->setLabelPosition(QPieSlice::LabelInsideHorizontal);
+        slice->setLabelColor(Qt::white);
+
+        const auto durationDT = QDateTime::fromTime_t(value.first);
+
+        slice->setLabel(QString("%1: %2 (%3%)")
+                            .arg(it.key())
+                            .arg(EntryModel::getDurationString(durationDT))
+                            .arg(QString::number(value.second, 'f', 2)));
+
+        ++it;
+    }
+
+    const auto durationString = EntryModel::getDurationString(QDateTime::fromTime_t(_chartDataProvider->getTotalTimeSpent()));
+    _chart->setTitle(QString("Report from %1 until %2<br>Total time spent: %3")
+                         .arg(ui->dtFilterStart->text())
+                         .arg(ui->dtFilterEnd->text())
+                         .arg(durationString));
 }
 
 void MainWindow::on_actionCreate_new_database_file_triggered()

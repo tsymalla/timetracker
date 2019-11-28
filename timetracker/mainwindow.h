@@ -1,9 +1,12 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QComboBox>
 #include <QMainWindow>
+#include <QComboBox>
+#include <QtCharts/QChartView>
+#include <QtCharts/QPieSeries>
 #include "dataprovider.h"
+#include "chartdataprovider.h"
 #include "projectmodel.h"
 #include "taskmodel.h"
 #include "entrymodel.h"
@@ -13,6 +16,8 @@
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
+
+QT_CHARTS_USE_NAMESPACE
 
 class MainWindow : public QMainWindow
 {
@@ -65,8 +70,11 @@ private:
     Ui::MainWindow              *ui;
     ProjectTaskAdminDialog      *_projectTaskAdminDialog;
     AboutDialog                 *_aboutDialog;
+    QChart                      *_chart;
+    QPieSeries                  *_chartData;
 
     DataProvider                *_provider;
+    ChartDataProvider           *_chartDataProvider;
     ProjectModel                *_projectModel;
     TaskModel                   *_taskModel;
     EntryModel                  *_entryModel;
@@ -76,5 +84,7 @@ private:
 
     void                        _refreshData();
     void                        _resetFilters(const QDate& start, const QDate& end);
+
+    void                        _updateChart();
 };
 #endif // MAINWINDOW_H

@@ -78,6 +78,7 @@ struct Entry
             result.value(5).toString(),
             QDateTime::fromString(result.value(6).toString(), DATE_TIME_FORMAT),
             QDateTime::fromString(result.value(7).toString(), DATE_TIME_FORMAT),
+            QDateTime::fromTime_t(0)
         };
 
         const auto duration = QDateTime::fromSecsSinceEpoch(e.until.toSecsSinceEpoch() - e.from.toSecsSinceEpoch());
