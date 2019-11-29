@@ -10,7 +10,7 @@ ChartDataProvider::ChartDataProvider(QObject *parent): QObject(parent)
  * @param entryData
  * @return Project and tasks assigned their total duration
  */
-ChartDataProvider::MAP_TYPE ChartDataProvider::getGroupedData(const QVector<Entry> &entryData)
+ChartDataProvider::MAP_TYPE& ChartDataProvider::getGroupedData(const QVector<Entry> &entryData)
 {
     _groupedData.clear();
     _totalTimeSpent = 0;

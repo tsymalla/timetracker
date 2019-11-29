@@ -16,7 +16,7 @@ private:
 public:
     ChartDataProvider(QObject *parent);
 
-    MAP_TYPE getGroupedData(const QVector<Entry>& entryData);
+    MAP_TYPE& getGroupedData(const QVector<Entry>& entryData);
     qreal getTotalTimeSpent() const;
 };
 

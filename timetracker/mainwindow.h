@@ -66,6 +66,8 @@ private slots:
 
     void on_dtFilterEnd_userDateChanged(const QDate &date);
 
+    void on_btnExport_clicked();
+
 private:
     Ui::MainWindow              *ui;
     ProjectTaskAdminDialog      *_projectTaskAdminDialog;

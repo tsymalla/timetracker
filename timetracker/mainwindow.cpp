@@ -1,3 +1,4 @@
+#include "csvwriter.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QMessageBox>
@@ -189,7 +190,7 @@ void MainWindow::_updateChart()
 
         const auto durationDT = QDateTime::fromTime_t(value.first);
 
-        slice->setLabel(QString("%1: %2 (%3%)")
+        slice->setLabel(QString("%1<br />%2 (%3%)")
                             .arg(it.key())
                             .arg(EntryModel::getDurationString(durationDT))
                             .arg(QString::number(value.second, 'f', 2)));
@@ -294,4 +295,14 @@ void MainWindow::on_dtFilterStart_userDateChanged(const QDate &date)
 void MainWindow::on_dtFilterEnd_userDateChanged(const QDate &date)
 {
     _resetFilters(ui->dtFilterStart->date(), date);
+}
+
+void MainWindow::on_btnExport_clicked()
+{
+    QString filePath = QFileDialog::getSaveFileName(this, tr("Export data to CSV"), "", tr("CSV files (*.csv)"));
+
+    if (CSVWriter::toCSV(_entryModel, filePath))
+    {
+        QMessageBox::information(this, tr("Success"), tr("Data successfully exported to %1.").arg(filePath));
+    }
 }

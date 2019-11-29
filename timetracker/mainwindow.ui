@@ -112,7 +112,7 @@
     <item>
      <widget class="QTabWidget" name="tabMain">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <property name="tabsClosable">
        <bool>false</bool>
@@ -236,7 +236,7 @@
         <item alignment="Qt::AlignTop">
          <widget class="QPushButton" name="btnExport">
           <property name="text">
-           <string>Export data</string>
+           <string>Export data to CSV</string>
           </property>
          </widget>
         </item>
