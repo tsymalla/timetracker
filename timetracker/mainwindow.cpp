@@ -242,7 +242,7 @@ void MainWindow::on_btnFilterTomorrow_clicked()
 
 void MainWindow::on_btnFilterWeek_clicked()
 {
-    const auto today = QDate::currentDate();
+    const auto today        = QDate::currentDate();
 
     // get first day of week
     const auto dayOfWeek    = today.dayOfWeek();
@@ -254,7 +254,7 @@ void MainWindow::on_btnFilterWeek_clicked()
 
 void MainWindow::on_btnFilterMonth_clicked()
 {
-    const auto today = QDate::currentDate();
+    const auto today            = QDate::currentDate();
 
     // get first day of month
     const auto monthNumber      = today.month();

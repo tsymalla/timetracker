@@ -13,14 +13,14 @@ void Database::_init()
 
     _db = QSqlDatabase::addDatabase(driver);
 
-    const QString path = QDir::currentPath() + QDir::separator() + DATABASE_NAME;
-    auto hasDatabase = true;
+    const QString path  = QDir::currentPath() + QDir::separator() + DATABASE_NAME;
+    auto hasDatabase    = true;
     if (!QFile::exists(path))
     {
         QFile file;
         file.open(QIODevice::WriteOnly);
         file.close();
-        hasDatabase = false;
+        hasDatabase     = false;
     }
 
     _db.setDatabaseName(path);

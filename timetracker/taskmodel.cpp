@@ -34,7 +34,6 @@ QVariant TaskModel::data(const QModelIndex &index, int role) const
     }
 
     const auto& task = _tasks[index.row()];
-
     return task.name;
 }
 

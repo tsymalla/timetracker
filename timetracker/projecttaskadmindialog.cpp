@@ -11,10 +11,10 @@ ProjectTaskAdminDialog::ProjectTaskAdminDialog(DataProvider* provider, QWidget *
 {
     ui->setupUi(this);
 
-    _taskModel = new TaskModel(this, _provider);
+    _taskModel      = new TaskModel(this, _provider);
     ui->lstTasks->setModel(_taskModel);
 
-    _projectModel = new ProjectModel(this, _provider);
+    _projectModel   = new ProjectModel(this, _provider);
     ui->lstProjects->setModel(_projectModel);
 }
 
@@ -33,7 +33,7 @@ void ProjectTaskAdminDialog::on_lstProjects_clicked(const QModelIndex &index)
 
 void ProjectTaskAdminDialog::on_btnCreateProject_clicked()
 {
-    bool isConfirmed = false;
+    bool isConfirmed    = false;
 
     QString projectName = QInputDialog::getText(this, tr("New project name"), tr("Enter the new project name."), QLineEdit::Normal, "", &isConfirmed);
 
@@ -43,7 +43,7 @@ void ProjectTaskAdminDialog::on_btnCreateProject_clicked()
     }
 
     Project p;
-    p.name = projectName;
+    p.name              = projectName;
 
     _projectModel->addRow(std::move(p));
     emit projectsChanged();
@@ -51,8 +51,8 @@ void ProjectTaskAdminDialog::on_btnCreateProject_clicked()
 
 void ProjectTaskAdminDialog::on_btnUpdateProject_clicked()
 {
-    bool isConfirmed = false;
-    const auto projectName = QInputDialog::getText(this, tr("New project name"), tr("Enter the new project name."), QLineEdit::Normal, _selectedProject.name, &isConfirmed);
+    bool isConfirmed        = false;
+    const auto projectName  = QInputDialog::getText(this, tr("New project name"), tr("Enter the new project name."), QLineEdit::Normal, _selectedProject.name, &isConfirmed);
 
     if (!isConfirmed)
     {
@@ -60,8 +60,8 @@ void ProjectTaskAdminDialog::on_btnUpdateProject_clicked()
     }
 
     Project newProject;
-    newProject.id       = _selectedProject.id;
-    newProject.name     = projectName;
+    newProject.id           = _selectedProject.id;
+    newProject.name         = projectName;
 
     _projectModel->updateRow(std::move(newProject));
     emit projectsChanged();
@@ -92,7 +92,7 @@ void ProjectTaskAdminDialog::on_lstTasks_clicked(const QModelIndex &index)
 
 void ProjectTaskAdminDialog::on_btnCreateTask_clicked()
 {
-    bool isConfirmed = false;
+    bool isConfirmed    = false;
     const auto taskName = QInputDialog::getText(this, tr("New task name"), tr("Enter the new task name."), QLineEdit::Normal, "", &isConfirmed);
 
     if (!isConfirmed)
@@ -101,8 +101,8 @@ void ProjectTaskAdminDialog::on_btnCreateTask_clicked()
     }
 
     Task t;
-    t.projectId = _selectedProject.id;
-    t.name = taskName;
+    t.projectId         = _selectedProject.id;
+    t.name              = taskName;
 
     _taskModel->addRow(std::move(t));
     emit tasksChanged(t.projectId);
@@ -110,8 +110,8 @@ void ProjectTaskAdminDialog::on_btnCreateTask_clicked()
 
 void ProjectTaskAdminDialog::on_btnUpdateTask_clicked()
 {
-    bool isConfirmed =      false;
-    const auto taskName =   QInputDialog::getText(this, tr("New task name"), tr("Enter the new task name."), QLineEdit::Normal, _selectedTask.name, &isConfirmed);
+    bool isConfirmed    = false;
+    const auto taskName = QInputDialog::getText(this, tr("New task name"), tr("Enter the new task name."), QLineEdit::Normal, _selectedTask.name, &isConfirmed);
 
     if (!isConfirmed)
     {
@@ -119,8 +119,8 @@ void ProjectTaskAdminDialog::on_btnUpdateTask_clicked()
     }
 
     Task newTask;
-    newTask         = _selectedTask;
-    newTask.name    = taskName;
+    newTask             = _selectedTask;
+    newTask.name        = taskName;
 
     _taskModel->updateRow(std::move(newTask));
     emit tasksChanged(newTask.projectId);
