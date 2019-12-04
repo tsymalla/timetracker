@@ -30,12 +30,12 @@ QVariant ProjectModel::data(const QModelIndex &index, int role) const
     return project.name;
 }
 
-Project &ProjectModel::getRow(const int index)
+Project &ProjectModel::getRow(int index)
 {
     return _projects[index];
 }
 
-int ProjectModel::getIndex(const ENTITY_ID_TYPE id) const
+int ProjectModel::getIndex(ENTITY_ID_TYPE id) const
 {
     for (auto i = 0; i < _projects.count(); ++i)
     {
@@ -64,7 +64,7 @@ void ProjectModel::updateRow(const Project &project)
     _internalUpdate();
 }
 
-void ProjectModel::removeRow(const int index, const Project &project)
+void ProjectModel::removeRow(int index, const Project &project)
 {
     beginRemoveRows(QModelIndex(), index, index);
     _provider->deleteProject(project);

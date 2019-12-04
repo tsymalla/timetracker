@@ -122,10 +122,18 @@ void EntryModel::setDateFilter(const QDate &start, const QDate &end)
     _internalUpdate();
 }
 
-const QString EntryModel::getDurationString(const QDateTime &dt)
+template<typename Value, typename Description>
+void appendValue(QStringList& result, Value v, Description d)
+{
+    if (v != 0)
+    {
+        result << QString::number(v) + " " + d + (v > 1 ? "s" : "");
+    }
+}
+
+QString EntryModel::getDurationString(const QDateTime &dt)
 {
     QStringList result;
-#define APPEND_VALUE(value, description) if (value != 0) result << QString::number(value) + " " + description + (value > 1 ? "s" : "");
 
     const qint64 DAY = 86400;
     const auto secs = dt.toSecsSinceEpoch();
@@ -135,9 +143,9 @@ const QString EntryModel::getDurationString(const QDateTime &dt)
     const auto hours = t.hour();
     const auto minutes = t.minute();
 
-    APPEND_VALUE(days,      "day")
-    APPEND_VALUE(hours,     "hour")
-    APPEND_VALUE(minutes,   "minute")
+    appendValue(result, days,      "day");
+    appendValue(result, hours,     "hour");
+    appendValue(result, minutes,   "minute");
 
     if (result.empty())
     {
@@ -145,7 +153,6 @@ const QString EntryModel::getDurationString(const QDateTime &dt)
     }
 
     return result.join(", ");
-#undef APPEND_VALUE
 }
 
 void EntryModel::refresh()

@@ -40,7 +40,7 @@ MainWindow::MainWindow(QWidget *parent)
     chartFont.setPointSize(15);
     chartFont.setBold(true);
 
-    _chart->setTitleFont(std::move(chartFont));
+    _chart->setTitleFont(chartFont);
     ui->chrtView->setChart(_chart);
 
     _chartData = new QPieSeries();
@@ -103,7 +103,7 @@ void MainWindow::on_btnNew_clicked()
 
 void MainWindow::on_btnDelete_clicked()
 {
-    _entryModel->removeRow(_selectedRowIndex, std::move(_selectedEntry));
+    _entryModel->removeRow(_selectedRowIndex, _selectedEntry);
     statusBar()->showMessage(tr("Deleted entry."));
     on_btnNew_clicked();
 
@@ -122,7 +122,7 @@ void MainWindow::on_btnSave_clicked()
 
     if (_isNewEntry)
     {
-        _entryModel->addRow(std::move(e));
+        _entryModel->addRow(e);
         statusBar()->showMessage(tr("Created entry."));
 
         on_btnNew_clicked();
@@ -130,7 +130,7 @@ void MainWindow::on_btnSave_clicked()
     else
     {
         e.id = _selectedEntry.id;
-        _entryModel->updateRow(std::move(e));
+        _entryModel->updateRow(e);
         statusBar()->showMessage(tr("Updated entry."));
     }
 
@@ -191,18 +191,14 @@ void MainWindow::_updateChart()
         const auto durationDT = QDateTime::fromTime_t(value.first);
 
         slice->setLabel(QString("%1<br />%2 (%3%)")
-                            .arg(it.key())
-                            .arg(EntryModel::getDurationString(durationDT))
-                            .arg(QString::number(value.second, 'f', 2)));
+                            .arg(it.key(), EntryModel::getDurationString(durationDT), QString::number(value.second, 'f', 2)));
 
         ++it;
     }
 
     const auto durationString = EntryModel::getDurationString(QDateTime::fromTime_t(_chartDataProvider->getTotalTimeSpent()));
     _chart->setTitle(QString("Report from %1 until %2<br>Total time spent: %3")
-                         .arg(ui->dtFilterStart->text())
-                         .arg(ui->dtFilterEnd->text())
-                         .arg(durationString));
+                         .arg(ui->dtFilterStart->text(), ui->dtFilterEnd->text(), durationString));
 }
 
 void MainWindow::on_actionCreate_new_database_file_triggered()

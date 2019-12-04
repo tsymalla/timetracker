@@ -17,7 +17,7 @@ class ProjectTaskAdminDialog : public QDialog
 
 public:
     explicit ProjectTaskAdminDialog(DataProvider* provider, QWidget *parent = nullptr);
-    ~ProjectTaskAdminDialog();
+    ~ProjectTaskAdminDialog() override;
 
 signals:
     void projectsChanged();

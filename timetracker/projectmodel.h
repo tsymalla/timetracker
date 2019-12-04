@@ -19,11 +19,11 @@ public:
     int rowCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;
 
-    Project& getRow(const int index);
-    int getIndex(const ENTITY_ID_TYPE id) const;
+    Project &getRow(int index);
+    int getIndex(ENTITY_ID_TYPE id) const;
     void addRow(const Project& project);
     void updateRow(const Project& project);
-    void removeRow(const int index, const Project& project);
+    void removeRow(int index, const Project& project);
     void refresh();
 };
 

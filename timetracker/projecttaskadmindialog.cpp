@@ -45,7 +45,7 @@ void ProjectTaskAdminDialog::on_btnCreateProject_clicked()
     Project p;
     p.name              = projectName;
 
-    _projectModel->addRow(std::move(p));
+    _projectModel->addRow(p);
     emit projectsChanged();
 }
 
@@ -63,7 +63,7 @@ void ProjectTaskAdminDialog::on_btnUpdateProject_clicked()
     newProject.id           = _selectedProject.id;
     newProject.name         = projectName;
 
-    _projectModel->updateRow(std::move(newProject));
+    _projectModel->updateRow(newProject);
     emit projectsChanged();
 }
 
@@ -104,7 +104,7 @@ void ProjectTaskAdminDialog::on_btnCreateTask_clicked()
     t.projectId         = _selectedProject.id;
     t.name              = taskName;
 
-    _taskModel->addRow(std::move(t));
+    _taskModel->addRow(t);
     emit tasksChanged(t.projectId);
 }
 
@@ -122,7 +122,7 @@ void ProjectTaskAdminDialog::on_btnUpdateTask_clicked()
     newTask             = _selectedTask;
     newTask.name        = taskName;
 
-    _taskModel->updateRow(std::move(newTask));
+    _taskModel->updateRow(newTask);
     emit tasksChanged(newTask.projectId);
 }
 

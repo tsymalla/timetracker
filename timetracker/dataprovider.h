@@ -15,7 +15,7 @@ struct Project
     ENTITY_ID_TYPE id;
     QString name;
 
-    static const QString TYPE() {
+    static QString TYPE() {
         return "PROJECT";
     }
 
@@ -35,7 +35,7 @@ struct Task
     ENTITY_ID_TYPE projectId;
     QString name;
 
-    static const QString TYPE() {
+    static QString TYPE() {
         return "TASK";
     }
 
@@ -62,7 +62,7 @@ struct Entry
     QDateTime until;
     QDateTime duration;
 
-    static const QString TYPE() {
+    static QString TYPE() {
         return "ENTRY";
     }
 
@@ -131,7 +131,7 @@ public:
     bool deleteTask(const Task& task);
     QVector<Task>& getAllTasksByProject(const ENTITY_ID_TYPE projectId);
 
-    void addEntry(const ENTITY_ID_TYPE taskId, const QString& entryContent, const QDateTime& from, const QDateTime& until);
+    void addEntry(ENTITY_ID_TYPE taskId, const QString& entryContent, const QDateTime& from, const QDateTime& until);
     void updateEntry(const Entry& entry);
     bool deleteEntry(const Entry& entry);
     QVector<Entry> getAllEntries() const;

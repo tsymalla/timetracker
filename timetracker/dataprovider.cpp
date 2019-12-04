@@ -84,11 +84,11 @@ QVector<Task> &DataProvider::getAllTasksByProject(const ENTITY_ID_TYPE projectId
     return _tasks[projectId];
 }
 
-void DataProvider::addEntry(const ENTITY_ID_TYPE taskId, const QString &text, const QDateTime &from, const QDateTime &until)
+void DataProvider::addEntry(ENTITY_ID_TYPE taskId, const QString &entryContent, const QDateTime &from, const QDateTime &until)
 {
     const auto fromFormat   = from.toString(DATE_TIME_FORMAT);
     const auto untilFormat  = until.toString(DATE_TIME_FORMAT);
-    QVariantList args       = { taskId, text, fromFormat, untilFormat };
+    QVariantList args       = { taskId, entryContent, fromFormat, untilFormat };
     _insert<Entry>(args);
 }
 

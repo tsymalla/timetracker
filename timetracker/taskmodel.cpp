@@ -12,7 +12,7 @@ TaskModel::TaskModel(QObject *parent, DataProvider *provider): QAbstractListMode
 {
 }
 
-void TaskModel::setProjectId(const ENTITY_ID_TYPE projectId)
+void TaskModel::setProjectId(ENTITY_ID_TYPE projectId)
 {
     assert(projectId > 0);
     _projectId = projectId;
@@ -37,12 +37,12 @@ QVariant TaskModel::data(const QModelIndex &index, int role) const
     return task.name;
 }
 
-Task &TaskModel::getRow(const int index)
+Task &TaskModel::getRow(int index)
 {
     return _tasks[index];
 }
 
-int TaskModel::getIndex(const ENTITY_ID_TYPE id) const
+int TaskModel::getIndex(ENTITY_ID_TYPE id) const
 {
     for (auto i = 0; i < _tasks.count(); ++i)
     {
