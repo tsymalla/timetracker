@@ -1,6 +1,6 @@
 #include "chartdataprovider.h"
 
-ChartDataProvider::ChartDataProvider(QObject *parent): QObject(parent)
+ChartDataProvider::ChartDataProvider(QObject *parent): QObject(parent), _totalTimeSpent(0.0)
 {
 
 }

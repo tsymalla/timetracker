@@ -259,14 +259,14 @@ void MainWindow::on_btnFilterMonth_clicked()
     // get first day of month
     const auto monthNumber      = today.month();
     const auto year             = today.year();
-    const auto startDateString  = QString::number(year) + "-" + QString::number(monthNumber) + "-01";
+    const auto startDateString  = QString::number(year) + "-" + QString::number(monthNumber).rightJustified(2, '0') + "-01";
     const auto startOfMonth     = QDate::fromString(startDateString, DATE_FORMAT);
 
     const auto isYearOverlap    = (monthNumber + 1 > 12);
     const auto nextMonth        = (isYearOverlap) ? 1 : (monthNumber + 1);
     const auto nextYear         = (isYearOverlap) ? year + 1 : year;
 
-    const auto endDateString    = QString::number(nextYear) + "-" + QString::number(nextMonth) + "-01";
+    const auto endDateString    = QString::number(nextYear) + "-" + QString::number(nextMonth).rightJustified(2, '0') + "-01";
     const auto endOfMonth       = QDate::fromString(endDateString, DATE_FORMAT).addDays(-1);
 
     _resetFilters(startOfMonth, endOfMonth);

@@ -6,7 +6,7 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QVariant>
-#include <assert.h>
+#include <cassert>
 
 using ENTITY_ID_TYPE = int;
 
@@ -26,7 +26,7 @@ private:
     {
         QString sql = "SELECT * FROM " + T::TYPE();
 
-        if (filter.size() > 0)
+        if (!filter.empty())
         {
             assert(filter.size() == args.size());
             QStringList whereClause;
@@ -102,7 +102,7 @@ public:
     Database& operator=(const Database&) = delete;
     Database(Database&&) = delete;
     Database& operator=(Database&&) = delete;
-    ~Database();
+    ~Database() final;
 
     bool isInitialized() const;
     QSqlQuery executeQuery(const QString& sql, const QVariantList& bindArgs) const;
