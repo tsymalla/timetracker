@@ -7,26 +7,39 @@ TestEntryModel::TestEntryModel()
 
 void TestEntryModel::init()
 {
-    _provider = new DataProvider(this);
 }
 
 void TestEntryModel::cleanup()
 {
-    delete _provider;
 }
 
 void TestEntryModel::initTestCase()
 {
+    _provider = new DataProvider(this);
     _model = new EntryModel(this, _provider);
+    _projectModel = new ProjectModel(this, _provider);
+    _taskModel = new TaskModel(this, _provider);
 }
 
 void TestEntryModel::cleanupTestCase()
 {
+    delete _provider;
     delete _model;
+    delete _projectModel;
+    delete _taskModel;
 }
 
 void TestEntryModel::testAddEntryIncreasesByOne()
 {
+    Project p;
+    p.name = "Test project";
+    _projectModel->addRow(p);
+
+    Task t;
+    t.name = "Test task";
+    t.projectId = 1;
+    _taskModel->addRow(t);
+
     const auto currentEntryCount = _model->getRows().length();
     Entry e;
     e.taskId = 1;

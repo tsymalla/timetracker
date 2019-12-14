@@ -2,6 +2,8 @@
 #include <QtTest>
 #include "dataprovider.h"
 #include "entrymodel.h"
+#include "taskmodel.h"
+#include "projectmodel.h"
 
 class TestEntryModel: public QObject
 {
@@ -20,5 +22,7 @@ private slots:
     void testRemoveEntryDecreasesByOne();
 private:
     DataProvider    *_provider = nullptr;
+    ProjectModel    *_projectModel = nullptr;
+    TaskModel       *_taskModel = nullptr;
     EntryModel      *_model = nullptr;
 };
