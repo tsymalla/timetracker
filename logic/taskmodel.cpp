@@ -63,6 +63,7 @@ void TaskModel::addRow(const Task &task)
     _provider->addTask(task);
     endInsertRows();
 
+    setProjectId(task.projectId);
     _internalUpdate();
 }
 

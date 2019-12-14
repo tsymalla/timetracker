@@ -64,6 +64,7 @@ QSqlQuery Database::executeQuery(const QString &sql, const QVariantList &bindArg
         qWarning() << query.executedQuery();
     }
 
+    qDebug() << query.executedQuery();
     return query;
 }
 
