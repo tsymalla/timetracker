@@ -26,6 +26,7 @@ ProjectTaskAdminDialog::~ProjectTaskAdminDialog()
 void ProjectTaskAdminDialog::on_lstProjects_clicked(const QModelIndex &index)
 {
     _selectedProject = _projectModel->getRow(index.row());
+    ui->btnCreateTask->setEnabled(true);
     ui->btnUpdateProject->setEnabled(true);
     ui->btnDeleteProject->setEnabled(true);
     _taskModel->setProjectId(_selectedProject.id);
@@ -79,6 +80,7 @@ void ProjectTaskAdminDialog::on_btnDeleteProject_clicked()
 
     emit projectsChanged();
     emit tasksChanged(_selectedProject.id);
+    ui->btnCreateTask->setEnabled(false);
     ui->btnUpdateProject->setEnabled(false);
     ui->btnDeleteProject->setEnabled(false);
 }
