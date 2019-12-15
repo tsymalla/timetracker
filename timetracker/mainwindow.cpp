@@ -112,6 +112,12 @@ void MainWindow::on_btnDelete_clicked()
 
 void MainWindow::on_btnSave_clicked()
 {
+    if (!_isInputValid())
+    {
+        QMessageBox::warning(this, tr("Error"), tr("Please check your input data."));
+        return;
+    }
+
     Task t = _taskModel->getRow(ui->cboTask->currentIndex());
 
     Entry e;
@@ -165,8 +171,16 @@ void MainWindow::_refreshData()
 
 void MainWindow::_resetFilters(const QDate& start, const QDate& end)
 {
-    ui->dtFilterStart->setDate(start);
-    ui->dtFilterEnd->setDate(end);
+    if (start > end)
+    {
+        ui->dtFilterStart->setDate(start);
+        ui->dtFilterEnd->setDate(start);
+    }
+    else
+    {
+        ui->dtFilterStart->setDate(start);
+        ui->dtFilterEnd->setDate(end);
+    }
 
     _entryModel->setDateFilter(start, end);
     _updateChart();
@@ -198,7 +212,16 @@ void MainWindow::_updateChart()
 
     const auto durationString = EntryModel::getDurationString(QDateTime::fromTime_t(_chartDataProvider->getTotalTimeSpent()));
     _chart->setTitle(QString("Report from %1 until %2<br>Total time spent: %3")
-                         .arg(ui->dtFilterStart->text(), ui->dtFilterEnd->text(), durationString));
+                     .arg(ui->dtFilterStart->text(), ui->dtFilterEnd->text(), durationString));
+}
+
+bool MainWindow::_isInputValid() const
+{
+    return
+        (ui->dtFrom->dateTime() < ui->dtUntil->dateTime()) &&
+        (ui->cboProject->currentIndex() > -1) &&
+        (ui->cboTask->currentIndex() > -1) &&
+        (ui->txtContent->toPlainText().length() > 0);
 }
 
 void MainWindow::on_actionCreate_new_database_file_triggered()

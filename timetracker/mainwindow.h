@@ -88,5 +88,6 @@ private:
     void                        _resetFilters(const QDate& start, const QDate& end);
 
     void                        _updateChart();
+    bool                        _isInputValid() const;
 };
 #endif // MAINWINDOW_H
