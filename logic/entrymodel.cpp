@@ -105,6 +105,12 @@ void EntryModel::updateRow(const Entry &entry)
     _internalUpdate();
 }
 
+void EntryModel::removeRow(const Entry &entry)
+{
+    _provider->deleteEntry(entry);
+    _internalUpdate();
+}
+
 void EntryModel::removeRow(const QModelIndex &index, const Entry &entry)
 {
     beginRemoveRows(QModelIndex(), index.row(), index.row());

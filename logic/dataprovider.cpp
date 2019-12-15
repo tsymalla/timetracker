@@ -7,6 +7,17 @@ DataProvider::DataProvider(QObject *parent): QObject(parent)
     _db = new Database(this);
 }
 
+DataProvider::DataProvider(QObject *parent, bool clean): QObject(parent)
+{
+    _initMapping();
+    _db = new Database(this);
+
+    if (clean)
+    {
+        _db->_cleanupData();
+    }
+}
+
 void DataProvider::_initMapping()
 {
     registerEntityColumn<Project>("NAME");

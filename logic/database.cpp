@@ -46,6 +46,13 @@ void Database::_refreshStorage()
     executeQuery("CREATE TABLE ENTRY (ID INTEGER PRIMARY KEY, TASK_ID INTEGER, ENTRY_CONTENT TEXT, TS_FROM INTEGER, TS_UNTIL INTEGER, FOREIGN KEY (TASK_ID) REFERENCES TASK(ID) ON DELETE CASCADE)");
 }
 
+void Database::_cleanupData()
+{
+    executeQuery("DELETE FROM ENTRY;");
+    executeQuery("DELETE FROM TASK");
+    executeQuery("DELETE FROM PROJECT");
+}
+
 QSqlQuery Database::executeQuery(const QString &sql, const QVariantList &bindArgs) const
 {
     QSqlQuery query;

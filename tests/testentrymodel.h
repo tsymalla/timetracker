@@ -25,4 +25,6 @@ private:
     ProjectModel    *_projectModel = nullptr;
     TaskModel       *_taskModel = nullptr;
     EntryModel      *_model = nullptr;
+
+    void _initTestData() const;
 };

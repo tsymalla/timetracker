@@ -118,6 +118,7 @@ private:
     }
 public:
     DataProvider(QObject *parent);
+    DataProvider(QObject *parent, bool clean);
 
     bool isInitialized() const;
 

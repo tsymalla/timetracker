@@ -33,6 +33,7 @@ public:
     QVector<Entry>& getRows();
     void addRow(const Entry& entry);
     void updateRow(const Entry& entry);
+    void removeRow(const Entry& entry);
     void removeRow(const QModelIndex &index, const Entry& entry);
     void setDateFilter(const QDate& start, const QDate& end);
 

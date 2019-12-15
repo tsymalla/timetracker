@@ -17,6 +17,7 @@ Q_OBJECT
 private:
     void _init();
     void _refreshStorage();
+    void _cleanupData();
     bool _isInitialized;
     QSqlDatabase _db;
     const QString DATABASE_NAME = "data.db";
