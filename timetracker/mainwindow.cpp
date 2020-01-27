@@ -8,6 +8,8 @@ MainWindow::MainWindow(QWidget *parent)
       , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    this->setWindowIcon(QIcon(":/default/resources/clock-2.ico"));
+
     _provider = new DataProvider(this);
 
     if (!_provider->isInitialized())
@@ -112,7 +114,7 @@ void MainWindow::on_btnDelete_clicked()
 
 void MainWindow::on_btnSave_clicked()
 {
-    if (!_isInputValid())
+    if (!_validateInput())
     {
         QMessageBox::warning(this, tr("Error"), tr("Please check your input data."));
         return;
@@ -215,17 +217,73 @@ void MainWindow::_updateChart()
                      .arg(ui->dtFilterStart->text(), ui->dtFilterEnd->text(), durationString));
 }
 
-bool MainWindow::_isInputValid() const
+bool MainWindow::_validateInput()
 {
-    return
-        (ui->dtFrom->dateTime() < ui->dtUntil->dateTime()) &&
-        (ui->cboProject->currentIndex() > -1) &&
-        (ui->cboTask->currentIndex() > -1) &&
-        (ui->txtContent->toPlainText().length() > 0);
+    auto isValid = true;
+    const static char* INVALID_PROPERTY = "isInvalid";
+
+    // valid date input
+    if (ui->dtFrom->dateTime() >= ui->dtUntil->dateTime())
+    {
+        isValid = false;
+        ui->dtFrom->setProperty(INVALID_PROPERTY, true);
+        ui->dtUntil->setProperty(INVALID_PROPERTY, true);
+    }
+    else
+    {
+        ui->dtFrom->setProperty(INVALID_PROPERTY, {});
+        ui->dtUntil->setProperty(INVALID_PROPERTY, {});
+    }
+
+    this->_refreshStyle(ui->dtFrom);
+    this->_refreshStyle(ui->dtUntil);
+
+    // valid project selection
+    if (ui->cboProject->currentIndex() <= -1)
+    {
+        isValid = false;
+        ui->cboProject->setProperty(INVALID_PROPERTY, true);
+    }
+    else
+    {
+        ui->cboProject->setProperty(INVALID_PROPERTY, {});
+    }
+
+    this->_refreshStyle(ui->cboProject);
+
+    // valid task selection
+    if (ui->cboTask->currentIndex() <= -1)
+    {
+        isValid = false;
+        ui->cboTask->setProperty(INVALID_PROPERTY, true);
+    }
+    else
+    {
+        ui->cboTask->setProperty(INVALID_PROPERTY, {});
+    }
+
+    this->_refreshStyle(ui->cboTask);
+
+    // prevent empty contents
+    if (ui->txtContent->toPlainText().length() == 0)
+    {
+        isValid = false;
+        ui->txtContent->setProperty(INVALID_PROPERTY, true);
+    }
+    else
+    {
+        ui->txtContent->setProperty(INVALID_PROPERTY, {});
+    }
+
+    this->_refreshStyle(ui->txtContent);
+
+    return isValid;
 }
 
-void MainWindow::on_actionCreate_new_database_file_triggered()
+void MainWindow::_refreshStyle(QWidget *widget)
 {
+    widget->style()->unpolish(widget);
+    widget->style()->polish(widget);
 }
 
 void MainWindow::on_actionExit_triggered()

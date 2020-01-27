@@ -46,8 +46,6 @@ private slots:
 
     void on_actionAbout_triggered();
 
-    void on_actionCreate_new_database_file_triggered();
-
     void on_actionExit_triggered();
 
     void on_btnFilterYesterday_clicked();
@@ -88,6 +86,8 @@ private:
     void                        _resetFilters(const QDate& start, const QDate& end);
 
     void                        _updateChart();
-    bool                        _isInputValid() const;
+    bool                        _validateInput();
+
+    void                        _refreshStyle(QWidget* widget);
 };
 #endif // MAINWINDOW_H
