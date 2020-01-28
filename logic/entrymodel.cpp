@@ -128,15 +128,6 @@ void EntryModel::setDateFilter(const QDate &start, const QDate &end)
     _internalUpdate();
 }
 
-template<typename Value, typename Description>
-void appendValue(QStringList& result, Value v, Description d)
-{
-    if (v != 0)
-    {
-        result << QString::number(v) + " " + d + (v > 1 ? "s" : "");
-    }
-}
-
 QString EntryModel::getDurationString(const QDateTime &dt)
 {
     QStringList result;
@@ -146,19 +137,12 @@ QString EntryModel::getDurationString(const QDateTime &dt)
     auto days = secs / DAY;
     auto t = QTime(0, 0).addSecs(secs  % DAY);
 
-    const auto hours = t.hour();
+    const auto hours = t.hour() + (days * 24);
     const auto minutes = t.minute();
 
-    appendValue(result, days,      "day");
-    appendValue(result, hours,     "hour");
-    appendValue(result, minutes,   "minute");
+    result << QString::number(hours).rightJustified(2, '0') << ":" << QString::number(minutes).rightJustified(2, '0');
 
-    if (result.empty())
-    {
-        result << "0 minutes";
-    }
-
-    return result.join(", ");
+    return result.join("");
 }
 
 void EntryModel::refresh()

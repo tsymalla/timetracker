@@ -215,6 +215,7 @@ void MainWindow::_updateChart()
     const auto durationString = EntryModel::getDurationString(QDateTime::fromTime_t(_chartDataProvider->getTotalTimeSpent()));
     _chart->setTitle(QString("Report from %1 until %2<br>Total time spent: %3")
                      .arg(ui->dtFilterStart->text(), ui->dtFilterEnd->text(), durationString));
+    ui->lblTotalTime->setText(durationString);
 }
 
 bool MainWindow::_validateInput()
