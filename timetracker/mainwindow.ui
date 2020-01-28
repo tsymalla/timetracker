@@ -14,11 +14,12 @@
    <string>TimeTracker</string>
   </property>
   <property name="windowIcon">
-   <iconset theme="default/resources/clock2.png"/>
+   <iconset theme="default/resources/clock2.png">
+    <normaloff>.</normaloff>.</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">*[isInvalid=&quot;true&quot;] {
- background-color: yellow;
+ border: 1px solid #FF0000;
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
