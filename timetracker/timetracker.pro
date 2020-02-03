@@ -1,4 +1,5 @@
 QT       += core gui charts sql
+TARGET = TimeTracker
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -51,3 +52,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     resources.qrc
+
+RC_ICONS = resources/clock-2.ico
