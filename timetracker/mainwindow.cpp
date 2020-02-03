@@ -176,7 +176,7 @@ void MainWindow::_resetFilters(const QDate& start, const QDate& end)
     if (start > end)
     {
         ui->dtFilterStart->setDate(start);
-        ui->dtFilterEnd->setDate(start);
+        ui->dtFilterEnd->setDate(end);
     }
     else
     {
