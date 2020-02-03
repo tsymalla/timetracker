@@ -173,16 +173,8 @@ void MainWindow::_refreshData()
 
 void MainWindow::_resetFilters(const QDate& start, const QDate& end)
 {
-    if (start > end)
-    {
-        ui->dtFilterStart->setDate(start);
-        ui->dtFilterEnd->setDate(end);
-    }
-    else
-    {
-        ui->dtFilterStart->setDate(start);
-        ui->dtFilterEnd->setDate(end);
-    }
+    ui->dtFilterStart->setDate(start);
+    ui->dtFilterEnd->setDate(end);
 
     _entryModel->setDateFilter(start, end);
     _updateChart();

@@ -51,13 +51,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QDateEdit" name="dtFilterEnd">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
+            <widget class="QDateEdit" name="dtFilterStart">
              <property name="minimumSize">
               <size>
                <width>120</width>
@@ -89,7 +83,13 @@
             </widget>
            </item>
            <item>
-            <widget class="QDateEdit" name="dtFilterStart">
+            <widget class="QDateEdit" name="dtFilterEnd">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="minimumSize">
               <size>
                <width>120</width>
@@ -475,7 +475,7 @@
      <x>0</x>
      <y>0</y>
      <width>1024</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAdministration">
