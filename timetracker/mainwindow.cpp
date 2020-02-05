@@ -204,10 +204,15 @@ void MainWindow::_updateChart()
         ++it;
     }
 
-    const auto durationString = EntryModel::getDurationString(QDateTime::fromTime_t(_chartDataProvider->getTotalTimeSpent()));
+    const auto timeSpent = QDateTime::fromTime_t(_chartDataProvider->getTotalTimeSpent());
+
+    const auto durationString = EntryModel::getDurationString(timeSpent);
     _chart->setTitle(QString("Report from %1 until %2<br>Total time spent: %3")
                      .arg(ui->dtFilterStart->text(), ui->dtFilterEnd->text(), durationString));
-    ui->lblTotalTime->setText(durationString);
+
+    QString totalTime = durationString;
+    totalTime += " (" + EntryModel::getDurationString(timeSpent, true) + ")";
+    ui->lblTotalTime->setText(totalTime);
 }
 
 bool MainWindow::_validateInput()

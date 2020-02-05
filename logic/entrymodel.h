@@ -37,7 +37,7 @@ public:
     void removeRow(const QModelIndex &index, const Entry& entry);
     void setDateFilter(const QDate& start, const QDate& end);
 
-    static QString getDurationString(const QDateTime& dt);
+    static QString getDurationString(const QDateTime& dt, bool percentage = false);
 
     void refresh();
 };

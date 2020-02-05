@@ -128,7 +128,7 @@ void EntryModel::setDateFilter(const QDate &start, const QDate &end)
     _internalUpdate();
 }
 
-QString EntryModel::getDurationString(const QDateTime &dt)
+QString EntryModel::getDurationString(const QDateTime &dt, bool percentage)
 {
     QStringList result;
 
@@ -140,7 +140,21 @@ QString EntryModel::getDurationString(const QDateTime &dt)
     const auto hours = t.hour() + (days * 24);
     const auto minutes = t.minute();
 
-    result << QString::number(hours).rightJustified(2, '0') << ":" << QString::number(minutes).rightJustified(2, '0');
+    auto minuteVal = 0;
+    QString separator;
+
+    if (!percentage)
+    {
+        minuteVal = minutes;
+        separator = ":";
+    }
+    else
+    {
+        minuteVal = static_cast<int>((static_cast<qreal>(minutes) / 60.) * 100.);
+        separator = ",";
+    }
+
+    result << QString::number(hours).rightJustified(2, '0') << separator << QString::number(minuteVal).rightJustified(2, '0');
 
     return result.join("");
 }
