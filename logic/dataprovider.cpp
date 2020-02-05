@@ -137,21 +137,35 @@ QVector<Entry> DataProvider::getAllEntries() const
     return entries;
 }
 
-QVector<Entry> DataProvider::getEntriesByDateRange(const QDate &start, const QDate &end) const
+QVector<Entry> DataProvider::getEntriesByFilter(const QDate &start, const QDate &end, const ENTITY_ID_TYPE projectId, const ENTITY_ID_TYPE taskId) const
 {
     QVector<Entry> entries;
-    const QVariantList args = { start.toString(DATE_FORMAT), QDateTime(end).addDays(1).addSecs(-1).toString(DATE_FORMAT) };
+    QVariantList args = { start.toString(DATE_FORMAT), QDateTime(end).addDays(1).addSecs(-1).toString(DATE_FORMAT) };
+    QString query = "SELECT e.ID,"
+                    "p.ID,"
+                    "t.ID,"
+                    "p.NAME,"
+                    "t.NAME,"
+                    "e.ENTRY_CONTENT,"
+                    "e.TS_FROM,"
+                    "e.TS_UNTIL FROM ENTRY e INNER JOIN TASK t ON e.TASK_ID = t.ID INNER JOIN PROJECT p ON t.PROJECT_ID = p.ID "
+                    "WHERE DATE(e.TS_FROM) >= DATE(:1) AND DATE(e.TS_UNTIL) <= DATE(:2) ";
 
-    auto result = _db->executeQuery("SELECT e.ID,"
-                                    "p.ID,"
-                                    "t.ID,"
-                                    "p.NAME,"
-                                    "t.NAME,"
-                                    "e.ENTRY_CONTENT,"
-                                    "e.TS_FROM,"
-                                    "e.TS_UNTIL FROM ENTRY e INNER JOIN TASK t ON e.TASK_ID = t.ID INNER JOIN PROJECT p ON t.PROJECT_ID = p.ID "
-                                    "WHERE DATE(e.TS_FROM) >= DATE(:1) AND DATE(e.TS_UNTIL) <= DATE(:2) "
-                                    "ORDER BY e.ID DESC", args);
+    if (projectId > 0)
+    {
+        query += " AND p.ID = :3";
+        args.push_back(projectId);
+    }
+
+    if (taskId > 0)
+    {
+        query += " AND t.ID = :4";
+        args.push_back(taskId);
+    }
+
+    query += " ORDER BY e.ID DESC";
+
+    auto result = _db->executeQuery(query, args);
 
     while (result.next())
     {

@@ -136,7 +136,7 @@ public:
     void updateEntry(const Entry& entry);
     bool deleteEntry(const Entry& entry);
     QVector<Entry> getAllEntries() const;
-    QVector<Entry> getEntriesByDateRange(const QDate& start, const QDate& end) const;
+    QVector<Entry> getEntriesByFilter(const QDate& start, const QDate& end, const ENTITY_ID_TYPE projectId, const ENTITY_ID_TYPE taskId) const;
 };
 
 #endif // DATAPROVIDER_H

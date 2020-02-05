@@ -44,6 +44,10 @@ private slots:
 
     void onTasksChanged(ENTITY_ID_TYPE projectId);
 
+    void onProjectsFilterChanged();
+
+    void onTasksFilterChanged(ENTITY_ID_TYPE projectId);
+
     void on_actionAbout_triggered();
 
     void on_actionExit_triggered();
@@ -66,6 +70,14 @@ private slots:
 
     void on_btnExport_clicked();
 
+    void on_cboFilterProject_currentIndexChanged(const QString &arg1);
+
+    void on_cboFilterTask_currentIndexChanged(const QString &arg1);
+
+    void on_btnResetProjectFilter_clicked();
+
+    void on_btnResetTaskFilter_clicked();
+
 private:
     Ui::MainWindow              *ui;
     ProjectTaskAdminDialog      *_projectTaskAdminDialog;
@@ -77,6 +89,7 @@ private:
     ChartDataProvider           *_chartDataProvider;
     ProjectModel                *_projectModel;
     TaskModel                   *_taskModel;
+    TaskModel                   *_taskFilterModel;
     EntryModel                  *_entryModel;
     Entry                       _selectedEntry;
     QModelIndex                 _selectedRowIndex;

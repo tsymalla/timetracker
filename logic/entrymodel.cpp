@@ -3,7 +3,7 @@
 
 void EntryModel::_internalUpdate()
 {
-    _entries = _provider->getEntriesByDateRange(_dateFilter.start, _dateFilter.end);
+    _entries = _provider->getEntriesByFilter(_dateFilter.start, _dateFilter.end, _projectIdFilter, _taskIdFilter);
 
     emit dataChanged(index(0, 0), index(_entries.count(), COL_COUNT));
     emit layoutChanged();
@@ -124,6 +124,20 @@ void EntryModel::setDateFilter(const QDate &start, const QDate &end)
 {
     _dateFilter.start   = start;
     _dateFilter.end     = end;
+
+    _internalUpdate();
+}
+
+void EntryModel::setProjectIdFilter(const ENTITY_ID_TYPE id)
+{
+    _projectIdFilter = id;
+
+    _internalUpdate();
+}
+
+void EntryModel::setTaskIdFilter(const ENTITY_ID_TYPE id)
+{
+    _taskIdFilter = id;
 
     _internalUpdate();
 }

@@ -29,12 +29,18 @@ MainWindow::MainWindow(QWidget *parent)
     _taskModel = new TaskModel(this, _provider);
     ui->cboTask->setModel(_taskModel);
 
+    _taskFilterModel = new TaskModel(this, _provider);
+    ui->cboFilterTask->setModel(_taskFilterModel);
+
     _projectModel = new ProjectModel(this, _provider);
     ui->cboProject->setModel(_projectModel);
+    ui->cboFilterProject->setModel(_projectModel);
 
     // receive events from admin dialog when the data has changed
     connect(_projectTaskAdminDialog, &ProjectTaskAdminDialog::projectsChanged, this, &MainWindow::onProjectsChanged);
     connect(_projectTaskAdminDialog, &ProjectTaskAdminDialog::tasksChanged, this, &MainWindow::onTasksChanged);
+    connect(_projectTaskAdminDialog, &ProjectTaskAdminDialog::projectsChanged, this, &MainWindow::onProjectsFilterChanged);
+    connect(_projectTaskAdminDialog, &ProjectTaskAdminDialog::tasksChanged, this, &MainWindow::onTasksFilterChanged);
 
     // initialize chart
     _chart = new QChart();
@@ -163,6 +169,19 @@ void MainWindow::onTasksChanged(ENTITY_ID_TYPE projectId)
     }
 }
 
+void MainWindow::onProjectsFilterChanged()
+{
+    _refreshData();
+}
+
+void MainWindow::onTasksFilterChanged(ENTITY_ID_TYPE projectId)
+{
+    if (projectId == _selectedEntry.projectId)
+    {
+        _refreshData();
+    }
+}
+
 void MainWindow::_refreshData()
 {
     _projectModel->refresh();
@@ -175,6 +194,8 @@ void MainWindow::_resetFilters(const QDate& start, const QDate& end)
 {
     ui->dtFilterStart->setDate(start);
     ui->dtFilterEnd->setDate(end);
+    ui->cboFilterProject->setCurrentIndex(0);
+    ui->cboFilterTask->setCurrentIndex(0);
 
     _entryModel->setDateFilter(start, end);
     _updateChart();
@@ -380,4 +401,50 @@ void MainWindow::on_btnExport_clicked()
     {
         QMessageBox::information(this, tr("Success"), tr("Data successfully exported to %1.").arg(filePath));
     }
+}
+
+void MainWindow::on_cboFilterProject_currentIndexChanged(const QString &arg1)
+{
+    Q_UNUSED(arg1)
+    ui->cboFilterTask->clear();
+    ui->cboFilterTask->setCurrentIndex(-1);
+    auto projectIndex = ui->cboFilterProject->currentIndex();
+
+    if (projectIndex <= -1)
+    {
+        return;
+    }
+
+    const auto& project = _projectModel->getRow(projectIndex);
+    _taskFilterModel->setProjectId(project.id);
+
+    _entryModel->setProjectIdFilter(project.id);
+}
+
+void MainWindow::on_cboFilterTask_currentIndexChanged(const QString &arg1)
+{
+    Q_UNUSED(arg1)
+    const auto index = ui->cboFilterTask->currentIndex();
+
+    if (index <= -1)
+    {
+        return;
+    }
+
+    Task t = _taskModel->getRow(index);
+    _entryModel->setTaskIdFilter(t.id);
+}
+
+void MainWindow::on_btnResetProjectFilter_clicked()
+{
+    ui->cboFilterProject->setCurrentIndex(-1);
+    ui->cboTask->clear();
+    _entryModel->setProjectIdFilter(0);
+    _entryModel->setTaskIdFilter(0);
+}
+
+void MainWindow::on_btnResetTaskFilter_clicked()
+{
+    ui->cboFilterTask->setCurrentIndex(-1);
+    _entryModel->setTaskIdFilter(0);
 }
