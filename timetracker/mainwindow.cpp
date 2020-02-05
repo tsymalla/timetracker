@@ -194,8 +194,6 @@ void MainWindow::_resetFilters(const QDate& start, const QDate& end)
 {
     ui->dtFilterStart->setDate(start);
     ui->dtFilterEnd->setDate(end);
-    ui->cboFilterProject->setCurrentIndex(0);
-    ui->cboFilterTask->setCurrentIndex(0);
 
     _entryModel->setDateFilter(start, end);
     _updateChart();
