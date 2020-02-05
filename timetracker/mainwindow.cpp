@@ -18,6 +18,20 @@ MainWindow::MainWindow(QWidget *parent)
         QApplication::exit();
     }
 
+    // initialize chart
+    _chart = new QChart();
+    QFont chartFont;
+    chartFont.setPointSize(15);
+    chartFont.setBold(true);
+
+    _chart->setTitleFont(chartFont);
+    ui->chrtView->setChart(_chart);
+
+    _chartData = new QPieSeries();
+    _chart->addSeries(_chartData);
+
+    _chartDataProvider = new ChartDataProvider(this);
+
     // dialogs
     _projectTaskAdminDialog = new ProjectTaskAdminDialog(_provider, this);
     _aboutDialog = new AboutDialog(this);
@@ -41,20 +55,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(_projectTaskAdminDialog, &ProjectTaskAdminDialog::tasksChanged, this, &MainWindow::onTasksChanged);
     connect(_projectTaskAdminDialog, &ProjectTaskAdminDialog::projectsChanged, this, &MainWindow::onProjectsFilterChanged);
     connect(_projectTaskAdminDialog, &ProjectTaskAdminDialog::tasksChanged, this, &MainWindow::onTasksFilterChanged);
-
-    // initialize chart
-    _chart = new QChart();
-    QFont chartFont;
-    chartFont.setPointSize(15);
-    chartFont.setBold(true);
-
-    _chart->setTitleFont(chartFont);
-    ui->chrtView->setChart(_chart);
-
-    _chartData = new QPieSeries();
-    _chart->addSeries(_chartData);
-
-    _chartDataProvider = new ChartDataProvider(this);
 
     on_btnNew_clicked();
     on_btnFilterToday_clicked();
@@ -419,6 +419,7 @@ void MainWindow::on_cboFilterProject_currentIndexChanged(const QString &arg1)
     _taskFilterModel->setProjectId(project.id);
 
     _entryModel->setProjectIdFilter(project.id);
+    _updateChart();
 }
 
 void MainWindow::on_cboFilterTask_currentIndexChanged(const QString &arg1)
@@ -433,6 +434,7 @@ void MainWindow::on_cboFilterTask_currentIndexChanged(const QString &arg1)
 
     Task t = _taskModel->getRow(index);
     _entryModel->setTaskIdFilter(t.id);
+    _updateChart();
 }
 
 void MainWindow::on_btnResetProjectFilter_clicked()
@@ -441,10 +443,12 @@ void MainWindow::on_btnResetProjectFilter_clicked()
     ui->cboTask->clear();
     _entryModel->setProjectIdFilter(0);
     _entryModel->setTaskIdFilter(0);
+    _updateChart();
 }
 
 void MainWindow::on_btnResetTaskFilter_clicked()
 {
     ui->cboFilterTask->setCurrentIndex(-1);
     _entryModel->setTaskIdFilter(0);
+    _updateChart();
 }
