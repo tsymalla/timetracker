@@ -3,6 +3,7 @@
 
 #include "database.h"
 #include <QDateTime>
+#include <QThread>
 #include <QMap>
 #include <QVector>
 
@@ -102,8 +103,10 @@ private:
     QMap<QString, QStringList>      _entityMapping;
     QVector<Project>                _projects;
     QMap<int, QVector<Task>>        _tasks;
+    QThread                         _processingThread;
 
     void _initMapping();
+    void _initDatabase();
 
     template<typename T>
     void _insert(const QVariantList& args)
@@ -137,6 +140,9 @@ public:
     bool deleteEntry(const Entry& entry);
     QVector<Entry> getAllEntries() const;
     QVector<Entry> getEntriesByFilter(const QDate& start, const QDate& end, const ENTITY_ID_TYPE projectId, const ENTITY_ID_TYPE taskId) const;
+
+public slots:
+    void queryFinished(QSqlQuery query);
 };
 
 #endif // DATAPROVIDER_H

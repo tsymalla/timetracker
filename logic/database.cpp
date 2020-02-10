@@ -53,7 +53,7 @@ void Database::_cleanupData()
     executeQuery("DELETE FROM PROJECT");
 }
 
-QSqlQuery Database::executeQuery(const QString &sql, const QVariantList &bindArgs) const
+QSqlQuery Database::executeQuery(const QString &sql, const QVariantList &bindArgs)
 {
     QSqlQuery query;
     query.prepare(sql);
@@ -71,10 +71,12 @@ QSqlQuery Database::executeQuery(const QString &sql, const QVariantList &bindArg
         qWarning() << query.executedQuery();
     }
 
+    emit queryFinished(query);
+
     return query;
 }
 
-QSqlQuery Database::executeQuery(const QString &sql) const
+QSqlQuery Database::executeQuery(const QString &sql)
 {
     return executeQuery(sql, {});
 }

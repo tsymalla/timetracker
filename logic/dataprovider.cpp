@@ -4,13 +4,13 @@
 DataProvider::DataProvider(QObject *parent): QObject(parent)
 {
     _initMapping();
-    _db = new Database(this);
+    _initDatabase();
 }
 
 DataProvider::DataProvider(QObject *parent, bool clean): QObject(parent)
 {
     _initMapping();
-    _db = new Database(this);
+    _initDatabase();
 
     if (clean)
     {
@@ -29,6 +29,14 @@ void DataProvider::_initMapping()
     registerEntityColumn<Entry>("ENTRY_CONTENT");
     registerEntityColumn<Entry>("TS_FROM");
     registerEntityColumn<Entry>("TS_UNTIL");
+}
+
+void DataProvider::_initDatabase()
+{
+    _db = new Database(this);
+    _db->moveToThread(&_processingThread);
+    connect(_db, &Database::queryFinished, this, &DataProvider::queryFinished);
+    _processingThread.start();
 }
 
 bool DataProvider::isInitialized() const
@@ -173,4 +181,9 @@ QVector<Entry> DataProvider::getEntriesByFilter(const QDate &start, const QDate 
     }
 
     return entries;
+}
+
+void DataProvider::queryFinished(QSqlQuery query)
+{
+
 }
