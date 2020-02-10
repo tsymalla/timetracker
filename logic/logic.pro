@@ -23,6 +23,7 @@ SOURCES += \
     database.cpp \
     dataprovider.cpp \
     entrymodel.cpp \
+    entryproxymodel.cpp \
     projectmodel.cpp \
     taskmodel.cpp
 
@@ -32,6 +33,7 @@ HEADERS += \
     database.h \
     dataprovider.h \
     entrymodel.h \
+    entryproxymodel.h \
     projectmodel.h \
     taskmodel.h
 

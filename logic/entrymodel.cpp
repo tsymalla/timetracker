@@ -3,7 +3,7 @@
 
 void EntryModel::_internalUpdate()
 {
-    _entries = _provider->getEntriesByFilter(_dateFilter.start, _dateFilter.end, _projectIdFilter, _taskIdFilter);
+    _entries = _provider->getAllEntries();
 
     emit dataChanged(index(0, 0), index(_entries.count(), COL_COUNT));
     emit layoutChanged();
@@ -49,6 +49,10 @@ QVariant EntryModel::data(const QModelIndex &index, int role) const
         return getDurationString(entry.duration);
     case 5:
         return entry.entryContent;
+    case 6:
+        return entry.projectId;
+    case 7:
+        return entry.taskId;
     }
 
     return QVariant();
@@ -116,28 +120,6 @@ void EntryModel::removeRow(const QModelIndex &index, const Entry &entry)
     beginRemoveRows(QModelIndex(), index.row(), index.row());
     _provider->deleteEntry(entry);
     endRemoveRows();
-
-    _internalUpdate();
-}
-
-void EntryModel::setDateFilter(const QDate &start, const QDate &end)
-{
-    _dateFilter.start   = start;
-    _dateFilter.end     = end;
-
-    _internalUpdate();
-}
-
-void EntryModel::setProjectIdFilter(const ENTITY_ID_TYPE id)
-{
-    _projectIdFilter = id;
-
-    _internalUpdate();
-}
-
-void EntryModel::setTaskIdFilter(const ENTITY_ID_TYPE id)
-{
-    _taskIdFilter = id;
 
     _internalUpdate();
 }
