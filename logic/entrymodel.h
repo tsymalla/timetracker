@@ -9,6 +9,7 @@
 
 class EntryModel : public QAbstractTableModel
 {
+Q_OBJECT
 private:
     constexpr static int COL_COUNT = 8;
 

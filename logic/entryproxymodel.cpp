@@ -1,3 +1,4 @@
+#include "entrymodel.h"
 #include "entryproxymodel.h"
 
 EntryProxyModel::EntryProxyModel(QObject *parent): QSortFilterProxyModel(parent), _startDt(QDate::currentDate()), _endDt(QDate::currentDate()), _projectId(0), _taskId(0)
@@ -52,7 +53,15 @@ int EntryProxyModel::columnCount(const QModelIndex &parent) const
 
 QVector<Entry> EntryProxyModel::getRows()
 {
+    auto source = qobject_cast<EntryModel*>(sourceModel());
     QVector<Entry> filteredResults;
+
+    for (auto i = 0; i < rowCount(); ++i)
+    {
+        auto sourceIndex = mapToSource(index(i, 0));
+        auto& item = source->getRow(sourceIndex);
+        filteredResults.push_back(item);
+    }
 
     return filteredResults;
 }

@@ -1,5 +1,4 @@
 #include "entrymodel.h"
-#include <QDebug>
 
 void EntryModel::_internalUpdate()
 {
