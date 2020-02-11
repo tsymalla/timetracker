@@ -2,6 +2,7 @@
 
 void EntryModel::_internalUpdate()
 {
+    emit layoutAboutToBeChanged();
     _entries = _provider->getAllEntries();
 
     emit dataChanged(index(0, 0), index(_entries.count(), COL_COUNT));

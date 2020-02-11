@@ -218,6 +218,7 @@ void MainWindow::_resetFilters(const QDate& start, const QDate& end)
 
 void MainWindow::_updateChart()
 {
+    _entryProxyModel->refresh();
     _chartData->clear();
     const auto& groupedData = _chartDataProvider->getGroupedData(_entryProxyModel->getRows());
     auto it = groupedData.constBegin();

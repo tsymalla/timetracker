@@ -51,19 +51,28 @@ int EntryProxyModel::columnCount(const QModelIndex &parent) const
     return COL_COUNT;
 }
 
-QVector<Entry> EntryProxyModel::getRows()
+void EntryProxyModel::refresh()
 {
     auto source = qobject_cast<EntryModel*>(sourceModel());
-    QVector<Entry> filteredResults;
+    _filteredData.clear();
 
     for (auto i = 0; i < rowCount(); ++i)
     {
         auto sourceIndex = mapToSource(index(i, 0));
         auto& item = source->getRow(sourceIndex);
-        filteredResults.push_back(item);
+        _filteredData.push_back(item);
     }
+}
 
-    return filteredResults;
+void EntryProxyModel::update()
+{
+    invalidateFilter();
+    refresh();
+}
+
+QVector<Entry> &EntryProxyModel::getRows()
+{
+    return _filteredData;
 }
 
 void EntryProxyModel::setStartDate(const QDate &dt)
@@ -73,7 +82,7 @@ void EntryProxyModel::setStartDate(const QDate &dt)
         _startDt = dt;
     }
 
-    invalidateFilter();
+    update();
 }
 
 void EntryProxyModel::setEndDate(const QDate &dt)
@@ -83,19 +92,19 @@ void EntryProxyModel::setEndDate(const QDate &dt)
         _endDt = dt;
     }
 
-    invalidateFilter();
+    update();
 }
 
 void EntryProxyModel::setProjectId(ENTITY_ID_TYPE projectId)
 {
     _projectId = projectId;
 
-    invalidateFilter();
+    update();
 }
 
 void EntryProxyModel::setTaskId(ENTITY_ID_TYPE taskId)
 {
     _taskId = taskId;
 
-    invalidateFilter();
+    update();
 }

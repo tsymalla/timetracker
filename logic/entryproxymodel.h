@@ -21,7 +21,9 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
     int columnCount(const QModelIndex &parent) const override;
 
-    QVector<Entry> getRows();
+    QVector<Entry>& getRows();
+    void refresh();
+    void update();
 
 public slots:
     void setStartDate(const QDate& dt);
@@ -34,6 +36,7 @@ private:
     QDate           _endDt;
     ENTITY_ID_TYPE  _projectId;
     ENTITY_ID_TYPE  _taskId;
+    QVector<Entry>  _filteredData;
 };
 
 #endif // ENTRYPROXYMODEL_H
