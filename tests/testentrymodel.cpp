@@ -17,10 +17,13 @@ void TestEntryModel::initTestCase()
 {
     _provider = new DataProvider(this, true);
     _model = new EntryModel(this, _provider);
+    _proxyModel = new EntryProxyModel(this);
+    _proxyModel->setSourceModel(_model);
     _projectModel = new ProjectModel(this, _provider);
     _taskModel = new TaskModel(this, _provider);
 
-    _model->setDateFilter(QDate::currentDate(), QDate::currentDate());
+    _proxyModel->setStartDate(QDate::currentDate());
+    _proxyModel->setEndDate(QDate::currentDate());
     _initTestData();
 }
 
@@ -28,6 +31,7 @@ void TestEntryModel::cleanupTestCase()
 {
     delete _provider;
     delete _model;
+    delete _proxyModel;
     delete _projectModel;
     delete _taskModel;
 }

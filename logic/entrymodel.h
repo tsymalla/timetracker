@@ -9,20 +9,12 @@
 
 class EntryModel : public QAbstractTableModel
 {
-    struct DateFilter
-    {
-        QDate start;
-        QDate end;
-    };
-
+Q_OBJECT
 private:
-    constexpr static int COL_COUNT = 6;
+    constexpr static int COL_COUNT = 8;
 
     DataProvider*   _provider;
     QVector<Entry>  _entries;
-    DateFilter      _dateFilter = { QDate::currentDate(), QDate::currentDate() };
-    ENTITY_ID_TYPE  _projectIdFilter = 0;
-    ENTITY_ID_TYPE  _taskIdFilter = 0;
 
     void _internalUpdate();
 public:
@@ -38,9 +30,6 @@ public:
     void updateRow(const Entry& entry);
     void removeRow(const Entry& entry);
     void removeRow(const QModelIndex &index, const Entry& entry);
-    void setDateFilter(const QDate& start, const QDate& end);
-    void setProjectIdFilter(const ENTITY_ID_TYPE id);
-    void setTaskIdFilter(const ENTITY_ID_TYPE id);
 
     static QString getDurationString(const QDateTime& dt, bool percentage = false);
 

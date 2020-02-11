@@ -2,6 +2,7 @@
 #include <QtTest>
 #include "dataprovider.h"
 #include "entrymodel.h"
+#include "entryproxymodel.h"
 #include "taskmodel.h"
 #include "projectmodel.h"
 
@@ -25,6 +26,7 @@ private:
     ProjectModel    *_projectModel = nullptr;
     TaskModel       *_taskModel = nullptr;
     EntryModel      *_model = nullptr;
+    EntryProxyModel *_proxyModel = nullptr;
 
     void _initTestData() const;
 };

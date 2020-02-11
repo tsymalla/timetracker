@@ -7,7 +7,7 @@ CSVWriter::CSVWriter(QObject *parent) : QObject(parent)
 {
 }
 
-bool CSVWriter::toCSV(const EntryModel* model, const QString &filePath)
+bool CSVWriter::toCSV(const EntryProxyModel* model, const QString &filePath)
 {
     const QString CSV_SEPARATOR = ";";
 

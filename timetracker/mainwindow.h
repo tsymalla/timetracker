@@ -10,6 +10,7 @@
 #include "projectmodel.h"
 #include "taskmodel.h"
 #include "entrymodel.h"
+#include "entryproxymodel.h"
 #include "projecttaskadmindialog.h"
 #include "aboutdialog.h"
 
@@ -78,6 +79,12 @@ private slots:
 
     void on_btnResetTaskFilter_clicked();
 
+signals:
+    void updateStartDateFilter(const QDate& dt);
+    void updateEndDateFilter(const QDate& dt);
+    void updateProjectIdFilter(ENTITY_ID_TYPE projectId);
+    void updateTaskIdFilter(ENTITY_ID_TYPE taskId);
+
 private:
     Ui::MainWindow              *ui;
     ProjectTaskAdminDialog      *_projectTaskAdminDialog;
@@ -91,11 +98,14 @@ private:
     TaskModel                   *_taskModel;
     TaskModel                   *_taskFilterModel;
     EntryModel                  *_entryModel;
+    EntryProxyModel             *_entryProxyModel;
     Entry                       _selectedEntry;
     QModelIndex                 _selectedRowIndex;
     bool                        _isNewEntry = true;
 
     void                        _refreshData();
+
+    void                        _connectFilters();
     void                        _resetFilters(const QDate& start, const QDate& end);
 
     void                        _updateChart();

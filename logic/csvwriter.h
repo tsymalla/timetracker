@@ -1,7 +1,7 @@
 #ifndef CSVWRITER_H
 #define CSVWRITER_H
 
-#include "entrymodel.h"
+#include "entryproxymodel.h"
 
 #include <QObject>
 
@@ -11,7 +11,7 @@ class CSVWriter : public QObject
 public:
     explicit CSVWriter(QObject *parent = nullptr);
 
-    static bool toCSV(const EntryModel* model, const QString& filePath);
+    static bool toCSV(const EntryProxyModel* model, const QString& filePath);
 
 signals:
 
