@@ -90,7 +90,7 @@ void MainWindow::on_cboProject_currentIndexChanged(const QString &arg1)
 
 void MainWindow::on_tblCurrentData_clicked(const QModelIndex &index)
 {
-    _selectedEntry = _entryModel->getRow(index);
+    _selectedEntry = _entryModel->getRow(_entryProxyModel->getMappedIndex(index));
     ui->dtFrom->setDateTime(_selectedEntry.from);
     ui->dtUntil->setDateTime(_selectedEntry.until);
 
@@ -124,7 +124,7 @@ void MainWindow::on_btnNew_clicked()
 
 void MainWindow::on_btnDelete_clicked()
 {
-    _entryModel->removeRow(_selectedRowIndex, _selectedEntry);
+    _entryModel->removeRow(_entryProxyModel->getMappedIndex(_selectedRowIndex), _selectedEntry);
     statusBar()->showMessage(tr("Deleted entry."));
     on_btnNew_clicked();
 

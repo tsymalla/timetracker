@@ -21,6 +21,7 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
     int columnCount(const QModelIndex &parent) const override;
 
+    QModelIndex getMappedIndex(const QModelIndex &index);
     QVector<Entry>& getRows();
     void refresh();
     void update();

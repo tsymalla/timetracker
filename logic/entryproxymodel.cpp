@@ -70,6 +70,11 @@ void EntryProxyModel::update()
     refresh();
 }
 
+QModelIndex EntryProxyModel::getMappedIndex(const QModelIndex &index)
+{
+    return mapToSource(index);
+}
+
 QVector<Entry> &EntryProxyModel::getRows()
 {
     return _filteredData;
