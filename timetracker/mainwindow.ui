@@ -22,6 +22,15 @@
  border: 1px solid #FF0000;
 }</string>
   </property>
+  <property name="toolButtonStyle">
+   <enum>Qt::ToolButtonIconOnly</enum>
+  </property>
+  <property name="documentMode">
+   <bool>false</bool>
+  </property>
+  <property name="unifiedTitleAndToolBarOnMac">
+   <bool>false</bool>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
@@ -132,15 +141,21 @@
            </item>
            <item>
             <widget class="QPushButton" name="btnResetProjectFilter">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="minimumSize">
               <size>
-               <width>24</width>
+               <width>32</width>
                <height>0</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
-               <width>24</width>
+               <width>32</width>
                <height>16777215</height>
               </size>
              </property>
@@ -176,13 +191,13 @@
             <widget class="QPushButton" name="btnResetTaskFilter">
              <property name="minimumSize">
               <size>
-               <width>24</width>
+               <width>32</width>
                <height>0</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
-               <width>24</width>
+               <width>32</width>
                <height>16777215</height>
               </size>
              </property>
@@ -223,13 +238,13 @@
            </property>
            <property name="minimumSize">
             <size>
-             <width>100</width>
+             <width>110</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>100</width>
+             <width>110</width>
              <height>16777215</height>
             </size>
            </property>
@@ -248,13 +263,13 @@
            </property>
            <property name="minimumSize">
             <size>
-             <width>100</width>
+             <width>110</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>100</width>
+             <width>110</width>
              <height>16777215</height>
             </size>
            </property>
@@ -273,13 +288,13 @@
            </property>
            <property name="minimumSize">
             <size>
-             <width>100</width>
+             <width>110</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>100</width>
+             <width>110</width>
              <height>16777215</height>
             </size>
            </property>
@@ -292,13 +307,13 @@
           <widget class="QPushButton" name="btnFilterWeek">
            <property name="minimumSize">
             <size>
-             <width>100</width>
+             <width>110</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>100</width>
+             <width>110</width>
              <height>16777215</height>
             </size>
            </property>
@@ -311,13 +326,13 @@
           <widget class="QPushButton" name="btnFilterMonth">
            <property name="minimumSize">
             <size>
-             <width>100</width>
+             <width>110</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>100</width>
+             <width>110</width>
              <height>16777215</height>
             </size>
            </property>
@@ -330,13 +345,13 @@
           <widget class="QPushButton" name="btnFilterYear">
            <property name="minimumSize">
             <size>
-             <width>100</width>
+             <width>110</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>100</width>
+             <width>110</width>
              <height>16777215</height>
             </size>
            </property>
@@ -703,7 +718,7 @@
      <x>0</x>
      <y>0</y>
      <width>1024</width>
-     <height>26</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAdministration">
