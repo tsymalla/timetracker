@@ -725,7 +725,30 @@
    <addaction name="menu"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>24</width>
+     <height>24</height>
+    </size>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionManage_projects_and_tasks"/>
+   <addaction name="actionExport_current_view"/>
+  </widget>
   <action name="actionManage_projects_and_tasks">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/toolbar/resources/manage.ico</normaloff>:/toolbar/resources/manage.ico</iconset>
+   </property>
    <property name="text">
     <string>Manage projects and tasks</string>
    </property>
@@ -746,6 +769,10 @@
    </property>
   </action>
   <action name="actionExport_current_view">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/toolbar/resources/export.ico</normaloff>:/toolbar/resources/export.ico</iconset>
+   </property>
    <property name="text">
     <string>Export...</string>
    </property>
@@ -758,6 +785,8 @@
    <header>QtCharts</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

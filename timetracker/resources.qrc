@@ -2,4 +2,8 @@
     <qresource prefix="/default">
         <file>resources/clock-2.ico</file>
     </qresource>
+    <qresource prefix="/toolbar">
+        <file>resources/export.ico</file>
+        <file>resources/manage.ico</file>
+    </qresource>
 </RCC>
