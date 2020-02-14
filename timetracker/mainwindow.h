@@ -13,6 +13,7 @@
 #include "entryproxymodel.h"
 #include "projecttaskadmindialog.h"
 #include "aboutdialog.h"
+#include "projecttreemodel.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -69,14 +70,6 @@ private slots:
 
     void on_dtFilterEnd_userDateChanged(const QDate &date);
 
-    void on_cboFilterProject_currentIndexChanged(const QString &arg1);
-
-    void on_cboFilterTask_currentIndexChanged(const QString &arg1);
-
-    void on_btnResetProjectFilter_clicked();
-
-    void on_btnResetTaskFilter_clicked();
-
     void on_actionExport_current_view_triggered();
 
 signals:
@@ -99,6 +92,7 @@ private:
     TaskModel                   *_taskFilterModel;
     EntryModel                  *_entryModel;
     EntryProxyModel             *_entryProxyModel;
+    ProjectTreeModel            *_projectTreeModel;
     Entry                       _selectedEntry;
     QModelIndex                 _selectedRowIndex;
     bool                        _isNewEntry = true;

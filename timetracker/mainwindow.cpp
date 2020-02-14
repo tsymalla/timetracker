@@ -53,12 +53,12 @@ MainWindow::MainWindow(QWidget *parent)
     ui->cboTask->setModel(_taskModel);
 
     _taskFilterModel = new TaskModel(this, _provider);
-    ui->cboFilterTask->setModel(_taskFilterModel);
 
     _projectModel = new ProjectModel(this, _provider);
     ui->cboProject->setModel(_projectModel);
-    ui->cboFilterProject->setModel(_projectModel);
-    ui->cboFilterProject->setCurrentIndex(-1);
+
+    _projectTreeModel = new ProjectTreeModel(this);
+    ui->trvProject->setModel(_projectTreeModel);
 
     _connectFilters();
 
@@ -412,60 +412,6 @@ void MainWindow::on_dtFilterStart_userDateChanged(const QDate &date)
 void MainWindow::on_dtFilterEnd_userDateChanged(const QDate &date)
 {
     _resetFilters(ui->dtFilterStart->date(), date);
-}
-
-void MainWindow::on_cboFilterProject_currentIndexChanged(const QString &arg1)
-{
-    Q_UNUSED(arg1)
-    ui->cboFilterTask->clear();
-    ui->cboFilterTask->setCurrentIndex(-1);
-    auto projectIndex = ui->cboFilterProject->currentIndex();
-
-    if (projectIndex <= -1)
-    {
-        return;
-    }
-
-    const auto& project = _projectModel->getRow(projectIndex);
-    _taskFilterModel->setProjectId(project.id);
-
-    emit updateProjectIdFilter(project.id);
-    emit updateTaskIdFilter(0);
-
-    _updateChart();
-}
-
-void MainWindow::on_cboFilterTask_currentIndexChanged(const QString &arg1)
-{
-    Q_UNUSED(arg1)
-    const auto index = ui->cboFilterTask->currentIndex();
-
-    if (index <= -1)
-    {
-        return;
-    }
-
-    Task t = _taskModel->getRow(index);
-    emit updateTaskIdFilter(t.id);
-    _updateChart();
-}
-
-void MainWindow::on_btnResetProjectFilter_clicked()
-{
-    ui->cboFilterProject->setCurrentIndex(-1);
-    ui->cboTask->clear();
-
-    emit updateProjectIdFilter(0);
-    emit updateTaskIdFilter(0);
-
-    _updateChart();
-}
-
-void MainWindow::on_btnResetTaskFilter_clicked()
-{
-    ui->cboFilterTask->setCurrentIndex(-1);
-    emit updateTaskIdFilter(0);
-    _updateChart();
 }
 
 void MainWindow::on_actionExport_current_view_triggered()

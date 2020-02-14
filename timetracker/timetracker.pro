@@ -33,12 +33,14 @@ SOURCES += \
     aboutdialog.cpp \
     main.cpp \
     mainwindow.cpp \
-    projecttaskadmindialog.cpp
+    projecttaskadmindialog.cpp \
+    projecttreemodel.cpp
 
 HEADERS += \
     aboutdialog.h \
     mainwindow.h \
-    projecttaskadmindialog.h
+    projecttaskadmindialog.h \
+    projecttreemodel.h
 
 FORMS += \
     aboutdialog.ui \
