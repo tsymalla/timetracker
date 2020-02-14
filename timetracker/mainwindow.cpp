@@ -25,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     chartFont.setBold(true);
 
     _chart->setTitleFont(chartFont);
+    _chart->legend()->setAlignment(Qt::AlignRight);
     ui->chrtView->setChart(_chart);
 
     _chartData = new QPieSeries();
@@ -407,16 +408,6 @@ void MainWindow::on_dtFilterEnd_userDateChanged(const QDate &date)
     _resetFilters(ui->dtFilterStart->date(), date);
 }
 
-void MainWindow::on_btnExport_clicked()
-{
-    QString filePath = QFileDialog::getSaveFileName(this, tr("Export data to CSV"), "", tr("CSV files (*.csv)"));
-
-    if (CSVWriter::toCSV(_entryProxyModel, filePath))
-    {
-        QMessageBox::information(this, tr("Success"), tr("Data successfully exported to %1.").arg(filePath));
-    }
-}
-
 void MainWindow::on_cboFilterProject_currentIndexChanged(const QString &arg1)
 {
     Q_UNUSED(arg1)
@@ -469,4 +460,14 @@ void MainWindow::on_btnResetTaskFilter_clicked()
     ui->cboFilterTask->setCurrentIndex(-1);
     emit updateTaskIdFilter(0);
     _updateChart();
+}
+
+void MainWindow::on_actionExport_current_view_triggered()
+{
+    QString filePath = QFileDialog::getSaveFileName(this, tr("Export data to CSV"), "", tr("CSV files (*.csv)"));
+
+    if (CSVWriter::toCSV(_entryProxyModel, filePath))
+    {
+        QMessageBox::information(this, tr("Success"), tr("Data successfully exported to %1.").arg(filePath));
+    }
 }

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1024</width>
-    <height>628</height>
+    <height>768</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -691,13 +691,6 @@
         <item>
          <widget class="QChartView" name="chrtView"/>
         </item>
-        <item alignment="Qt::AlignTop">
-         <widget class="QPushButton" name="btnExport">
-          <property name="text">
-           <string>Export data to CSV</string>
-          </property>
-         </widget>
-        </item>
        </layout>
       </widget>
      </widget>
@@ -718,6 +711,7 @@
      <string>Menu</string>
     </property>
     <addaction name="actionManage_projects_and_tasks"/>
+    <addaction name="actionExport_current_view"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -749,6 +743,11 @@
   <action name="actionExit">
    <property name="text">
     <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionExport_current_view">
+   <property name="text">
+    <string>Export...</string>
    </property>
   </action>
  </widget>

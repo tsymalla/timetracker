@@ -69,8 +69,6 @@ private slots:
 
     void on_dtFilterEnd_userDateChanged(const QDate &date);
 
-    void on_btnExport_clicked();
-
     void on_cboFilterProject_currentIndexChanged(const QString &arg1);
 
     void on_cboFilterTask_currentIndexChanged(const QString &arg1);
@@ -78,6 +76,8 @@ private slots:
     void on_btnResetProjectFilter_clicked();
 
     void on_btnResetTaskFilter_clicked();
+
+    void on_actionExport_current_view_triggered();
 
 signals:
     void updateStartDateFilter(const QDate& dt);
