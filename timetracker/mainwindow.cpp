@@ -8,6 +8,12 @@ MainWindow::MainWindow(QWidget *parent)
       , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+#ifdef Q_OS_MAC
+    // maximize window on mac
+    setWindowState(Qt::WindowMaximized);
+#endif
+
     this->setWindowIcon(QIcon(":/default/resources/clock-2.ico"));
 
     _provider = new DataProvider(this);
