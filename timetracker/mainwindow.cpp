@@ -57,7 +57,7 @@ MainWindow::MainWindow(QWidget *parent)
     _projectModel = new ProjectModel(this, _provider);
     ui->cboProject->setModel(_projectModel);
 
-    _projectTreeModel = new ProjectTreeModel(this);
+    _projectTreeModel = new ProjectTreeModel(this, _provider);
     ui->trvProject->setModel(_projectTreeModel);
 
     _connectFilters();
