@@ -232,7 +232,7 @@ void MainWindow::_updateChart()
     const auto timeSpent = QDateTime::fromTime_t(_chartDataProvider->getTotalTimeSpent());
 
     const auto durationString = EntryModel::getDurationString(timeSpent);
-    _chart->setTitle(QString("Report from %1 until %2<br>Total time spent: %3")
+    _chart->setTitle(QString("Report: %1 - %2<br>Time spent total: %3")
                      .arg(ui->dtFilterStart->text(), ui->dtFilterEnd->text(), durationString));
 
     QString totalTime = durationString;

@@ -25,6 +25,7 @@ SOURCES += \
     entrymodel.cpp \
     entryproxymodel.cpp \
     projectmodel.cpp \
+    projecttreemodel.cpp \
     taskmodel.cpp
 
 HEADERS += \
@@ -35,6 +36,7 @@ HEADERS += \
     entrymodel.h \
     entryproxymodel.h \
     projectmodel.h \
+    projecttreemodel.h \
     taskmodel.h
 
 # Default rules for deployment.
