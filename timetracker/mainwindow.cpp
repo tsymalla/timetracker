@@ -52,8 +52,6 @@ MainWindow::MainWindow(QWidget *parent)
     _taskModel = new TaskModel(this, _provider);
     ui->cboTask->setModel(_taskModel);
 
-    _taskFilterModel = new TaskModel(this, _provider);
-
     _projectModel = new ProjectModel(this, _provider);
     ui->cboProject->setModel(_projectModel);
 
@@ -65,8 +63,6 @@ MainWindow::MainWindow(QWidget *parent)
     // receive events from admin dialog when the data has changed
     connect(_projectTaskAdminDialog, &ProjectTaskAdminDialog::projectsChanged, this, &MainWindow::onProjectsChanged);
     connect(_projectTaskAdminDialog, &ProjectTaskAdminDialog::tasksChanged, this, &MainWindow::onTasksChanged);
-    connect(_projectTaskAdminDialog, &ProjectTaskAdminDialog::projectsChanged, this, &MainWindow::onProjectsFilterChanged);
-    connect(_projectTaskAdminDialog, &ProjectTaskAdminDialog::tasksChanged, this, &MainWindow::onTasksFilterChanged);
 
     on_btnNew_clicked();
     on_btnFilterToday_clicked();
@@ -182,19 +178,6 @@ void MainWindow::onProjectsChanged()
 }
 
 void MainWindow::onTasksChanged(ENTITY_ID_TYPE projectId)
-{
-    if (projectId == _selectedEntry.projectId)
-    {
-        _refreshData();
-    }
-}
-
-void MainWindow::onProjectsFilterChanged()
-{
-    _refreshData();
-}
-
-void MainWindow::onTasksFilterChanged(ENTITY_ID_TYPE projectId)
 {
     if (projectId == _selectedEntry.projectId)
     {
@@ -422,4 +405,42 @@ void MainWindow::on_actionExport_current_view_triggered()
     {
         QMessageBox::information(this, tr("Success"), tr("Data successfully exported to %1.").arg(filePath));
     }
+}
+
+void MainWindow::on_trvProject_clicked(const QModelIndex &index)
+{
+    const auto node = _projectTreeModel->getNode(index);
+    if (node == nullptr)
+    {
+        return;
+    }
+
+    const auto type = static_cast<TreeItem::TYPE>(node->data(2).toUInt());
+    const auto id = node->data(1);
+
+    if (type == TreeItem::TYPE::OTHER)
+    {
+        // reset filters
+        emit updateProjectIdFilter(0);
+        emit updateTaskIdFilter(0);
+    }
+    else if (type == TreeItem::TYPE::PROJECT)
+    {
+        emit updateProjectIdFilter(id.toInt());
+        emit updateTaskIdFilter(0);
+    }
+    else if (type == TreeItem::TYPE::TASK)
+    {
+        const auto parent = node->parent();
+        if (parent == nullptr)
+        {
+            return;
+        }
+
+        const auto projectId = parent->data(1);
+        emit updateProjectIdFilter(projectId.toInt());
+        emit updateTaskIdFilter(id.toInt());
+    }
+
+    _updateChart();
 }

@@ -46,10 +46,6 @@ private slots:
 
     void onTasksChanged(ENTITY_ID_TYPE projectId);
 
-    void onProjectsFilterChanged();
-
-    void onTasksFilterChanged(ENTITY_ID_TYPE projectId);
-
     void on_actionAbout_triggered();
 
     void on_actionExit_triggered();
@@ -72,6 +68,8 @@ private slots:
 
     void on_actionExport_current_view_triggered();
 
+    void on_trvProject_clicked(const QModelIndex &index);
+
 signals:
     void updateStartDateFilter(const QDate& dt);
     void updateEndDateFilter(const QDate& dt);
@@ -89,7 +87,6 @@ private:
     ChartDataProvider           *_chartDataProvider;
     ProjectModel                *_projectModel;
     TaskModel                   *_taskModel;
-    TaskModel                   *_taskFilterModel;
     EntryModel                  *_entryModel;
     EntryProxyModel             *_entryProxyModel;
     ProjectTreeModel            *_projectTreeModel;

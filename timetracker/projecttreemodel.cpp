@@ -48,11 +48,15 @@ QVariant TreeItem::data(int column) const
 {
     if (column == 0)
     {
-        return _data.id;
+        return _data.title;
     }
     else if (column == 1)
     {
-        return _data.title;
+        return _data.id;
+    }
+    else if (column == 2)
+    {
+        return static_cast<unsigned int>(_data.type);
     }
 
     return QVariant();
@@ -91,7 +95,8 @@ void ProjectTreeModel::_initializeTree()
 
 ProjectTreeModel::ProjectTreeModel(QObject *parent, DataProvider* provider) : QAbstractItemModel(parent), _provider(provider)
 {
-    _root = new TreeItem({ 0, TreeItem::TYPE::OTHER, "All projects" });
+    _root = new TreeItem({ 0, TreeItem::TYPE::OTHER, tr("Root") });
+    _root->addChild(new TreeItem({ 0, TreeItem::TYPE::OTHER, tr("All projects") }, _root));
     _initializeTree();
 }
 
@@ -173,9 +178,19 @@ int ProjectTreeModel::columnCount(const QModelIndex &parent) const
     return TreeItem::colCount();
 }
 
+TreeItem *ProjectTreeModel::getNode(const QModelIndex &index) const
+{
+    if (!index.isValid() || index.column() == 1)
+    {
+        return nullptr;
+    }
+
+    return static_cast<TreeItem*>(index.internalPointer());
+}
+
 QVariant ProjectTreeModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid() || role != Qt::DisplayRole || index.column() == 0)
+    if (!index.isValid() || role != Qt::DisplayRole || index.column() == 1)
     {
         return QVariant();
     }
@@ -188,7 +203,7 @@ QVariant ProjectTreeModel::headerData(int section, Qt::Orientation orientation, 
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
     {
-        if (section == 1)
+        if (section == 0)
         {
             return "Title";
         }
