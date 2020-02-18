@@ -47,8 +47,8 @@ class ProjectTreeModel : public QAbstractItemModel
 {
     Q_OBJECT
 private:
-    DataProvider*                       _provider;
-    TreeItem*                           _root;
+    DataProvider*                       _provider = nullptr;
+    TreeItem*                           _root = nullptr;
     void                                _initializeTree();
 
 public:
@@ -63,6 +63,9 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
+
+public slots:
+    void refreshTree();
 };
 
 #endif // PROJECTTREEMODEL_H

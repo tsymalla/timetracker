@@ -70,6 +70,8 @@ private slots:
 
     void on_trvProject_clicked(const QModelIndex &index);
 
+    void refreshTree();
+
 signals:
     void updateStartDateFilter(const QDate& dt);
     void updateEndDateFilter(const QDate& dt);

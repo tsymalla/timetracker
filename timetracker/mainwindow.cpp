@@ -64,6 +64,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(_projectTaskAdminDialog, &ProjectTaskAdminDialog::projectsChanged, this, &MainWindow::onProjectsChanged);
     connect(_projectTaskAdminDialog, &ProjectTaskAdminDialog::tasksChanged, this, &MainWindow::onTasksChanged);
 
+    // refresh tree
+    connect(_projectTaskAdminDialog, &ProjectTaskAdminDialog::projectsChanged, this, &MainWindow::refreshTree);
+    connect(_projectTaskAdminDialog, &ProjectTaskAdminDialog::tasksChanged, this, &MainWindow::refreshTree);
+
     on_btnNew_clicked();
     on_btnFilterToday_clicked();
 }
@@ -443,4 +447,10 @@ void MainWindow::on_trvProject_clicked(const QModelIndex &index)
     }
 
     _updateChart();
+}
+
+void MainWindow::refreshTree()
+{
+    ui->trvProject->clearSelection();
+    _projectTreeModel->refreshTree();
 }

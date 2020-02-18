@@ -95,9 +95,7 @@ void ProjectTreeModel::_initializeTree()
 
 ProjectTreeModel::ProjectTreeModel(QObject *parent, DataProvider* provider) : QAbstractItemModel(parent), _provider(provider)
 {
-    _root = new TreeItem({ 0, TreeItem::TYPE::OTHER, tr("Root") });
-    _root->addChild(new TreeItem({ 0, TreeItem::TYPE::OTHER, tr("All projects") }, _root));
-    _initializeTree();
+    refreshTree();
 }
 
 ProjectTreeModel::~ProjectTreeModel()
@@ -220,4 +218,21 @@ Qt::ItemFlags ProjectTreeModel::flags(const QModelIndex &index) const
     }
 
     return QAbstractItemModel::flags(index);
+}
+
+void ProjectTreeModel::refreshTree()
+{
+    emit beginResetModel();
+
+    if (_root != nullptr)
+    {
+        delete _root;
+        _root = nullptr;
+    }
+
+    _root = new TreeItem({ 0, TreeItem::TYPE::OTHER, tr("Root") });
+    _root->addChild(new TreeItem({ 0, TreeItem::TYPE::OTHER, tr("All projects") }, _root));
+    _initializeTree();
+
+    emit endResetModel();
 }
