@@ -12,10 +12,6 @@ public:
     explicit CSVWriter(QObject *parent = nullptr);
 
     static bool toCSV(const EntryProxyModel* model, const QString& filePath);
-
-signals:
-
-public slots:
 };
 
 #endif // CSVWRITER_H

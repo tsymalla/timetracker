@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>257</width>
-    <height>102</height>
+    <height>134</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>60</y>
+     <y>90</y>
      <width>211</width>
      <height>32</height>
     </rect>
@@ -29,13 +29,13 @@
     <set>QDialogButtonBox::Close</set>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>20</x>
      <y>10</y>
      <width>221</width>
-     <height>46</height>
+     <height>74</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -54,7 +54,14 @@
     <item>
      <widget class="QLabel" name="label_2">
       <property name="text">
-       <string>Created by Thomas Symalla in 2019</string>
+       <string>Thomas Symalla, 2019-2020</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>Use on your own risk.</string>
       </property>
      </widget>
     </item>

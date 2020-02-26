@@ -15,7 +15,8 @@ struct Project
     ENTITY_ID_TYPE id;
     QString name;
 
-    static QString TYPE() {
+    static QString TYPE()
+    {
         return "PROJECT";
     }
 
@@ -35,7 +36,8 @@ struct Task
     ENTITY_ID_TYPE projectId;
     QString name;
 
-    static QString TYPE() {
+    static QString TYPE()
+    {
         return "TASK";
     }
 
@@ -62,7 +64,8 @@ struct Entry
     QDateTime until;
     QDateTime duration;
 
-    static QString TYPE() {
+    static QString TYPE()
+    {
         return "ENTRY";
     }
 

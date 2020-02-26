@@ -53,7 +53,7 @@ private:
 
 public:
     explicit ProjectTreeModel(QObject *parent, DataProvider* provider);
-    ~ProjectTreeModel();
+    ~ProjectTreeModel() override;
 
     QModelIndex index(int row, int column, const QModelIndex &parent) const override;
     QModelIndex parent(const QModelIndex &child) const override;
