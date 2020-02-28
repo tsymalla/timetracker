@@ -14,6 +14,7 @@
 #include "projecttaskadmindialog.h"
 #include "aboutdialog.h"
 #include "projecttreemodel.h"
+#include "entryeditor.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -30,15 +31,7 @@ public:
     ~MainWindow() override;
 
 private slots:
-    void on_cboProject_currentIndexChanged(const QString &);
-
     void on_tblCurrentData_clicked(const QModelIndex &index);
-
-    void on_btnNew_clicked();
-
-    void on_btnDelete_clicked();
-
-    void on_btnSave_clicked();
 
     void on_actionManage_projects_and_tasks_triggered();
 
@@ -72,6 +65,14 @@ private slots:
 
     void refreshTree();
 
+    void newEntry();
+
+    void createdEntry();
+
+    void updatedEntry();
+
+    void deletedEntry(const QModelIndex& selectedRowIndex, const Entry& selectedEntry);
+
 signals:
     void updateStartDateFilter(const QDate& dt);
     void updateEndDateFilter(const QDate& dt);
@@ -92,9 +93,6 @@ private:
     EntryModel                  *_entryModel;
     EntryProxyModel             *_entryProxyModel;
     ProjectTreeModel            *_projectTreeModel;
-    Entry                       _selectedEntry;
-    QModelIndex                 _selectedRowIndex;
-    bool                        _isNewEntry = true;
 
     void                        _refreshData();
 
@@ -102,8 +100,5 @@ private:
     void                        _resetFilters(const QDate& start, const QDate& end);
 
     void                        _updateChart();
-    bool                        _validateInput();
-
-    void                        _refreshStyle(QWidget* widget);
 };
 #endif // MAINWINDOW_H

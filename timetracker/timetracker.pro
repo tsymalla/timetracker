@@ -31,17 +31,20 @@ else:unix: PRE_TARGETDEPS += $$OUT_PWD/../logic/liblogic.a
 
 SOURCES += \
     aboutdialog.cpp \
+    entryeditor.cpp \
     main.cpp \
     mainwindow.cpp \
     projecttaskadmindialog.cpp
 
 HEADERS += \
     aboutdialog.h \
+    entryeditor.h \
     mainwindow.h \
     projecttaskadmindialog.h
 
 FORMS += \
     aboutdialog.ui \
+    entryeditor.ui \
     mainwindow.ui \
     projecttaskadmindialog.ui
 

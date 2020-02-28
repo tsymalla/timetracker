@@ -44,19 +44,17 @@ MainWindow::MainWindow(QWidget *parent)
     _aboutDialog = new AboutDialog(this);
 
     // models and their connection
+    _projectModel = new ProjectModel(this, _provider);
+    _taskModel = new TaskModel(this, _provider);
     _entryModel = new EntryModel(this, _provider);
     _entryProxyModel = new EntryProxyModel(this);
     _entryProxyModel->setSourceModel(_entryModel);
     ui->tblCurrentData->setModel(_entryProxyModel);
 
-    _taskModel = new TaskModel(this, _provider);
-    ui->cboTask->setModel(_taskModel);
-
-    _projectModel = new ProjectModel(this, _provider);
-    ui->cboProject->setModel(_projectModel);
-
     _projectTreeModel = new ProjectTreeModel(this, _provider);
     ui->trvProject->setModel(_projectTreeModel);
+
+    ui->entryEditor->initModels(_projectModel, _taskModel, _entryModel);
 
     _connectFilters();
 
@@ -68,7 +66,13 @@ MainWindow::MainWindow(QWidget *parent)
     connect(_projectTaskAdminDialog, &ProjectTaskAdminDialog::projectsChanged, this, &MainWindow::refreshTree);
     connect(_projectTaskAdminDialog, &ProjectTaskAdminDialog::tasksChanged, this, &MainWindow::refreshTree);
 
-    on_btnNew_clicked();
+    // receive events from editor
+    connect(ui->entryEditor, &EntryEditor::newEntry, this, &MainWindow::newEntry);
+    connect(ui->entryEditor, &EntryEditor::entryCreated, this, &MainWindow::createdEntry);
+    connect(ui->entryEditor, &EntryEditor::entryUpdated, this, &MainWindow::updatedEntry);
+    connect(ui->entryEditor, &EntryEditor::entryDeleted, this, &MainWindow::deletedEntry);
+
+    ui->entryEditor->newEntry();
     on_btnFilterToday_clicked();
 }
 
@@ -85,90 +89,9 @@ void MainWindow::_connectFilters()
     connect(this, &MainWindow::updateTaskIdFilter, _entryProxyModel, &EntryProxyModel::setTaskId);
 }
 
-void MainWindow::on_cboProject_currentIndexChanged(const QString &arg1)
-{
-    Q_UNUSED(arg1)
-    ui->cboTask->clear();
-    ui->cboTask->setCurrentIndex(-1);
-    auto projectIndex = ui->cboProject->currentIndex();
-    const auto& project = _projectModel->getRow(projectIndex);
-    _taskModel->setProjectId(project.id);
-}
-
 void MainWindow::on_tblCurrentData_clicked(const QModelIndex &index)
 {
-    _selectedEntry = _entryModel->getRow(_entryProxyModel->getMappedIndex(index));
-    ui->dtFrom->setDateTime(_selectedEntry.from);
-    ui->dtUntil->setDateTime(_selectedEntry.until);
-
-    auto projectIndex = _projectModel->getIndex(_selectedEntry.projectId);
-    ui->cboProject->setCurrentIndex(projectIndex);
-
-    auto taskIndex = _taskModel->getIndex(_selectedEntry.taskId);
-    ui->cboTask->setCurrentIndex(taskIndex);
-
-    ui->txtContent->setText(_selectedEntry.entryContent);
-    _selectedRowIndex = index;
-    _isNewEntry = false;
-
-    ui->btnDelete->setEnabled(true);
-    _isNewEntry = false;
-}
-
-void MainWindow::on_btnNew_clicked()
-{
-    _isNewEntry = true;
-    const auto currentDateTime = QDateTime::currentDateTime();
-
-    ui->dtFrom->setDateTime(currentDateTime);
-    ui->dtUntil->setDateTime(currentDateTime);
-    ui->txtContent->clear();
-
-    ui->btnDelete->setEnabled(false);
-    ui->tblCurrentData->clearSelection();
-    ui->tblCurrentData->resizeRowsToContents();
-}
-
-void MainWindow::on_btnDelete_clicked()
-{
-    _entryModel->removeRow(_entryProxyModel->getMappedIndex(_selectedRowIndex), _selectedEntry);
-    statusBar()->showMessage(tr("Deleted entry."));
-    on_btnNew_clicked();
-
-    _updateChart();
-}
-
-void MainWindow::on_btnSave_clicked()
-{
-    if (!_validateInput())
-    {
-        QMessageBox::warning(this, tr("Error"), tr("Please check your input data."));
-        return;
-    }
-
-    Task t = _taskModel->getRow(ui->cboTask->currentIndex());
-
-    Entry e;
-    e.taskId            = t.id;
-    e.entryContent      = ui->txtContent->toPlainText();
-    e.from              = ui->dtFrom->dateTime();
-    e.until             = ui->dtUntil->dateTime();
-
-    if (_isNewEntry)
-    {
-        _entryModel->addRow(e);
-        statusBar()->showMessage(tr("Created entry."));
-
-        on_btnNew_clicked();
-    }
-    else
-    {
-        e.id = _selectedEntry.id;
-        _entryModel->updateRow(e);
-        statusBar()->showMessage(tr("Updated entry."));
-    }
-
-    _updateChart();
+    ui->entryEditor->setSelectedEntry(_entryModel->getRow(_entryProxyModel->getMappedIndex(index)), index);
 }
 
 void MainWindow::on_actionManage_projects_and_tasks_triggered()
@@ -183,7 +106,7 @@ void MainWindow::onProjectsChanged()
 
 void MainWindow::onTasksChanged(ENTITY_ID_TYPE projectId)
 {
-    if (projectId == _selectedEntry.projectId)
+    if (projectId == ui->entryEditor->getSelectedEntry().projectId)
     {
         _refreshData();
     }
@@ -191,9 +114,7 @@ void MainWindow::onTasksChanged(ENTITY_ID_TYPE projectId)
 
 void MainWindow::_refreshData()
 {
-    _projectModel->refresh();
-    _entryModel->refresh();
-
+    ui->entryEditor->refreshModels();
     statusBar()->showMessage(tr("Projects and tasks refreshed."));
 }
 
@@ -242,75 +163,6 @@ void MainWindow::_updateChart()
     QString totalTime = durationString;
     totalTime += " (" + EntryModel::getDurationString(timeSpent, true) + ")";
     ui->lblTotalTime->setText(totalTime);
-}
-
-bool MainWindow::_validateInput()
-{
-    auto isValid = true;
-    const static char* INVALID_PROPERTY = "isInvalid";
-
-    // valid date input
-    if (ui->dtFrom->dateTime() >= ui->dtUntil->dateTime())
-    {
-        isValid = false;
-        ui->dtFrom->setProperty(INVALID_PROPERTY, true);
-        ui->dtUntil->setProperty(INVALID_PROPERTY, true);
-    }
-    else
-    {
-        ui->dtFrom->setProperty(INVALID_PROPERTY, {});
-        ui->dtUntil->setProperty(INVALID_PROPERTY, {});
-    }
-
-    this->_refreshStyle(ui->dtFrom);
-    this->_refreshStyle(ui->dtUntil);
-
-    // valid project selection
-    if (ui->cboProject->currentIndex() <= -1)
-    {
-        isValid = false;
-        ui->cboProject->setProperty(INVALID_PROPERTY, true);
-    }
-    else
-    {
-        ui->cboProject->setProperty(INVALID_PROPERTY, {});
-    }
-
-    this->_refreshStyle(ui->cboProject);
-
-    // valid task selection
-    if (ui->cboTask->currentIndex() <= -1)
-    {
-        isValid = false;
-        ui->cboTask->setProperty(INVALID_PROPERTY, true);
-    }
-    else
-    {
-        ui->cboTask->setProperty(INVALID_PROPERTY, {});
-    }
-
-    this->_refreshStyle(ui->cboTask);
-
-    // prevent empty contents
-    if (ui->txtContent->toPlainText().length() == 0)
-    {
-        isValid = false;
-        ui->txtContent->setProperty(INVALID_PROPERTY, true);
-    }
-    else
-    {
-        ui->txtContent->setProperty(INVALID_PROPERTY, {});
-    }
-
-    this->_refreshStyle(ui->txtContent);
-
-    return isValid;
-}
-
-void MainWindow::_refreshStyle(QWidget *widget)
-{
-    widget->style()->unpolish(widget);
-    widget->style()->polish(widget);
 }
 
 void MainWindow::on_actionExit_triggered()
@@ -453,4 +305,33 @@ void MainWindow::refreshTree()
 {
     ui->trvProject->clearSelection();
     _projectTreeModel->refreshTree();
+}
+
+void MainWindow::newEntry()
+{
+    ui->tblCurrentData->clearSelection();
+    ui->tblCurrentData->resizeRowsToContents();
+}
+
+void MainWindow::createdEntry()
+{
+    statusBar()->showMessage(tr("Created entry."));
+
+    _updateChart();
+}
+
+void MainWindow::updatedEntry()
+{
+    statusBar()->showMessage(tr("Updated entry."));
+
+    _updateChart();
+}
+
+void MainWindow::deletedEntry(const QModelIndex& selectedRowIndex, const Entry& selectedEntry)
+{
+    _entryModel->removeRow(_entryProxyModel->getMappedIndex(selectedRowIndex), selectedEntry);
+
+    statusBar()->showMessage(tr("Deleted entry."));
+
+    _updateChart();
 }
