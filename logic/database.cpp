@@ -2,9 +2,16 @@
 #include <QDebug>
 #include <QDir>
 
+Database::Database(QObject *parent, const DatabaseConfiguration::Settings& settings): QObject(parent), _isInitialized(false)
+{
+    _config = settings;
+
+    _init();
+}
+
 void Database::_init()
 {
-    const QString driver("QSQLITE");
+    const QString driver = _config.type.toUpper() == "SQLITE" ? "QSQLITE" : "QMYSQL";
     if (!QSqlDatabase::isDriverAvailable(driver))
     {
         qWarning() << "SQLite not available.";
@@ -13,17 +20,28 @@ void Database::_init()
 
     _db = QSqlDatabase::addDatabase(driver);
 
-    const QString path  = QDir::currentPath() + QDir::separator() + DATABASE_NAME;
     auto hasDatabase    = true;
-    if (!QFile::exists(path))
+    if (driver == "QSQLITE")
     {
-        QFile file;
-        file.open(QIODevice::WriteOnly);
-        file.close();
-        hasDatabase     = false;
-    }
+        const QString path  = _config.path.isEmpty() ? (QDir::currentPath() + QDir::separator() + DEFAULT_DATABASE_FILE) : _config.path;
+        if (!QFile::exists(path))
+        {
+            QFile file;
+            file.open(QIODevice::WriteOnly);
+            file.close();
+            hasDatabase     = false;
+        }
 
-    _db.setDatabaseName(path);
+        _db.setDatabaseName(path);
+    }
+    else
+    {
+        _db.setHostName(_config.host);
+        _db.setPort(_config.port);
+        _db.setDatabaseName(_config.databaseName);
+        _db.setUserName(_config.username);
+        _db.setPassword(_config.password);
+    }
 
     if (!_db.open())
     {
@@ -77,11 +95,6 @@ QSqlQuery Database::executeQuery(const QString &sql, const QVariantList &bindArg
 QSqlQuery Database::executeQuery(const QString &sql) const
 {
     return executeQuery(sql, {});
-}
-
-Database::Database(QObject *parent, const QString& type, const QString& path, const QString& host, const QString& username, const QString& password): QObject(parent), _isInitialized(false)
-{
-    _init();
 }
 
 Database::~Database()

@@ -1,16 +1,16 @@
 #include "dataprovider.h"
 #include <QVariant>
 
-DataProvider::DataProvider(QObject *parent, const QString& type, const QString& path, const QString& host, const QString& username, const QString& password): QObject(parent)
+DataProvider::DataProvider(QObject *parent, const DatabaseConfiguration::Settings& settings): QObject(parent)
 {
     _initMapping();
-    _db = new Database(this, type, path, host, username, password);
+    _db = new Database(this, settings);
 }
 
-DataProvider::DataProvider(QObject *parent, const QString& type, const QString& path, const QString& host, const QString& username, const QString& password, bool clean): QObject(parent)
+DataProvider::DataProvider(QObject *parent, const DatabaseConfiguration::Settings& settings, bool clean): QObject(parent)
 {
     _initMapping();
-    _db = new Database(this, type, path, host, username, password);
+    _db = new Database(this, settings);
 
     if (clean)
     {

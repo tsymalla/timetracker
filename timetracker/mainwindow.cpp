@@ -111,19 +111,22 @@ void MainWindow::onTasksChanged(ENTITY_ID_TYPE projectId)
 void MainWindow::_initDatabase()
 {
     QSettings _databaseConfig;
+    DatabaseConfiguration::Settings settings;
 
-    const auto type = _databaseConfig.value(DatabaseConfiguration::DATABASE_TYPE_KEY, "SQLite").toString();
-    const auto path = _databaseConfig.value(DatabaseConfiguration::PATH_KEY, "").toString();
-    const auto host = _databaseConfig.value(DatabaseConfiguration::HOST_KEY, "").toString();
-    const auto username = _databaseConfig.value(DatabaseConfiguration::USERNAME_KEY, "").toString();
-    const auto password = _databaseConfig.value(DatabaseConfiguration::PASSWORD_KEY, "").toString();
+    settings.type           = _databaseConfig.value(DatabaseConfiguration::DATABASE_TYPE_KEY, "SQLite").toString();
+    settings.path           = _databaseConfig.value(DatabaseConfiguration::PATH_KEY, "").toString();
+    settings.port           = _databaseConfig.value(DatabaseConfiguration::PORT_KEY, DatabaseConfiguration::DEFAULT_PORT).toInt();
+    settings.host           = _databaseConfig.value(DatabaseConfiguration::HOST_KEY, "").toString();
+    settings.databaseName   = _databaseConfig.value(DatabaseConfiguration::DATABASE_NAME_KEY, "").toString();
+    settings.username       = _databaseConfig.value(DatabaseConfiguration::USERNAME_KEY, "").toString();
+    settings.password       = _databaseConfig.value(DatabaseConfiguration::PASSWORD_KEY, "").toString();
 
-    _provider = new DataProvider(this, type, path, host, username, password);
+    _provider = new DataProvider(this, settings);
 
     if (!_provider->isInitialized())
     {
-        QMessageBox::warning(this, tr("Error"), "Could not initialize database. Exiting.");
-        QApplication::exit();
+        QMessageBox::warning(this, tr("Error"), "Could not initialize database. Creating a new local database file.");
+        // TODO
     }
 }
 

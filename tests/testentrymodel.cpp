@@ -15,7 +15,10 @@ void TestEntryModel::cleanup()
 
 void TestEntryModel::initTestCase()
 {
-    _provider = new DataProvider(this, "SQLite", "", "", "", "", true);
+    DatabaseConfiguration::Settings config;
+    config.type = "SQLite";
+
+    _provider = new DataProvider(this, config, true);
     _model = new EntryModel(this, _provider);
     _proxyModel = new EntryProxyModel(this);
     _proxyModel->setSourceModel(_model);

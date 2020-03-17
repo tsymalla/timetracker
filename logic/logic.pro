@@ -32,6 +32,7 @@ HEADERS += \
     chartdataprovider.h \
     csvwriter.h \
     database.h \
+    databaseconfiguration.h \
     dataprovider.h \
     entrymodel.h \
     entryproxymodel.h \

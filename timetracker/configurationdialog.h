@@ -33,10 +33,7 @@ private:
     void _restoreSettings();
 
     QString _loadSetting(const QSettings& settings, const QString& key, const QString& defaultValue = "");
-    void _loadSetting(const QSettings& settings, const QString& key, QLineEdit* field);
-
     void _saveSetting(QSettings& settings, const QString& key, const QString& value = "");
-    void _saveSetting(QSettings& settings, const QString& key, QLineEdit* field);
 };
 
 #endif // CONFIGURATIONDIALOG_H

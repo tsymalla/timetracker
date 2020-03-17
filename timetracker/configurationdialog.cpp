@@ -31,29 +31,37 @@ void ConfigurationDialog::_setFieldVisibility(const QString& databaseType)
     const auto type = databaseType.toUpper();
     if (type == "SQLITE")
     {
-        ui->hostLabel->setVisible(false);
-        ui->txtHost->setVisible(false);
-        ui->usernameLabel->setVisible(false);
-        ui->txtUsername->setVisible(false);
-        ui->passswordLabel->setVisible(false);
-        ui->txtPassword->setVisible(false);
+        ui->hostLabel->hide();
+        ui->txtHost->hide();
+        ui->portLabel->hide();
+        ui->txtPort->hide();
+        ui->usernameLabel->hide();
+        ui->txtUsername->hide();
+        ui->passwordLabel->hide();
+        ui->txtPassword->hide();
+        ui->databaseNameLabel->hide();
+        ui->txtDatabaseName->hide();
 
-        ui->pathLabel->setVisible(true);
-        ui->txtDatabasePath->setVisible(true);
-        ui->btnSelectPath->setVisible(true);
+        ui->pathLabel->show();
+        ui->txtDatabasePath->show();
+        ui->btnSelectPath->show();
     }
     else
     {
-        ui->hostLabel->setVisible(true);
-        ui->txtHost->setVisible(true);
-        ui->usernameLabel->setVisible(true);
-        ui->txtUsername->setVisible(true);
-        ui->passswordLabel->setVisible(true);
-        ui->txtPassword->setVisible(true);
+        ui->hostLabel->show();
+        ui->txtHost->show();
+        ui->portLabel->show();
+        ui->txtPort->show();
+        ui->usernameLabel->show();
+        ui->txtUsername->show();
+        ui->passwordLabel->show();
+        ui->txtPassword->show();
+        ui->databaseNameLabel->show();
+        ui->txtDatabaseName->show();
 
-        ui->pathLabel->setVisible(false);
-        ui->txtDatabasePath->setVisible(false);
-        ui->btnSelectPath->setVisible(false);
+        ui->pathLabel->hide();
+        ui->txtDatabasePath->hide();
+        ui->btnSelectPath->hide();
     }
 }
 
@@ -63,10 +71,12 @@ void ConfigurationDialog::_restoreSettings()
 
     ui->databaseTypeComboBox->setCurrentText(_loadSetting(settings, DatabaseConfiguration::DATABASE_TYPE_KEY));
 
-    _loadSetting(settings, DatabaseConfiguration::PATH_KEY, ui->txtDatabasePath);
-    _loadSetting(settings, DatabaseConfiguration::HOST_KEY, ui->txtHost);
-    _loadSetting(settings, DatabaseConfiguration::USERNAME_KEY, ui->txtUsername);
-    _loadSetting(settings, DatabaseConfiguration::PASSWORD_KEY, ui->txtPassword);
+    ui->txtDatabasePath->setText(_loadSetting(settings, DatabaseConfiguration::PATH_KEY));
+    ui->txtPort->setValue(_loadSetting(settings, DatabaseConfiguration::PORT_KEY).toInt());
+    ui->txtHost->setText(_loadSetting(settings, DatabaseConfiguration::HOST_KEY));
+    ui->txtDatabaseName->setText(_loadSetting(settings, DatabaseConfiguration::DATABASE_NAME_KEY));
+    ui->txtUsername->setText(_loadSetting(settings, DatabaseConfiguration::USERNAME_KEY));
+    ui->txtPassword->setText(_loadSetting(settings, DatabaseConfiguration::PASSWORD_KEY));
 
     // toggle type combo box
     _setFieldVisibility(ui->databaseTypeComboBox->currentText());
@@ -77,21 +87,9 @@ QString ConfigurationDialog::_loadSetting(const QSettings& settings, const QStri
     return settings.value(key, defaultValue).toString();
 }
 
-void ConfigurationDialog::_loadSetting(const QSettings& settings, const QString &key, QLineEdit* field)
-{
-    const auto value = _loadSetting(settings, key);
-    field->setText(value);
-}
-
 void ConfigurationDialog::_saveSetting(QSettings& settings, const QString &key, const QString &value)
 {
     settings.setValue(key, value);
-}
-
-void ConfigurationDialog::_saveSetting(QSettings& settings, const QString &key, QLineEdit *field)
-{
-    const auto value = field->text();
-    _saveSetting(settings, key, value);
 }
 
 void ConfigurationDialog::on_buttonBox_accepted()
@@ -99,10 +97,12 @@ void ConfigurationDialog::on_buttonBox_accepted()
     QSettings settings;
 
     _saveSetting(settings, DatabaseConfiguration::DATABASE_TYPE_KEY, ui->databaseTypeComboBox->currentText());
-    _saveSetting(settings, DatabaseConfiguration::PATH_KEY, ui->txtDatabasePath);
-    _saveSetting(settings, DatabaseConfiguration::HOST_KEY, ui->txtHost);
-    _saveSetting(settings, DatabaseConfiguration::USERNAME_KEY, ui->txtUsername);
-    _saveSetting(settings, DatabaseConfiguration::PASSWORD_KEY, ui->txtPassword);
+    _saveSetting(settings, DatabaseConfiguration::PATH_KEY, ui->txtDatabasePath->text());
+    _saveSetting(settings, DatabaseConfiguration::PORT_KEY, ui->txtPort->text());
+    _saveSetting(settings, DatabaseConfiguration::HOST_KEY, ui->txtHost->text());
+    _saveSetting(settings, DatabaseConfiguration::DATABASE_NAME_KEY, ui->txtDatabaseName->text());
+    _saveSetting(settings, DatabaseConfiguration::USERNAME_KEY, ui->txtUsername->text());
+    _saveSetting(settings, DatabaseConfiguration::PASSWORD_KEY, ui->txtPassword->text());
 
     QMessageBox::warning(this, tr("Database configuration updated"), tr("The database configuration was updated.\nPlease restart the application in order for the changes to take effect."));
     this->close();

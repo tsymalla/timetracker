@@ -7,6 +7,7 @@
 #include <QSqlQuery>
 #include <QVariant>
 #include <cassert>
+#include "databaseconfiguration.h"
 
 using ENTITY_ID_TYPE = int;
 
@@ -19,8 +20,11 @@ private:
     void _refreshStorage();
     void _cleanupData();
     bool _isInitialized;
+
+    const QString DEFAULT_DATABASE_FILE = "data.db";
     QSqlDatabase _db;
-    const QString DATABASE_NAME = "data.db";
+
+    DatabaseConfiguration::Settings _config;
 
     template<typename T>
     QSqlQuery _genericSelect(const QStringList& filter, const QVariantList& args) const
@@ -98,7 +102,7 @@ private:
     }
 
 public:
-    Database(QObject *parent, const QString& type, const QString& path, const QString& host, const QString& username, const QString& password);
+    Database(QObject *parent, const DatabaseConfiguration::Settings& settings);
     Database(const Database&) = delete;
     Database& operator=(const Database&) = delete;
     Database(Database&&) = delete;
