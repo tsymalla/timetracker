@@ -63,7 +63,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(_projectTaskAdminDialog, &ProjectTaskAdminDialog::tasksChanged, this, &MainWindow::refreshTree);
 
     // receive events from editor
-    connect(ui->entryEditor, &EntryEditor::newEntry, this, &MainWindow::newEntry);
+    connect(ui->entryEditor, &EntryEditor::newClicked, this, &MainWindow::newEntry);
     connect(ui->entryEditor, &EntryEditor::entryCreated, this, &MainWindow::createdEntry);
     connect(ui->entryEditor, &EntryEditor::entryUpdated, this, &MainWindow::updatedEntry);
     connect(ui->entryEditor, &EntryEditor::entryDeleted, this, &MainWindow::deletedEntry);

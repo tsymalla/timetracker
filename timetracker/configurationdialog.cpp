@@ -31,43 +31,41 @@ void ConfigurationDialog::_setFieldVisibility(const QString& databaseType)
     const auto type = databaseType.toUpper();
     if (type == "SQLITE")
     {
-        ui->hostLabel->hide();
-        ui->txtHost->hide();
-        ui->portLabel->hide();
-        ui->txtPort->hide();
-        ui->usernameLabel->hide();
-        ui->txtUsername->hide();
-        ui->passwordLabel->hide();
-        ui->txtPassword->hide();
-        ui->databaseNameLabel->hide();
-        ui->txtDatabaseName->hide();
+        ui->txtHost->setEnabled(false);
+        ui->txtPort->setEnabled(false);
+        ui->txtUsername->setEnabled(false);
+        ui->txtPassword->setEnabled(false);
+        ui->txtDatabaseName->setEnabled(false);
 
-        ui->pathLabel->show();
-        ui->txtDatabasePath->show();
-        ui->btnSelectPath->show();
+        ui->txtHost->clear();
+        ui->txtPort->clear();
+        ui->txtUsername->clear();
+        ui->txtPassword->clear();
+        ui->txtDatabaseName->clear();
+
+        ui->txtDatabasePath->setEnabled(true);
+        ui->btnSelectPath->setEnabled(true);
     }
     else
     {
-        ui->hostLabel->show();
-        ui->txtHost->show();
-        ui->portLabel->show();
-        ui->txtPort->show();
-        ui->usernameLabel->show();
-        ui->txtUsername->show();
-        ui->passwordLabel->show();
-        ui->txtPassword->show();
-        ui->databaseNameLabel->show();
-        ui->txtDatabaseName->show();
+        ui->txtHost->setEnabled(true);
+        ui->txtPort->setEnabled(true);
+        ui->txtUsername->setEnabled(true);
+        ui->txtPassword->setEnabled(true);
+        ui->txtDatabaseName->setEnabled(true);
 
-        ui->pathLabel->hide();
-        ui->txtDatabasePath->hide();
-        ui->btnSelectPath->hide();
+        ui->txtDatabasePath->clear();
+        ui->txtDatabasePath->setEnabled(false);
+        ui->btnSelectPath->setEnabled(false);
     }
 }
 
 void ConfigurationDialog::_restoreSettings()
 {
     QSettings settings;
+
+    // toggle type combo box
+    _setFieldVisibility(ui->databaseTypeComboBox->currentText());
 
     ui->databaseTypeComboBox->setCurrentText(_loadSetting(settings, DatabaseConfiguration::DATABASE_TYPE_KEY));
 
@@ -77,9 +75,6 @@ void ConfigurationDialog::_restoreSettings()
     ui->txtDatabaseName->setText(_loadSetting(settings, DatabaseConfiguration::DATABASE_NAME_KEY));
     ui->txtUsername->setText(_loadSetting(settings, DatabaseConfiguration::USERNAME_KEY));
     ui->txtPassword->setText(_loadSetting(settings, DatabaseConfiguration::PASSWORD_KEY));
-
-    // toggle type combo box
-    _setFieldVisibility(ui->databaseTypeComboBox->currentText());
 }
 
 QString ConfigurationDialog::_loadSetting(const QSettings& settings, const QString &key, const QString &defaultValue)

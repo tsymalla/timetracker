@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>387</width>
-    <height>264</height>
+    <width>316</width>
+    <height>275</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,8 +17,8 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>220</y>
-     <width>341</width>
+     <y>240</y>
+     <width>271</width>
      <height>32</height>
     </rect>
    </property>
@@ -33,12 +33,21 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>0</y>
-     <width>361</width>
-     <height>200</height>
+     <y>10</y>
+     <width>291</width>
+     <height>226</height>
     </rect>
    </property>
    <layout class="QFormLayout" name="formLayout">
+    <property name="sizeConstraint">
+     <enum>QLayout::SetFixedSize</enum>
+    </property>
+    <property name="fieldGrowthPolicy">
+     <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+    </property>
+    <property name="labelAlignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
     <item row="0" column="0">
      <widget class="QLabel" name="databaseTypeLabel">
       <property name="text">
@@ -48,6 +57,18 @@
     </item>
     <item row="0" column="1">
      <widget class="QComboBox" name="databaseTypeComboBox">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>180</width>
+        <height>0</height>
+       </size>
+      </property>
       <item>
        <property name="text">
         <string>SQLite</string>
@@ -71,6 +92,18 @@
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="QLineEdit" name="txtDatabasePath">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>170</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="readOnly">
          <bool>true</bool>
         </property>
@@ -79,7 +112,7 @@
       <item>
        <widget class="QPushButton" name="btnSelectPath">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -87,13 +120,13 @@
         <property name="minimumSize">
          <size>
           <width>32</width>
-          <height>0</height>
+          <height>32</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
           <width>32</width>
-          <height>16777215</height>
+          <height>32</height>
          </size>
         </property>
         <property name="toolTip">
@@ -103,6 +136,22 @@
          <string>...</string>
         </property>
        </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Expanding</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>30</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
       </item>
      </layout>
     </item>
@@ -114,32 +163,18 @@
      </widget>
     </item>
     <item row="2" column="1">
-     <widget class="QLineEdit" name="txtHost"/>
-    </item>
-    <item row="5" column="0">
-     <widget class="QLabel" name="usernameLabel">
-      <property name="text">
-       <string>Username</string>
+     <widget class="QLineEdit" name="txtHost">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
-     </widget>
-    </item>
-    <item row="5" column="1">
-     <widget class="QLineEdit" name="txtUsername"/>
-    </item>
-    <item row="6" column="0">
-     <widget class="QLabel" name="passwordLabel">
-      <property name="text">
-       <string>Password</string>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="1">
-     <widget class="QLineEdit" name="txtPassword">
-      <property name="inputMask">
-       <string/>
-      </property>
-      <property name="echoMode">
-       <enum>QLineEdit::Password</enum>
+      <property name="maximumSize">
+       <size>
+        <width>180</width>
+        <height>16777215</height>
+       </size>
       </property>
      </widget>
     </item>
@@ -152,6 +187,12 @@
     </item>
     <item row="3" column="1">
      <widget class="QSpinBox" name="txtPort">
+      <property name="maximumSize">
+       <size>
+        <width>80</width>
+        <height>16777215</height>
+       </size>
+      </property>
       <property name="minimum">
        <number>1</number>
       </property>
@@ -171,11 +212,86 @@
      </widget>
     </item>
     <item row="4" column="1">
-     <widget class="QLineEdit" name="txtDatabaseName"/>
+     <widget class="QLineEdit" name="txtDatabaseName">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>180</width>
+        <height>16777215</height>
+       </size>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="usernameLabel">
+      <property name="text">
+       <string>Username</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1">
+     <widget class="QLineEdit" name="txtUsername">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>180</width>
+        <height>16777215</height>
+       </size>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0">
+     <widget class="QLabel" name="passwordLabel">
+      <property name="text">
+       <string>Password</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="1">
+     <widget class="QLineEdit" name="txtPassword">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>180</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="inputMask">
+       <string/>
+      </property>
+      <property name="echoMode">
+       <enum>QLineEdit::Password</enum>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>databaseTypeComboBox</tabstop>
+  <tabstop>txtDatabasePath</tabstop>
+  <tabstop>btnSelectPath</tabstop>
+  <tabstop>txtHost</tabstop>
+  <tabstop>txtPort</tabstop>
+  <tabstop>txtDatabaseName</tabstop>
+  <tabstop>txtUsername</tabstop>
+  <tabstop>txtPassword</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
