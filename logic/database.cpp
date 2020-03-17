@@ -36,6 +36,7 @@ void Database::_init()
     }
     else
     {
+        _db.setConnectOptions("MYSQL_OPT_RECONNECT=1");
         _db.setHostName(_config.host);
         _db.setPort(_config.port);
         _db.setDatabaseName(_config.databaseName);
