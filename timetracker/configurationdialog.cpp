@@ -3,15 +3,15 @@
 
 #include <QSettings>
 #include <QLineEdit>
+#include <QFileDialog>
 #include <QMessageBox>
+#include "databaseconfiguration.h"
 
-ConfigurationDialog::ConfigurationDialog(QSettings *settings, QWidget *parent) :
+ConfigurationDialog::ConfigurationDialog(QWidget *parent) :
                                                             QDialog(parent),
-                                                            ui(new Ui::ConfigurationDialog),
-                                                            _settings(settings)
+                                                            ui(new Ui::ConfigurationDialog)
 {
     ui->setupUi(this);
-    assert(settings != nullptr);
 
     _restoreSettings();
 }
@@ -59,47 +59,57 @@ void ConfigurationDialog::_setFieldVisibility(const QString& databaseType)
 
 void ConfigurationDialog::_restoreSettings()
 {
-    ui->databaseTypeComboBox->setCurrentText(_loadSetting(DATABASE_TYPE_KEY));
+    QSettings settings;
 
-    _loadSetting(PATH_KEY, ui->txtDatabasePath);
-    _loadSetting(HOST_KEY, ui->txtHost);
-    _loadSetting(USERNAME_KEY, ui->txtUsername);
-    _loadSetting(PASSWORD_KEY, ui->txtPassword);
+    ui->databaseTypeComboBox->setCurrentText(_loadSetting(settings, DatabaseConfiguration::DATABASE_TYPE_KEY));
+
+    _loadSetting(settings, DatabaseConfiguration::PATH_KEY, ui->txtDatabasePath);
+    _loadSetting(settings, DatabaseConfiguration::HOST_KEY, ui->txtHost);
+    _loadSetting(settings, DatabaseConfiguration::USERNAME_KEY, ui->txtUsername);
+    _loadSetting(settings, DatabaseConfiguration::PASSWORD_KEY, ui->txtPassword);
 
     // toggle type combo box
     _setFieldVisibility(ui->databaseTypeComboBox->currentText());
 }
 
-QString ConfigurationDialog::_loadSetting(const QString &key, const QString &defaultValue)
+QString ConfigurationDialog::_loadSetting(const QSettings& settings, const QString &key, const QString &defaultValue)
 {
-    return _settings->value(key, defaultValue).toString();
+    return settings.value(key, defaultValue).toString();
 }
 
-void ConfigurationDialog::_loadSetting(const QString &key, QLineEdit* field)
+void ConfigurationDialog::_loadSetting(const QSettings& settings, const QString &key, QLineEdit* field)
 {
-    const auto value = _loadSetting(key);
+    const auto value = _loadSetting(settings, key);
     field->setText(value);
 }
 
-void ConfigurationDialog::_saveSetting(const QString &key, const QString &value)
+void ConfigurationDialog::_saveSetting(QSettings& settings, const QString &key, const QString &value)
 {
-    _settings->setValue(key, value);
+    settings.setValue(key, value);
 }
 
-void ConfigurationDialog::_saveSetting(const QString &key, QLineEdit *field)
+void ConfigurationDialog::_saveSetting(QSettings& settings, const QString &key, QLineEdit *field)
 {
     const auto value = field->text();
-    _saveSetting(key, value);
+    _saveSetting(settings, key, value);
 }
 
 void ConfigurationDialog::on_buttonBox_accepted()
 {
-    _saveSetting(DATABASE_TYPE_KEY, ui->databaseTypeComboBox->currentText());
-    _saveSetting(PATH_KEY, ui->txtDatabasePath);
-    _saveSetting(HOST_KEY, ui->txtHost);
-    _saveSetting(USERNAME_KEY, ui->txtUsername);
-    _saveSetting(PASSWORD_KEY, ui->txtPassword);
+    QSettings settings;
+
+    _saveSetting(settings, DatabaseConfiguration::DATABASE_TYPE_KEY, ui->databaseTypeComboBox->currentText());
+    _saveSetting(settings, DatabaseConfiguration::PATH_KEY, ui->txtDatabasePath);
+    _saveSetting(settings, DatabaseConfiguration::HOST_KEY, ui->txtHost);
+    _saveSetting(settings, DatabaseConfiguration::USERNAME_KEY, ui->txtUsername);
+    _saveSetting(settings, DatabaseConfiguration::PASSWORD_KEY, ui->txtPassword);
 
     QMessageBox::warning(this, tr("Database configuration updated"), tr("The database configuration was updated.\nPlease restart the application in order for the changes to take effect."));
     this->close();
+}
+
+void ConfigurationDialog::on_btnSelectPath_clicked()
+{
+    const auto fileName = QFileDialog::getOpenFileName(this, tr("Select database file"), QDir::homePath(), tr("Database files (*.db)"));
+    ui->txtDatabasePath->setText(fileName);
 }

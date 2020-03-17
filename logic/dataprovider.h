@@ -120,8 +120,8 @@ private:
         _db->_genericUpdate<T>(id, _entityMapping[T::TYPE()], args);
     }
 public:
-    DataProvider(QObject *parent);
-    DataProvider(QObject *parent, bool clean);
+    DataProvider(QObject *parent, const QString& type, const QString& path, const QString& host, const QString& username, const QString& password);
+    DataProvider(QObject *parent, const QString& type, const QString& path, const QString& host, const QString& username, const QString& password, bool clean);
 
     bool isInitialized() const;
 

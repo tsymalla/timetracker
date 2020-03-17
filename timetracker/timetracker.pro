@@ -40,6 +40,7 @@ SOURCES += \
 HEADERS += \
     aboutdialog.h \
     configurationdialog.h \
+    databaseconfiguration.h \
     entryeditor.h \
     mainwindow.h \
     projecttaskadmindialog.h

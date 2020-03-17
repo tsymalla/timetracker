@@ -15,7 +15,7 @@ void TestEntryModel::cleanup()
 
 void TestEntryModel::initTestCase()
 {
-    _provider = new DataProvider(this, true);
+    _provider = new DataProvider(this, "SQLite", "", "", "", "", true);
     _model = new EntryModel(this, _provider);
     _proxyModel = new EntryProxyModel(this);
     _proxyModel->setSourceModel(_model);

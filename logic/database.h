@@ -98,7 +98,7 @@ private:
     }
 
 public:
-    Database(QObject *parent);
+    Database(QObject *parent, const QString& type, const QString& path, const QString& host, const QString& username, const QString& password);
     Database(const Database&) = delete;
     Database& operator=(const Database&) = delete;
     Database(Database&&) = delete;

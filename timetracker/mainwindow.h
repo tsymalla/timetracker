@@ -85,7 +85,7 @@ signals:
 
 private:
     Ui::MainWindow              *ui;
-    QSettings                   *_databaseConfig;
+    QSettings                   _databaseConfig;
 
     ProjectTaskAdminDialog      *_projectTaskAdminDialog;
     ConfigurationDialog         *_configurationDialog;
@@ -101,6 +101,7 @@ private:
     EntryProxyModel             *_entryProxyModel;
     ProjectTreeModel            *_projectTreeModel;
 
+    void                        _initDatabase();
     void                        _refreshData();
 
     void                        _connectFilters();

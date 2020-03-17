@@ -2,6 +2,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QMessageBox>
+#include "databaseconfiguration.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -16,17 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->setWindowIcon(QIcon(":/default/resources/clock-2.ico"));
 
-    _databaseConfig = new QSettings();
-
-    _provider = new DataProvider(this);
-
-    if (!_provider->isInitialized())
-    {
-        QMessageBox::warning(this, tr("Error"), "Could not initialize database. Exiting.");
-        QApplication::exit();
-    }
-
-    // database config
+    _initDatabase();
 
     // initialize chart
     _chart = new QChart();
@@ -45,7 +36,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // dialogs
     _projectTaskAdminDialog = new ProjectTaskAdminDialog(_provider, this);
-    _configurationDialog = new ConfigurationDialog(_databaseConfig, this);
+    _configurationDialog = new ConfigurationDialog(this);
     _aboutDialog = new AboutDialog(this);
 
     // models and their connection
@@ -114,6 +105,25 @@ void MainWindow::onTasksChanged(ENTITY_ID_TYPE projectId)
     if (projectId == ui->entryEditor->getSelectedEntry().projectId)
     {
         _refreshData();
+    }
+}
+
+void MainWindow::_initDatabase()
+{
+    QSettings _databaseConfig;
+
+    const auto type = _databaseConfig.value(DatabaseConfiguration::DATABASE_TYPE_KEY, "SQLite").toString();
+    const auto path = _databaseConfig.value(DatabaseConfiguration::PATH_KEY, "").toString();
+    const auto host = _databaseConfig.value(DatabaseConfiguration::HOST_KEY, "").toString();
+    const auto username = _databaseConfig.value(DatabaseConfiguration::USERNAME_KEY, "").toString();
+    const auto password = _databaseConfig.value(DatabaseConfiguration::PASSWORD_KEY, "").toString();
+
+    _provider = new DataProvider(this, type, path, host, username, password);
+
+    if (!_provider->isInitialized())
+    {
+        QMessageBox::warning(this, tr("Error"), "Could not initialize database. Exiting.");
+        QApplication::exit();
     }
 }
 
