@@ -16,6 +16,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->setWindowIcon(QIcon(":/default/resources/clock-2.ico"));
 
+    _databaseConfig = new QSettings();
+
     _provider = new DataProvider(this);
 
     if (!_provider->isInitialized())
@@ -23,6 +25,8 @@ MainWindow::MainWindow(QWidget *parent)
         QMessageBox::warning(this, tr("Error"), "Could not initialize database. Exiting.");
         QApplication::exit();
     }
+
+    // database config
 
     // initialize chart
     _chart = new QChart();
@@ -41,6 +45,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // dialogs
     _projectTaskAdminDialog = new ProjectTaskAdminDialog(_provider, this);
+    _configurationDialog = new ConfigurationDialog(_databaseConfig, this);
     _aboutDialog = new AboutDialog(this);
 
     // models and their connection
@@ -334,4 +339,9 @@ void MainWindow::deletedEntry(const QModelIndex& selectedRowIndex, const Entry& 
     statusBar()->showMessage(tr("Deleted entry."));
 
     _updateChart();
+}
+
+void MainWindow::on_actionDatabase_configuration_triggered()
+{
+    _configurationDialog->show();
 }

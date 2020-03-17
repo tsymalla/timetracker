@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QSettings>
 #include <QComboBox>
 #include <QtCharts/QChartView>
 #include <QtCharts/QPieSeries>
@@ -12,6 +13,7 @@
 #include "entrymodel.h"
 #include "entryproxymodel.h"
 #include "projecttaskadmindialog.h"
+#include "configurationdialog.h"
 #include "aboutdialog.h"
 #include "projecttreemodel.h"
 #include "entryeditor.h"
@@ -73,6 +75,8 @@ private slots:
 
     void deletedEntry(const QModelIndex& selectedRowIndex, const Entry& selectedEntry);
 
+    void on_actionDatabase_configuration_triggered();
+
 signals:
     void updateStartDateFilter(const QDate& dt);
     void updateEndDateFilter(const QDate& dt);
@@ -81,7 +85,10 @@ signals:
 
 private:
     Ui::MainWindow              *ui;
+    QSettings                   *_databaseConfig;
+
     ProjectTaskAdminDialog      *_projectTaskAdminDialog;
+    ConfigurationDialog         *_configurationDialog;
     AboutDialog                 *_aboutDialog;
     QChart                      *_chart;
     QPieSeries                  *_chartData;
