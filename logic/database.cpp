@@ -11,7 +11,7 @@ Database::Database(QObject *parent, const DatabaseConfiguration::Settings& setti
 
 void Database::_init()
 {
-    const QString driver = _config.type.toUpper() == "SQLITE" ? "QSQLITE" : "QMYSQL";
+    const QString driver = _config.type.toUpper() == "SQLITE" ? "QSQLITE" : "QMYSQL3";
     if (!QSqlDatabase::isDriverAvailable(driver))
     {
         qWarning() << "SQLite not available.";
