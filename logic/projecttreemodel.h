@@ -41,6 +41,11 @@ public:
     constexpr static int colCount() { return 1; }
 
     QVariant data(int column) const;
+    TreeItemData _getInternalData() const;
+
+    bool isProjectNode() const;
+    bool isTaskNode() const;
+    bool isOtherNode() const;
 };
 
 class ProjectTreeModel : public QAbstractItemModel

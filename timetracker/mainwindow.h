@@ -12,7 +12,6 @@
 #include "taskmodel.h"
 #include "entrymodel.h"
 #include "entryproxymodel.h"
-#include "projecttaskadmindialog.h"
 #include "configurationdialog.h"
 #include "aboutdialog.h"
 #include "projecttreemodel.h"
@@ -34,8 +33,6 @@ public:
 
 private slots:
     void on_tblCurrentData_clicked(const QModelIndex &index);
-
-    void on_actionManage_projects_and_tasks_triggered();
 
     void onProjectsChanged();
 
@@ -77,6 +74,20 @@ private slots:
 
     void on_actionDatabase_configuration_triggered();
 
+    void on_trvProject_customContextMenuRequested(const QPoint &pos);
+
+    void on_actionCreate_project_triggered();
+
+    void on_actionDelete_project_triggered();
+
+    void on_actionRename_project_triggered();
+
+    void on_actionCreate_task_triggered();
+
+    void on_actionRename_task_triggered();
+
+    void on_actionDelete_task_triggered();
+
 signals:
     void updateStartDateFilter(const QDate& dt);
     void updateEndDateFilter(const QDate& dt);
@@ -87,7 +98,6 @@ private:
     Ui::MainWindow              *ui;
     QSettings                   _databaseConfig;
 
-    ProjectTaskAdminDialog      *_projectTaskAdminDialog;
     ConfigurationDialog         *_configurationDialog;
     AboutDialog                 *_aboutDialog;
     QChart                      *_chart;
@@ -100,6 +110,7 @@ private:
     EntryModel                  *_entryModel;
     EntryProxyModel             *_entryProxyModel;
     ProjectTreeModel            *_projectTreeModel;
+    ENTITY_ID_TYPE              _selectedId = 0;
 
     void                        _initDatabase();
     void                        _refreshData();

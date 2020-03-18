@@ -62,6 +62,26 @@ QVariant TreeItem::data(int column) const
     return QVariant();
 }
 
+TreeItem::TreeItemData TreeItem::_getInternalData() const
+{
+    return _data;
+}
+
+bool TreeItem::isProjectNode() const
+{
+    return _data.type == TYPE::PROJECT;
+}
+
+bool TreeItem::isTaskNode() const
+{
+    return _data.type == TYPE::TASK;
+}
+
+bool TreeItem::isOtherNode() const
+{
+    return _data.type == TYPE::OTHER;
+}
+
 /**
  * @brief ProjectTreeModel::_initializeTree
  * Creates the internal tree data structure by iterating over the projects and the corresponding tasks

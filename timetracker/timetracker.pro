@@ -34,22 +34,19 @@ SOURCES += \
     configurationdialog.cpp \
     entryeditor.cpp \
     main.cpp \
-    mainwindow.cpp \
-    projecttaskadmindialog.cpp
+    mainwindow.cpp
 
 HEADERS += \
     aboutdialog.h \
     configurationdialog.h \
     entryeditor.h \
-    mainwindow.h \
-    projecttaskadmindialog.h
+    mainwindow.h
 
 FORMS += \
     aboutdialog.ui \
     configurationdialog.ui \
     entryeditor.ui \
-    mainwindow.ui \
-    projecttaskadmindialog.ui
+    mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
