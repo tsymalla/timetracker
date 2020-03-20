@@ -32,11 +32,6 @@ public:
     ~MainWindow() override;
 
 private slots:
-    void on_tblCurrentData_clicked(const QModelIndex &index);
-
-    void onProjectsChanged();
-
-    void onTasksChanged(ENTITY_ID_TYPE projectId);
 
     void on_actionAbout_triggered();
 
@@ -87,6 +82,8 @@ private slots:
     void on_actionRename_task_triggered();
 
     void on_actionDelete_task_triggered();
+
+    void onTblSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 
 signals:
     void updateStartDateFilter(const QDate& dt);

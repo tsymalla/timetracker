@@ -322,6 +322,9 @@
           <property name="contextMenuPolicy">
            <enum>Qt::CustomContextMenu</enum>
           </property>
+          <property name="alternatingRowColors">
+           <bool>true</bool>
+          </property>
           <attribute name="headerVisible">
            <bool>false</bool>
           </attribute>
@@ -426,7 +429,7 @@
      <x>0</x>
      <y>0</y>
      <width>1024</width>
-     <height>26</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAdministration">

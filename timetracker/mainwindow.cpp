@@ -63,6 +63,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->entryEditor->newEntry();
     on_btnFilterToday_clicked();
+
+    connect(ui->tblCurrentData->selectionModel(),
+            &QItemSelectionModel::selectionChanged, this, &MainWindow::onTblSelectionChanged);
 }
 
 MainWindow::~MainWindow()
@@ -76,23 +79,6 @@ void MainWindow::_connectFilters()
     connect(this, &MainWindow::updateEndDateFilter, _entryProxyModel, &EntryProxyModel::setEndDate);
     connect(this, &MainWindow::updateProjectIdFilter, _entryProxyModel, &EntryProxyModel::setProjectId);
     connect(this, &MainWindow::updateTaskIdFilter, _entryProxyModel, &EntryProxyModel::setTaskId);
-}
-
-void MainWindow::on_tblCurrentData_clicked(const QModelIndex &index)
-{
-    ui->entryEditor->setSelectedEntry(_entryModel->getRow(_entryProxyModel->getMappedIndex(index)), index);
-}
-
-void MainWindow::onProjectsChanged()
-{
-}
-
-void MainWindow::onTasksChanged(ENTITY_ID_TYPE projectId)
-{
-    if (projectId == ui->entryEditor->getSelectedEntry().projectId)
-    {
-        _refreshData();
-    }
 }
 
 void MainWindow::_initDatabase()
@@ -504,4 +490,15 @@ void MainWindow::on_actionDelete_task_triggered()
 
     _refreshData();
     refreshTree();
+}
+
+void MainWindow::onTblSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
+{
+    if (selected.indexes().empty())
+    {
+        return;
+    }
+
+    const auto index = selected.indexes().first();
+    ui->entryEditor->setSelectedEntry(_entryModel->getRow(_entryProxyModel->getMappedIndex(index)), index);
 }
