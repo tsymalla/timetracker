@@ -64,8 +64,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->entryEditor->newEntry();
     on_btnFilterToday_clicked();
 
-    connect(ui->tblCurrentData->selectionModel(),
-            &QItemSelectionModel::selectionChanged, this, &MainWindow::onTblSelectionChanged);
+    connect(ui->tblCurrentData->selectionModel(), &QItemSelectionModel::currentChanged, this, &MainWindow::onTblSelectionChanged);
 }
 
 MainWindow::~MainWindow()
@@ -492,13 +491,7 @@ void MainWindow::on_actionDelete_task_triggered()
     refreshTree();
 }
 
-void MainWindow::onTblSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
+void MainWindow::onTblSelectionChanged(const QModelIndex &current, const QModelIndex &previous)
 {
-    if (selected.indexes().empty())
-    {
-        return;
-    }
-
-    const auto index = selected.indexes().first();
-    ui->entryEditor->setSelectedEntry(_entryModel->getRow(_entryProxyModel->getMappedIndex(index)), index);
+    ui->entryEditor->setSelectedEntry(_entryModel->getRow(_entryProxyModel->getMappedIndex(current)), current);
 }

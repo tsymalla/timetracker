@@ -83,7 +83,7 @@ private slots:
 
     void on_actionDelete_task_triggered();
 
-    void onTblSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
+    void onTblSelectionChanged(const QModelIndex &current, const QModelIndex &previous);
 
 signals:
     void updateStartDateFilter(const QDate& dt);
