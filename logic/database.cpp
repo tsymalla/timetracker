@@ -106,6 +106,17 @@ Database::~Database()
     }
 }
 
+void Database::reset(const DatabaseConfiguration::Settings &settings)
+{
+    if (_db.isOpen())
+    {
+        _db.close();
+    }
+
+    _config = settings;
+    _init();
+}
+
 bool Database::isInitialized() const
 {
     return _isInitialized;

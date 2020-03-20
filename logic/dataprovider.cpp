@@ -18,6 +18,11 @@ DataProvider::DataProvider(QObject *parent, const DatabaseConfiguration::Setting
     }
 }
 
+void DataProvider::reset(const DatabaseConfiguration::Settings &settings)
+{
+    _db->reset(settings);
+}
+
 void DataProvider::_initMapping()
 {
     registerEntityColumn<Project>("NAME");

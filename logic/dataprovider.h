@@ -123,6 +123,8 @@ public:
     DataProvider(QObject *parent, const DatabaseConfiguration::Settings& settings);
     DataProvider(QObject *parent, const DatabaseConfiguration::Settings& settings, bool clean);
 
+    void reset(const DatabaseConfiguration::Settings& settings);
+
     bool isInitialized() const;
 
     void addProject(const QString& projectName);

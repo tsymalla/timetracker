@@ -59,6 +59,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->entryEditor, &EntryEditor::entryUpdated, this, &MainWindow::updatedEntry);
     connect(ui->entryEditor, &EntryEditor::entryDeleted, this, &MainWindow::deletedEntry);
 
+    connect(_configurationDialog, &ConfigurationDialog::databaseConfigChanged, this, &MainWindow::_initDatabase);
+
     ui->entryEditor->newEntry();
     on_btnFilterToday_clicked();
 }
@@ -106,7 +108,14 @@ void MainWindow::_initDatabase()
     settings.username       = _databaseConfig.value(DatabaseConfiguration::USERNAME_KEY, "").toString();
     settings.password       = _databaseConfig.value(DatabaseConfiguration::PASSWORD_KEY, "").toString();
 
-    _provider = new DataProvider(this, settings);
+    if (_provider == nullptr)
+    {
+        _provider = new DataProvider(this, settings);
+    }
+    else
+    {
+        _provider->reset(settings);
+    }
 
     if (!_provider->isInitialized())
     {

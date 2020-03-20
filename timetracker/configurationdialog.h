@@ -18,6 +18,9 @@ public:
     explicit ConfigurationDialog(QWidget *parent = nullptr);
     ~ConfigurationDialog();
 
+signals:
+    void databaseConfigChanged();
+
 private slots:
     void on_databaseTypeComboBox_currentIndexChanged(const QString &arg1);
 

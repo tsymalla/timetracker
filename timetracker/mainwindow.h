@@ -103,7 +103,7 @@ private:
     QChart                      *_chart;
     QPieSeries                  *_chartData;
 
-    DataProvider                *_provider;
+    DataProvider                *_provider = nullptr;
     ChartDataProvider           *_chartDataProvider;
     ProjectModel                *_projectModel;
     TaskModel                   *_taskModel;
