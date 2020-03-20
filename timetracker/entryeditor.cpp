@@ -10,6 +10,9 @@ EntryEditor::EntryEditor(QWidget *parent) :
                                             ui(new Ui::EntryEditor)
 {
     ui->setupUi(this);
+
+    connect(ui->dtFrom, &QDateTimeEdit::dateTimeChanged, this, &EntryEditor::_onStartEndDateChanged);
+    connect(ui->dtUntil, &QDateTimeEdit::dateTimeChanged, this, &EntryEditor::_onStartEndDateChanged);
 }
 
 EntryEditor::~EntryEditor()
@@ -107,6 +110,7 @@ void EntryEditor::on_btnNew_clicked()
         _refreshStyle(ui->txtContent);
     }
 
+    ui->btnSave->setText("Save");
     emit newClicked();
 }
 
@@ -145,6 +149,20 @@ void EntryEditor::on_btnDelete_clicked()
 {
     emit entryDeleted(_selectedRowIndex, _selectedEntry);
     on_btnNew_clicked();
+}
+
+void EntryEditor::_onStartEndDateChanged()
+{
+    const auto from = ui->dtFrom->dateTime();
+    const auto until = ui->dtUntil->dateTime();
+
+    if (until > from)
+    {
+        const auto duration = QDateTime::fromSecsSinceEpoch(until.toSecsSinceEpoch() - from.toSecsSinceEpoch());
+        const auto durationString = EntryModel::getDurationString(duration, false);
+
+        ui->btnSave->setText(QString("Save (%1)").arg(durationString));
+    }
 }
 
 bool EntryEditor::_validateInput()
