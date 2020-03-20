@@ -163,6 +163,10 @@ void EntryEditor::_onStartEndDateChanged()
 
         ui->btnSave->setText(QString("Save (%1)").arg(durationString));
     }
+    else
+    {
+        ui->btnSave->setText("Save");
+    }
 }
 
 bool EntryEditor::_validateInput()
