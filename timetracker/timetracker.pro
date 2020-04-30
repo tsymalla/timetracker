@@ -60,3 +60,7 @@ RESOURCES += \
     resources.qrc
 
 RC_ICONS = resources/clock-2.ico
+
+mac {
+    QMAKE_INFO_PLIST = Info.plist
+}
