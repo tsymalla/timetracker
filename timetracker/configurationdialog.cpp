@@ -100,6 +100,8 @@ void ConfigurationDialog::on_buttonBox_accepted()
     _saveSetting(settings, DatabaseConfiguration::PASSWORD_KEY, ui->txtPassword->text());
 
     QMessageBox::warning(this, tr("Database configuration updated"), tr("The database configuration was updated.\nPlease restart the application in order for the changes to take effect."));
+    emit databaseConfigChanged();
+
     this->close();
 }
 

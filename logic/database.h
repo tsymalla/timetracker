@@ -109,6 +109,8 @@ public:
     Database& operator=(Database&&) = delete;
     ~Database() final;
 
+    void reset(const DatabaseConfiguration::Settings& settings);
+
     bool isInitialized() const;
     QSqlQuery executeQuery(const QString& sql, const QVariantList& bindArgs) const;
     QSqlQuery executeQuery(const QString& sql) const;

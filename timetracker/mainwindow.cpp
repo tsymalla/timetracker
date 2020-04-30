@@ -35,7 +35,6 @@ MainWindow::MainWindow(QWidget *parent)
     _chartDataProvider = new ChartDataProvider(this);
 
     // dialogs
-    _projectTaskAdminDialog = new ProjectTaskAdminDialog(_provider, this);
     _configurationDialog = new ConfigurationDialog(this);
     _aboutDialog = new AboutDialog(this);
 
@@ -54,22 +53,18 @@ MainWindow::MainWindow(QWidget *parent)
 
     _connectFilters();
 
-    // receive events from admin dialog when the data has changed
-    connect(_projectTaskAdminDialog, &ProjectTaskAdminDialog::projectsChanged, this, &MainWindow::onProjectsChanged);
-    connect(_projectTaskAdminDialog, &ProjectTaskAdminDialog::tasksChanged, this, &MainWindow::onTasksChanged);
-
-    // refresh tree
-    connect(_projectTaskAdminDialog, &ProjectTaskAdminDialog::projectsChanged, this, &MainWindow::refreshTree);
-    connect(_projectTaskAdminDialog, &ProjectTaskAdminDialog::tasksChanged, this, &MainWindow::refreshTree);
-
     // receive events from editor
     connect(ui->entryEditor, &EntryEditor::newClicked, this, &MainWindow::newEntry);
     connect(ui->entryEditor, &EntryEditor::entryCreated, this, &MainWindow::createdEntry);
     connect(ui->entryEditor, &EntryEditor::entryUpdated, this, &MainWindow::updatedEntry);
     connect(ui->entryEditor, &EntryEditor::entryDeleted, this, &MainWindow::deletedEntry);
 
+    connect(_configurationDialog, &ConfigurationDialog::databaseConfigChanged, this, &MainWindow::_initDatabase);
+
     ui->entryEditor->newEntry();
     on_btnFilterToday_clicked();
+
+    connect(ui->tblCurrentData->selectionModel(), &QItemSelectionModel::currentChanged, this, &MainWindow::onTblSelectionChanged);
 }
 
 MainWindow::~MainWindow()
@@ -85,29 +80,6 @@ void MainWindow::_connectFilters()
     connect(this, &MainWindow::updateTaskIdFilter, _entryProxyModel, &EntryProxyModel::setTaskId);
 }
 
-void MainWindow::on_tblCurrentData_clicked(const QModelIndex &index)
-{
-    ui->entryEditor->setSelectedEntry(_entryModel->getRow(_entryProxyModel->getMappedIndex(index)), index);
-}
-
-void MainWindow::on_actionManage_projects_and_tasks_triggered()
-{
-    _projectTaskAdminDialog->show();
-}
-
-void MainWindow::onProjectsChanged()
-{
-    _refreshData();
-}
-
-void MainWindow::onTasksChanged(ENTITY_ID_TYPE projectId)
-{
-    if (projectId == ui->entryEditor->getSelectedEntry().projectId)
-    {
-        _refreshData();
-    }
-}
-
 void MainWindow::_initDatabase()
 {
     QSettings _databaseConfig;
@@ -121,7 +93,14 @@ void MainWindow::_initDatabase()
     settings.username       = _databaseConfig.value(DatabaseConfiguration::USERNAME_KEY, "").toString();
     settings.password       = _databaseConfig.value(DatabaseConfiguration::PASSWORD_KEY, "").toString();
 
-    _provider = new DataProvider(this, settings);
+    if (_provider == nullptr)
+    {
+        _provider = new DataProvider(this, settings);
+    }
+    else
+    {
+        _provider->reset(settings);
+    }
 
     if (!_provider->isInitialized())
     {
@@ -357,4 +336,162 @@ void MainWindow::deletedEntry(const QModelIndex& selectedRowIndex, const Entry& 
 void MainWindow::on_actionDatabase_configuration_triggered()
 {
     _configurationDialog->show();
+}
+
+void MainWindow::on_trvProject_customContextMenuRequested(const QPoint &pos)
+{
+    QMenu contextMenu;
+    QModelIndex index = ui->trvProject->indexAt(pos);
+    const auto node = _projectTreeModel->getNode(index);
+
+    if (node == nullptr)
+    {
+        contextMenu.addAction(ui->actionCreate_project);
+    }
+    else if (index.isValid())
+    {
+        if (node->isOtherNode())
+        {
+            contextMenu.addAction(ui->actionCreate_project);
+        }
+        else
+        {
+            const auto nodeData = node->_getInternalData();
+            _selectedId = nodeData.id;
+
+            if (node->isProjectNode())
+            {
+                contextMenu.addAction(ui->actionCreate_task);
+                contextMenu.addAction(ui->actionRename_project);
+                contextMenu.addAction(ui->actionDelete_project);
+            }
+
+            if (node->isTaskNode())
+            {
+                _taskModel->setProjectId(node->parent()->_getInternalData().id);
+
+                contextMenu.addAction(ui->actionRename_task);
+                contextMenu.addAction(ui->actionDelete_task);
+            }
+        }
+    }
+
+    contextMenu.exec(ui->trvProject->mapToGlobal(pos));
+}
+
+void MainWindow::on_actionCreate_project_triggered()
+{
+    bool isConfirmed    = false;
+
+    QString projectName = QInputDialog::getText(this, tr("New project name"), tr("Enter the new project name."), QLineEdit::Normal, "", &isConfirmed);
+
+    if (!isConfirmed)
+    {
+        return;
+    }
+
+    Project p;
+    p.name              = projectName;
+
+    _projectModel->addRow(p);
+    _refreshData();
+    refreshTree();
+}
+
+
+void MainWindow::on_actionRename_project_triggered()
+{
+    const auto selectedProject = _projectModel->getRow(_projectModel->getIndex(_selectedId));
+    bool isConfirmed        = false;
+    const auto projectName  = QInputDialog::getText(this, tr("New project name"), tr("Enter the new project name."), QLineEdit::Normal, selectedProject.name, &isConfirmed);
+
+    if (!isConfirmed)
+    {
+        return;
+    }
+
+    Project newProject;
+    newProject.id           = selectedProject.id;
+    newProject.name         = projectName;
+
+    _projectModel->updateRow(newProject);
+    _refreshData();
+    refreshTree();
+}
+
+void MainWindow::on_actionDelete_project_triggered()
+{
+    if (QMessageBox::question(this, tr("Delete project"), tr("Do you really want to delete the project?"), QMessageBox::Yes | QMessageBox::Cancel) == QMessageBox::Cancel)
+    {
+        return;
+    }
+
+    const auto idx = _projectModel->getIndex(_selectedId);
+    const auto project = _projectModel->getRow(idx);
+
+    _projectModel->removeRow(idx, project);
+    _refreshData();
+    refreshTree();
+}
+
+void MainWindow::on_actionCreate_task_triggered()
+{
+    bool isConfirmed    = false;
+    const auto taskName = QInputDialog::getText(this, tr("New task name"), tr("Enter the new task name."), QLineEdit::Normal, "", &isConfirmed);
+
+    if (!isConfirmed)
+    {
+        return;
+    }
+
+    Task t;
+    t.projectId         = _selectedId;
+    t.name              = taskName;
+
+    _taskModel->addRow(t);
+    _refreshData();
+    refreshTree();
+}
+
+void MainWindow::on_actionRename_task_triggered()
+{
+    const auto selectedIndex = _taskModel->getIndex(_selectedId);
+    const auto selectedTask = _taskModel->getRow(selectedIndex);
+
+    bool isConfirmed    = false;
+    const auto taskName = QInputDialog::getText(this, tr("New task name"), tr("Enter the new task name."), QLineEdit::Normal, selectedTask.name, &isConfirmed);
+
+    if (!isConfirmed)
+    {
+        return;
+    }
+
+    Task newTask;
+    newTask             = selectedTask;
+    newTask.name        = taskName;
+
+    _taskModel->updateRow(newTask);
+
+    _refreshData();
+    refreshTree();
+}
+
+void MainWindow::on_actionDelete_task_triggered()
+{
+    if (QMessageBox::question(this, tr("Delete task"), tr("Do you really want to delete the task?"), QMessageBox::Yes | QMessageBox::Cancel) == QMessageBox::Cancel)
+    {
+        return;
+    }
+
+    const auto idx = _taskModel->getIndex(_selectedId);
+    const auto task = _taskModel->getRow(idx);
+    _taskModel->removeRow(idx, task);
+
+    _refreshData();
+    refreshTree();
+}
+
+void MainWindow::onTblSelectionChanged(const QModelIndex &current, const QModelIndex &previous)
+{
+    ui->entryEditor->setSelectedEntry(_entryModel->getRow(_entryProxyModel->getMappedIndex(current)), current);
 }

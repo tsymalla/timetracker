@@ -319,6 +319,12 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="contextMenuPolicy">
+           <enum>Qt::CustomContextMenu</enum>
+          </property>
+          <property name="alternatingRowColors">
+           <bool>true</bool>
+          </property>
           <attribute name="headerVisible">
            <bool>false</bool>
           </attribute>
@@ -423,14 +429,13 @@
      <x>0</x>
      <y>0</y>
      <width>1024</width>
-     <height>26</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAdministration">
     <property name="title">
      <string>Menu</string>
     </property>
-    <addaction name="actionManage_projects_and_tasks"/>
     <addaction name="actionDatabase_configuration"/>
     <addaction name="actionExport_current_view"/>
     <addaction name="separator"/>
@@ -462,21 +467,9 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionManage_projects_and_tasks"/>
+   <addaction name="actionDatabase_configuration"/>
    <addaction name="actionExport_current_view"/>
   </widget>
-  <action name="actionManage_projects_and_tasks">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/toolbar/resources/manage.ico</normaloff>:/toolbar/resources/manage.ico</iconset>
-   </property>
-   <property name="text">
-    <string>Manage projects and tasks</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+M</string>
-   </property>
-  </action>
   <action name="actionAbout">
    <property name="text">
     <string>About</string>
@@ -508,8 +501,42 @@
    </property>
   </action>
   <action name="actionDatabase_configuration">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/toolbar/resources/manage.ico</normaloff>:/toolbar/resources/manage.ico</iconset>
+   </property>
    <property name="text">
     <string>Database configuration</string>
+   </property>
+  </action>
+  <action name="actionCreate_project">
+   <property name="text">
+    <string>Create project</string>
+   </property>
+  </action>
+  <action name="actionRename_task">
+   <property name="text">
+    <string>Rename task</string>
+   </property>
+  </action>
+  <action name="actionCreate_task">
+   <property name="text">
+    <string>Create task</string>
+   </property>
+  </action>
+  <action name="actionDelete_project">
+   <property name="text">
+    <string>Delete project</string>
+   </property>
+  </action>
+  <action name="actionRename_project">
+   <property name="text">
+    <string>Rename project</string>
+   </property>
+  </action>
+  <action name="actionDelete_task">
+   <property name="text">
+    <string>Delete task</string>
    </property>
   </action>
  </widget>

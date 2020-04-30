@@ -53,6 +53,8 @@ private slots:
     void on_btnSave_clicked();
 
     void on_btnDelete_clicked();
+
+    void _onStartEndDateChanged();
 };
 
 #endif // ENTRYEDITOR_H

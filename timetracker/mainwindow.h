@@ -12,7 +12,6 @@
 #include "taskmodel.h"
 #include "entrymodel.h"
 #include "entryproxymodel.h"
-#include "projecttaskadmindialog.h"
 #include "configurationdialog.h"
 #include "aboutdialog.h"
 #include "projecttreemodel.h"
@@ -33,13 +32,6 @@ public:
     ~MainWindow() override;
 
 private slots:
-    void on_tblCurrentData_clicked(const QModelIndex &index);
-
-    void on_actionManage_projects_and_tasks_triggered();
-
-    void onProjectsChanged();
-
-    void onTasksChanged(ENTITY_ID_TYPE projectId);
 
     void on_actionAbout_triggered();
 
@@ -77,6 +69,22 @@ private slots:
 
     void on_actionDatabase_configuration_triggered();
 
+    void on_trvProject_customContextMenuRequested(const QPoint &pos);
+
+    void on_actionCreate_project_triggered();
+
+    void on_actionDelete_project_triggered();
+
+    void on_actionRename_project_triggered();
+
+    void on_actionCreate_task_triggered();
+
+    void on_actionRename_task_triggered();
+
+    void on_actionDelete_task_triggered();
+
+    void onTblSelectionChanged(const QModelIndex &current, const QModelIndex &previous);
+
 signals:
     void updateStartDateFilter(const QDate& dt);
     void updateEndDateFilter(const QDate& dt);
@@ -87,19 +95,19 @@ private:
     Ui::MainWindow              *ui;
     QSettings                   _databaseConfig;
 
-    ProjectTaskAdminDialog      *_projectTaskAdminDialog;
     ConfigurationDialog         *_configurationDialog;
     AboutDialog                 *_aboutDialog;
     QChart                      *_chart;
     QPieSeries                  *_chartData;
 
-    DataProvider                *_provider;
+    DataProvider                *_provider = nullptr;
     ChartDataProvider           *_chartDataProvider;
     ProjectModel                *_projectModel;
     TaskModel                   *_taskModel;
     EntryModel                  *_entryModel;
     EntryProxyModel             *_entryProxyModel;
     ProjectTreeModel            *_projectTreeModel;
+    ENTITY_ID_TYPE              _selectedId = 0;
 
     void                        _initDatabase();
     void                        _refreshData();
